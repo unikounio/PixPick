@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 
 gem "rails", "~> 7.2.0"
+gem "rails-i18n"
 gem "sprockets-rails"
 gem "sqlite3", ">= 1.4"
 gem "puma", ">= 5.0"
@@ -19,6 +20,7 @@ group :development, :test do
 end
 
 group :development do
+  gem "i18n_generators", require: false
   gem "rubocop", require: false
   gem "rubocop-rails", require: false
   gem "rubocop-fjord", require: false
