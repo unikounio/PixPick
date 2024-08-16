@@ -10,6 +10,7 @@ gem "stimulus-rails"
 gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
+gem "slim-rails", require: false
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -22,6 +23,7 @@ group :development do
   gem "rubocop-rails", require: false
   gem "rubocop-fjord", require: false
   gem "rubocop-performance", require: false
+  gem "slim_lint", require: false
   gem "web-console"
 end
 
