@@ -81,5 +81,5 @@ test:
 production:
   <<: *default
   database: pix_pick_production
-  username: pix_pick
+  username: unikounio
   password: <%= ENV["PIX_PICK_DATABASE_PASSWORD"] %>
