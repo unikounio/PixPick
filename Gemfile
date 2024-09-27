@@ -23,11 +23,11 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
   gem "rspec-rails"
   gem "dotenv-rails"
+  gem "bullet"
 end
 
 group :development do
   gem "web-console"
-  gem "bullet"
   gem "prettier", require: false
   gem "rubocop", require: false
   gem "rubocop-rails", require: false
