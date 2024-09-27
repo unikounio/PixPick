@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "lint": "prettier --check 'app/javascript/**/*.js' && eslint 'app/javascript/**/*.js'",
+    "fix": "prettier --write 'app/javascript/**/*.js'"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.11.1",
+    "eslint": "^9.11.1",
+    "eslint-config-prettier": "^9.1.0",
+    "globals": "^15.9.0",
+    "prettier": "^3.3.3"
+  }
+}
