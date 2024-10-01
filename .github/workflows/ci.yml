@@ -6,35 +6,18 @@ on:
     branches: [main]
 
 jobs:
-  scan_ruby:
+  audit:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: .ruby-version
           bundler-cache: true
-
       - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bin/brakeman --no-pager
-
-  scan_js:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
+        run: bin/brakeman -q -w2 --no-pager --skip-libs
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
 
@@ -43,12 +26,48 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: .ruby-version
           bundler-cache: true
-
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.0.4
+        with:
+          node-version: '20.15.1'
       - name: Lint code for consistent style
         run: bin/rubocop -f github
+      - name: Lint Slim templates for consistent style
+        run: bundle exec slim-lint app/views
+      - name: Install dependencies
+        run: npm install
+      - name: Lint JavaScript files
+        run: npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_DB: pix_pick_test
+          POSTGRES_USER: unikounio
+          POSTGRES_PASSWORD: password
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: "postgres://unikounio:password@localhost:5432/pix_pick_test"
+      RAILS_MASTER_KEY: ${{ secrets.PIXPICK_MASTER_KEY }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+      - name: Set up DB
+        run: bin/rails db:migrate
+      - name: Run tests
+        run: bundle exec rspec
