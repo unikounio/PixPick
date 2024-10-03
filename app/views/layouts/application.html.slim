@@ -18,11 +18,13 @@ link rel="apple-touch-icon" href="/icon.png"
 = javascript_importmap_tags
 
 body
-  h1.text-3xl.font-bold.p-8
-    | PixPick
-  - if flash[:notice]
-    .bg-blue-100.border-t.border-b.border-blue-500.text-blue-700.px-4.py-3
-      span
-        | #{notice}
+  header
+    - if current_user
+      | #{current_user.name} さん
+    - else
+      | ゲストさん
+      = button_to "Googleでログイン", user_google_oauth2_omniauth_authorize_path,
+        method: :post, data: { turbo: false }
+
 main.container.mx-auto.mt-28.px-5.flex
 = yield
