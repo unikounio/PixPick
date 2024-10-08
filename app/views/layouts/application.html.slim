@@ -18,5 +18,15 @@ link rel="apple-touch-icon" href="/icon.png"
 = javascript_importmap_tags
 
 body
+  header
+    - if current_user
+      | #{current_user.name} さん　
+      = link_to "ログアウト", destroy_user_session_path,
+        data: { turbo_method: :delete }
+    - else
+      | ゲストさん
+      = button_to "Googleでログイン", user_google_oauth2_omniauth_authorize_path,
+        method: :post, data: { turbo: false }
+
 main.container.mx-auto.mt-28.px-5.flex
 = yield
