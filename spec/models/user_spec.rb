@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe User, type: :model do
+RSpec.describe User do
   let(:auth) do
     OmniAuth::AuthHash.new(
       provider: 'google_oauth2',
@@ -13,15 +15,13 @@ RSpec.describe User, type: :model do
   end
 
   it 'validates uniqueness of uid scoped to provider' do
-    FactoryBot.create(:user, uid: '12345678', provider: 'google_oauth2')
-    duplicate_user = FactoryBot.build(:user, uid: '12345678', provider: 'google_oauth2')
+    create(:user, uid: '12345678', provider: 'google_oauth2')
+    duplicate_user = build(:user, uid: '12345678', provider: 'google_oauth2')
     expect(duplicate_user).not_to be_valid
   end
 
   describe '.from_omniauth' do
     context 'when the user exists' do
-      let!(:user) { FactoryBot.create(:user) }
-
       it 'updates the existing user' do
         existing_user = described_class.from_omniauth(auth)
         expect(existing_user.name).to eq('Authenticated User')
