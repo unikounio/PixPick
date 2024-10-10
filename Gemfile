@@ -20,7 +20,6 @@ gem "omniauth-rails_csrf_protection"
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
   gem "brakeman", require: false
-  gem "rubocop-rails-omakase", require: false
   gem "rspec-rails"
   gem "factory_bot_rails"
   gem "dotenv-rails"
@@ -36,5 +35,7 @@ group :development do
   gem "rubocop-performance", require: false
   gem "rubocop-rspec", require: false
   gem "rubocop-rspec_rails", require: false
+  gem 'rubocop-capybara', require: false
+  gem 'rubocop-factory_bot', require: false
   gem "slim_lint", require: false
 end
