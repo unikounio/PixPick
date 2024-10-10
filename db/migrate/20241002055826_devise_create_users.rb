@@ -9,6 +9,6 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.2]
       t.string :avatar_url
       t.timestamps null: false
     end
-    add_index :users, [ :uid, :provider ], unique: true
+    add_index :users, %i[uid provider], unique: true
   end
 end
