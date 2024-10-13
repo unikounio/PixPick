@@ -1,0 +1,8 @@
+h1 Googleフォトライブラリの写真
+- if @photos.any?
+  ul
+    - @photos.each do |photo_url|
+      li
+        = image_tag(photo_url, alt: 'Googleフォト画像')
+- else
+  p 画像が見つかりませんでした。
