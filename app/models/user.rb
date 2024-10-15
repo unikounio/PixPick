@@ -7,6 +7,7 @@ class User < ApplicationRecord
 
   has_many :participants, dependent: :destroy
   has_many :contests, through: :participants
+  has_many :entries, dependent: :destroy
 
   def self.from_omniauth(auth)
     user = find_or_create_by(provider: auth.provider, uid: auth.uid)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_14_055253) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_15_060304) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,6 +19,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_14_055253) do
     t.datetime "deadline"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "entries", force: :cascade do |t|
+    t.string "photo_url"
+    t.bigint "contest_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contest_id"], name: "index_entries_on_contest_id"
+    t.index ["photo_url", "contest_id"], name: "index_entries_on_photo_url_and_contest_id", unique: true
+    t.index ["user_id"], name: "index_entries_on_user_id"
   end
 
   create_table "participants", force: :cascade do |t|
@@ -41,6 +52,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_14_055253) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "entries", "contests"
+  add_foreign_key "entries", "users"
   add_foreign_key "participants", "contests"
   add_foreign_key "participants", "users"
 end
