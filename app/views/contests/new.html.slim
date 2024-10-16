@@ -1,2 +1,35 @@
-h1 Contests#new
-p Find me in app/views/contests/new.html.slim
+h1 コンテストを作成
+
+- if @contests.any?
+  p
+    | フォームにコンテスト名と投票期日を入力して作成ボタンを押すことで、新しいコンテストを作成することができます。
+- else
+  p
+    | #{current_user.name}さん
+    br
+    | ようこそPixPickへ
+    br
+    | PixPickは、Googleフォトから気になる写真をピックアップしてコンテストを開催し、
+      参加者の投票によりベストショットを決めることができるサービスです。
+    br
+    | まだ、#{current_user.name}さんが参加しているコンテストはありません。
+    br
+    | このサービスは、自分でコンテストを開催するか、招待されたコンテストに参加することで、利用することができます。
+    br
+    | 以下のフォームからコンテス トを開催できます。
+    br
+    | さっそく#{current_user.name}さんのコンテストを開催してみましょう！
+
+= form_with model: @contest, local: true do |f|
+  = f.label :name, 'コンテスト名'
+  = f.text_field :name
+  br
+
+  = f.label :deadline, '投票期日'
+  = f.date_field :deadline
+  | まで
+  br
+
+  = f.submit '作成'
+
+= link_to 'コンテスト一覧へ', user_contests_path(current_user)

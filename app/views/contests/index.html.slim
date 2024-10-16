@@ -1,0 +1,10 @@
+h1 コンテスト一覧
+- if @contests.any?
+  ul
+    - @contests.each do |contest|
+      li
+        | #{contest.name}
+- else
+  p まだコンテストはありません。
+
+= link_to 'トップページへ', root_path
