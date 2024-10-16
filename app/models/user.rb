@@ -3,15 +3,16 @@
 class User < ApplicationRecord
   devise :omniauthable, omniauth_providers: %i[google_oauth2]
 
-  validates :uid, uniqueness: { scope: :provider }
-
   has_many :participants, dependent: :destroy
   has_many :contests, through: :participants
   has_many :entries, dependent: :destroy
 
+  validates :name, presence: true
+  validates :uid, uniqueness: { scope: :provider, message: 'このユーザーは既に登録されています' }
+
   def self.from_omniauth(auth)
     user = find_or_create_by(provider: auth.provider, uid: auth.uid)
-    user.name = auth.info.name
+    user.name = auth.info.name.presence || 'ゲストユーザー'
     user.avatar_url = auth.info.image
     user.save!
     user

@@ -1,0 +1,16 @@
+#new_contest_form
+  = form_with model: @contest do |form|
+    - if @contest.errors.any?
+      ul
+        - @contest.errors.full_messages.each do |message|
+          li = message
+
+    .form-group
+      = form.label :name, 'コンテスト名'
+      = form.text_field :name
+
+    .form-group
+      = form.label :deadline, '投票期日'
+      = form.date_field :deadline
+
+    = form.submit '作成'

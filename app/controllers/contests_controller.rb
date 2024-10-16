@@ -12,19 +12,20 @@ class ContestsController < ApplicationController
   end
 
   def create
+    @contest = current_user.contests.new(contest_params)
     ActiveRecord::Base.transaction do
-      @contest = current_user.contests.new(contest_params)
       @contest.save!
       @contest.participants.create!(user: current_user)
       redirect_to new_contest_entry_path(@contest), notice: 'コンテストを作成しました。'
     end
   rescue ActiveRecord::RecordInvalid
-    render :new, alert: 'コンテストの作成に失敗しました。'
+    @contests = current_user.contests
+    render turbo_stream: turbo_stream.replace('new_contest_form', partial: 'form', locals: { contest: @contest })
   end
-end
 
   private
 
-def contest_params
-  params.require(:contest).permit(:name, :deadline)
+  def contest_params
+    params.require(:contest).permit(:name, :deadline)
+  end
 end

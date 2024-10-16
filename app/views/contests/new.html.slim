@@ -1,8 +1,7 @@
 h1 コンテストを作成
 
 - if @contests.any?
-  p
-    | フォームにコンテスト名と投票期日を入力して作成ボタンを押すことで、新しいコンテストを作成することができます。
+  p フォームにコンテスト名と投票期日を入力して作成ボタンを押すことで、新しいコンテストを作成することができます。
 - else
   p
     | #{current_user.name}さん
@@ -20,16 +19,6 @@ h1 コンテストを作成
     br
     | さっそく#{current_user.name}さんのコンテストを開催してみましょう！
 
-= form_with model: @contest, local: true do |f|
-  = f.label :name, 'コンテスト名'
-  = f.text_field :name
-  br
-
-  = f.label :deadline, '投票期日'
-  = f.date_field :deadline
-  | まで
-  br
-
-  = f.submit '作成'
+= render 'form'
 
 = link_to 'コンテスト一覧へ', user_contests_path(current_user)

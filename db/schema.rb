@@ -10,19 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_15_060304) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_16_030239) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "contests", force: :cascade do |t|
-    t.string "name"
-    t.datetime "deadline"
+    t.string "name", null: false
+    t.datetime "deadline", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "entries", force: :cascade do |t|
-    t.string "photo_url"
+    t.string "photo_url", null: false
     t.bigint "contest_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
@@ -43,7 +43,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_15_060304) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.string "provider", null: false
     t.string "uid", null: false
     t.string "avatar_url"
