@@ -16,7 +16,8 @@ class ContestsController < ApplicationController
     ActiveRecord::Base.transaction do
       @contest.save!
       @contest.participants.create!(user: current_user)
-      redirect_to new_contest_entry_path(@contest), notice: 'コンテストを作成しました。'
+      redirect_to new_contest_entry_path(@contest),
+                  notice: t('activerecord.notices.messages.create', model: t('activerecord.models.contest'))
     end
   rescue ActiveRecord::RecordInvalid
     @contests = current_user.contests

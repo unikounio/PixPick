@@ -6,11 +6,11 @@
           li = message
 
     .form-group
-      = form.label :name, 'コンテスト名'
+      = form.label :name, t('activerecord.attributes.contest.name')
       = form.text_field :name
 
     .form-group
-      = form.label :deadline, '投票期日'
+      = form.label :deadline, t('activerecord.attributes.contest.deadline')
       = form.date_field :deadline
 
-    = form.submit '作成'
+    = form.submit t('helpers.submit.contest.create')

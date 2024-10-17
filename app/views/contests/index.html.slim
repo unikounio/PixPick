@@ -1,10 +1,11 @@
-h1 コンテスト一覧
+h1 = t('views.contests.index.title')
+
 - if @contests.any?
   ul
     - @contests.each do |contest|
       li
-        | #{contest.name}
+        = contest.name
 - else
-  p まだコンテストはありません。
+  p = t('views.contests.index.no_contests')
 
 = link_to 'トップページへ', root_path

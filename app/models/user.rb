@@ -8,11 +8,11 @@ class User < ApplicationRecord
   has_many :entries, dependent: :destroy
 
   validates :name, presence: true
-  validates :uid, uniqueness: { scope: :provider, message: 'このユーザーは既に登録されています' }
+  validates :uid, uniqueness: { scope: :provider, message: :registered }
 
   def self.from_omniauth(auth)
     user = find_or_create_by(provider: auth.provider, uid: auth.uid)
-    user.name = auth.info.name.presence || 'ゲストユーザー'
+    user.name = auth.info.name.presence || I18n.t('users.guest')
     user.avatar_url = auth.info.image
     user.save!
     user

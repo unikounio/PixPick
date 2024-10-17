@@ -1,23 +1,25 @@
-h1 コンテストを作成
+h1 = t('views.contests.new.title')
 
 - if @contests.any?
-  p フォームにコンテスト名と投票期日を入力して作成ボタンを押すことで、新しいコンテストを作成することができます。
+    p = t('views.contests.new.description_with_contests')
 - else
-  p
-    | #{current_user.name}さん
-    br
-    | ようこそPixPickへ
-    br
-    | PixPickは、Googleフォトから気になる写真をピックアップしてコンテストを開催し、
-      参加者の投票によりベストショットを決めることができるサービスです。
-    br
-    | まだ、#{current_user.name}さんが参加しているコンテストはありません。
-    br
-    | このサービスは、自分でコンテストを開催するか、招待されたコンテストに参加することで、利用することができます。
-    br
-    | 以下のフォームからコンテス トを開催できます。
-    br
-    | さっそく#{current_user.name}さんのコンテストを開催してみましょう！
+    p
+        | #{t('views.contests.new.welcome_message.title',
+          name: current_user.name)}
+        br
+        | #{t('views.contests.new.welcome_message.welcome')}
+        br
+        | #{t('views.contests.new.welcome_message.description')}
+        br
+        | #{t('views.contests.new.welcome_message.no_contests',
+          name: current_user.name)}
+        br
+        | #{t('views.contests.new.welcome_message.usage')}
+        br
+        | #{t('views.contests.new.welcome_message.form_prompt')}
+        br
+        | #{t('views.contests.new.welcome_message.encouragement',
+          name: current_user.name)}
 
 = render 'form'
 

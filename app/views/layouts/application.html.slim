@@ -20,12 +20,13 @@ link rel="apple-touch-icon" href="/icon.png"
 body
   header
     - if current_user
-      | #{current_user.name} さん　
-      = link_to 'ログアウト', destroy_user_session_path,
+      | #{t('views.layouts.header.greeting', name: current_user.name)}　
+      = link_to t('views.layouts.header.logout'), destroy_user_session_path,
         data: { turbo_method: :delete }
     - else
-      | ゲストさん
-      = button_to 'Googleでログイン', user_google_oauth2_omniauth_authorize_path,
+      | #{t('views.layouts.header.guest')}
+      = button_to t('views.layouts.header.login_with_google'),
+        user_google_oauth2_omniauth_authorize_path,
         method: :post, data: { turbo: false }
 
 #flash.flash

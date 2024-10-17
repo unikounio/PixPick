@@ -5,5 +5,5 @@ class Entry < ApplicationRecord
   belongs_to :user
 
   validates :photo_url, presence: true,
-                        uniqueness: { scope: :contest_id, message: 'この写真は既にエントリーされています' }
+                        uniqueness: { scope: :contest_id, message: :entered }
 end
