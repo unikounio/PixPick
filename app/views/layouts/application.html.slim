@@ -28,5 +28,8 @@ body
       = button_to 'Googleでログイン', user_google_oauth2_omniauth_authorize_path,
         method: :post, data: { turbo: false }
 
+#flash.flash
+  = render 'layouts/flash'
+
 main.container.mx-auto.mt-28.px-5.flex
 = yield
