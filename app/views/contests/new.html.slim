@@ -1,2 +1,26 @@
-h1 Contests#new
-p Find me in app/views/contests/new.html.slim
+h1 = t('views.contests.new.title')
+
+- if @contests.any?
+    p = t('views.contests.new.description_with_contests')
+- else
+    p
+        | #{t('views.contests.new.welcome_message.title',
+          name: current_user.name)}
+        br
+        | #{t('views.contests.new.welcome_message.welcome')}
+        br
+        | #{t('views.contests.new.welcome_message.description')}
+        br
+        | #{t('views.contests.new.welcome_message.no_contests',
+          name: current_user.name)}
+        br
+        | #{t('views.contests.new.welcome_message.usage')}
+        br
+        | #{t('views.contests.new.welcome_message.form_prompt')}
+        br
+        | #{t('views.contests.new.welcome_message.encouragement',
+          name: current_user.name)}
+
+= render 'form'
+
+= link_to 'コンテスト一覧へ', user_contests_path(current_user)

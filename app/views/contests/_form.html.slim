@@ -1,0 +1,16 @@
+#new_contest_form
+  = form_with model: @contest do |form|
+    - if @contest.errors.any?
+      ul
+        - @contest.errors.full_messages.each do |message|
+          li = message
+
+    .form-group
+      = form.label :name, t('activerecord.attributes.contest.name')
+      = form.text_field :name
+
+    .form-group
+      = form.label :deadline, t('activerecord.attributes.contest.deadline')
+      = form.date_field :deadline
+
+    = form.submit t('helpers.submit.contest.create')

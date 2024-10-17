@@ -9,11 +9,11 @@ module Users
       if @user.persisted?
         request.env['devise.mapping'] = Devise.mappings[:user]
         store_tokens(auth.credentials)
-
-        sign_in_and_redirect @user, event: :authentication
         set_flash_message(:notice, :success, kind: 'Google') if is_navigational_format?
+        sign_in_and_redirect @user, event: :authentication
       else
-        redirect_to root_path, alert: '認証に失敗しました。もう一度お試しください。'
+        set_flash_message(:alert, :failure, kind: 'Google') if is_navigational_format?
+        redirect_to root_path
       end
     end
 
@@ -21,8 +21,8 @@ module Users
       error = request.env['omniauth.error']
       error_type = request.env['omniauth.error.type']
       logger.error "OmniAuth認証失敗: #{error.message} (Type: #{error_type})"
-
-      redirect_to root_path, alert: '認証に失敗しました。もう一度お試しください。'
+      set_flash_message(:alert, :failure, kind: 'Google') if is_navigational_format?
+      redirect_to root_path
     end
 
     private
