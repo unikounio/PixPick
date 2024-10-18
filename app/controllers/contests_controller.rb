@@ -21,7 +21,7 @@ class ContestsController < ApplicationController
     end
   rescue ActiveRecord::RecordInvalid
     @contests = current_user.contests
-    render turbo_stream: turbo_stream.replace('new_contest_form', partial: 'form', locals: { contest: @contest })
+    render :new, status: :unprocessable_entity
   end
 
   private
