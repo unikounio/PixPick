@@ -9,13 +9,15 @@ class EntriesController < ApplicationController
     if response.success?
       @picking_session = JSON.parse(response.body)
       session[:picking_session_id] = @picking_session['id']
+
+      @polling_url = "https://photospicker.googleapis.com/v1/sessions/#{session[:picking_session_id]}"
+
+      render :new
     else
       Rails.logger.error "PickingSessionの作成に失敗: #{response.body}"
       redirect_to root_path, alert: 'セッションの作成に失敗しました。再試行してください。'
       return
     end
-
-    render :new
   end
 
   private

@@ -1,3 +1,19 @@
 h1 エントリー写真を登録
-= link_to 'Googleフォトから写真を追加', @picking_session['pickerUri'], target: '_blank'
+
+div(
+  data-controller="poll"
+  data-poll-session-url-value=@polling_url
+  data-poll-poll-notify-url-value="poll_completeアクションのパス"
+)
+
+  = link_to 'Googleフォトから写真を追加', @picking_session['pickerUri'], data: { action: 'poll#startPolling' }
+
+/ - if @mediaItems.any?
+/   ul
+/     - @mediaItems.each do |mediaItem|
+/       li
+/         = image_tag(mediaItem[mediaFile][baseUrl], alt: 'Googleフォト画像')
+/ - else
+/   p 画像が見つかりませんでした。
+
 = link_to 'トップページへ', root_path
