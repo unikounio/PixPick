@@ -22,6 +22,7 @@ ja:
         entered: この写真は既にエントリーされています
         participated: このコンテストには既に参加しています
         registered: このユーザーは既に登録されています
+        failed_to_refresh_token: アクセストークンの更新に失敗しました。再度ログインしてください。
     notices:
       messages:
         create: '%{model}を作成しました'

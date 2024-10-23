@@ -21,7 +21,7 @@ class User < ApplicationRecord
   def token_expired?(token_expires_at)
     return true if token_expires_at.nil?
 
-    Time.zone.at(token_expires_at) < Time.current
+    token_expires_at < Time.current
   end
 
   def request_token_refresh(refresh_token)
