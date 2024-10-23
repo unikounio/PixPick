@@ -1,11 +1,9 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { sessionUrl: String, pollNotifyUrl: String }
+  static values = { sessionUrl: String, accessToken: String, pollNotifyUrl: String }
 
   startPolling(event) {
-    console.log("polling開始")
-
     event.preventDefault();
 
     window.open(event.currentTarget.href, '_blank');
@@ -14,5 +12,15 @@ export default class extends Controller {
   }
 
   pollSession() {
+    fetch(this.sessionUrlValue, {
+      headers: {
+        'Authorization': `Bearer ${this.accessTokenValue}`
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+      }
+    )
   }
 }
