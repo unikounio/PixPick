@@ -435,6 +435,7 @@ DEPENDENCIES
   devise-i18n
   dotenv-rails
   factory_bot_rails
+  faraday
   importmap-rails
   omniauth-google-oauth2
   omniauth-rails_csrf_protection

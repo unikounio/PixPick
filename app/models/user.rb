@@ -27,7 +27,7 @@ class User < ApplicationRecord
   def request_token_refresh(refresh_token)
     response = post_token_request(refresh_token)
 
-    if response.is_a?(Net::HTTPSuccess)
+    if response.success?
       JSON.parse(response.body)
     else
       logger.error "アクセストークン更新失敗: #{response.body}"
@@ -38,14 +38,13 @@ class User < ApplicationRecord
   private
 
   def post_token_request(refresh_token)
-    Net::HTTP.post_form(
-      URI('https://oauth2.googleapis.com/token'),
-      {
+    Faraday.post('https://oauth2.googleapis.com/token') do |req|
+      req.body = {
         client_id: ENV.fetch('GOOGLE_CLIENT_ID', nil),
         client_secret: ENV.fetch('GOOGLE_CLIENT_SECRET', nil),
         refresh_token:,
         grant_type: 'refresh_token'
       }
-    )
+    end
   end
 end
