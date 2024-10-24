@@ -4,7 +4,7 @@ div(
   data-controller="poll"
   data-poll-session-url-value=@polling_url
   data-poll-access-token-value=session[:access_token]
-  data-poll-poll-notify-url-value="poll_completeアクションのパス"
+  data-poll-poll-finish-url-value=finish_polling_contest_entries_path
 )
 
   = link_to 'Googleフォトから写真を追加', @picking_session['pickerUri'], data: { action: 'poll#startPolling' }

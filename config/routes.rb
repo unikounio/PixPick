@@ -9,7 +9,9 @@ Rails.application.routes.draw do
   end
 
   resources :contests, except: :index do
-    resources :entries, except: %i[index edit]
+    resources :entries, except: %i[index edit] do
+      patch 'finish_polling', on: :collection
+    end
   end
 
   get 'users/:user_id/contests', to: 'contests#index', as: :user_contests

@@ -20,6 +20,12 @@ class EntriesController < ApplicationController
     end
   end
 
+  def finish_polling
+    Rails.logger.info "Polling session finished"
+    session_id = session[:picking_session_id]
+    delete_picking_session(session_id)
+  end
+
   private
 
   def ensure_valid_access_token!
