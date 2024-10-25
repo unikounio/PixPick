@@ -1,20 +1,14 @@
 h1 エントリー写真を登録
 
-div(
-  data-controller="poll"
-  data-poll-session-url-value=@polling_url
-  data-poll-access-token-value=session[:access_token]
-  data-poll-poll-finish-url-value=finish_polling_contest_entries_path
-)
+- if @picking_session.present?
+  div(
+    data-controller="poll"
+    data-poll-session-url-value=@polling_url
+    data-poll-access-token-value=session[:access_token]
+    data-poll-poll-finish-url-value=finish_polling_contest_entries_path
+  )
+    = link_to 'Googleフォトから写真を追加', @picking_session['pickerUri'], data: { action: 'poll#startPolling' }
 
-  = link_to 'Googleフォトから写真を追加', @picking_session['pickerUri'], data: { action: 'poll#startPolling' }
-
-/ - if @mediaItems.any?
-/   ul
-/     - @mediaItems.each do |mediaItem|
-/       li
-/         = image_tag(mediaItem[mediaFile][baseUrl], alt: 'Googleフォト画像')
-/ - else
-/   p 画像が見つかりませんでした。
+= turbo_frame_tag 'selected_items'
 
 = link_to 'トップページへ', root_path

@@ -19,9 +19,9 @@ export default class extends Controller {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data)
-        if (data.mediaItemsSet) {
-          this.finishPolling();
+        const mediaItemsSet = data.mediaItemsSet
+        if (mediaItemsSet) {
+          this.finishPolling(mediaItemsSet);
         } else {
           const pollInterval = parseFloat(data.pollingConfig.pollInterval.replace('s', '')) * 1000;
           const timeoutIn = parseFloat(data.pollingConfig.timeoutIn.replace('s', '')) * 1000;
@@ -30,7 +30,7 @@ export default class extends Controller {
             setTimeout(() => this.pollSession(), pollInterval);
           } else {
             alert('写真選択がタイムアウトしました。再度お試しください。');
-            this.finishPolling();
+            this.finishPolling(mediaItemsSet);
           }
         }
       }
@@ -38,20 +38,29 @@ export default class extends Controller {
       .catch(error => console.error("Polling error:", error))
   }
 
-  finishPolling() {
+  finishPolling(mediaItemsSet) {
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     fetch(this.pollFinishUrlValue, {
       method: 'PATCH',
       headers: {
-        'X-CSRF-Token': token
-      }
+        'X-CSRF-Token': token,
+        'Content-Type': 'application/json',
+        'Accept': 'text/vnd.turbo-stream.html'
+      },
+      body: JSON.stringify({ mediaItemsSet: mediaItemsSet })
     })
       .then(response => {
         if (!response.ok) {
-          throw new Error("ポーリング終了処理の送信に失敗しました");
+          return response.text().then(errorText => {
+            throw new Error(errorText || "不明なエラー");
+          })
         }
+        return response.text();
       })
-      .catch(error => console.error("ポーリング終了処理の送信に失敗しました:", error));
+      .then(html => {
+        document.querySelector("#selected_items").innerHTML = html;
+      })
+      .catch(error => console.error("ポーリング終了処理の送信に失敗しました:", error.message));
   }
 }
