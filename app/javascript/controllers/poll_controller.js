@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { sessionUrl: String, accessToken: String, pollFinishUrl: String }
+  static values = { sessionUrl: String, accessToken: String, pollFinishPath: String }
 
   startPolling(event) {
     event.preventDefault();
@@ -41,7 +41,7 @@ export default class extends Controller {
   finishPolling(mediaItemsSet) {
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    fetch(this.pollFinishUrlValue, {
+    fetch(this.pollFinishPathValue, {
       method: 'PATCH',
       headers: {
         'X-CSRF-Token': token,

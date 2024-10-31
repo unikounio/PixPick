@@ -1,9 +1,14 @@
-- if @photos.present?
-  ul
-    - @photos.each do |photo|
-      - encoded_photo = Base64.strict_encode64(photo)
-      li
-        = image_tag("data:image/jpeg;base64,#{encoded_photo}", alt: 'Googleフォト画像')
-  = button_to '登録', contest_entries_path, method: :post
+- if @photo_thumbnails.present?
+  div(
+    data-controller="entry-submission"
+    data-entry-submission-base-urls-value=@base_urls
+    data-entry-submission-contest-entries-path-value=contest_entries_path
+  )
+    ul
+      - @photo_thumbnails.each do |photo|
+        - encoded_photo = Base64.strict_encode64(photo)
+        li
+          = image_tag("data:image/jpeg;base64,#{encoded_photo}", alt: 'Googleフォト画像')
+    = button_tag '登録', data: { action: 'entry-submission#submitEntries' }
 - else
   p 画像が見つかりませんでした。

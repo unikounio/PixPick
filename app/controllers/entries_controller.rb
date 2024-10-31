@@ -17,7 +17,6 @@ class EntriesController < ApplicationController
     else
       Rails.logger.error "PickingSessionの作成に失敗: #{response.body}"
       redirect_to root_path, alert: 'セッションの作成に失敗しました。再試行してください。'
-      return
     end
   end
 
@@ -27,20 +26,22 @@ class EntriesController < ApplicationController
     session_id = session[:picking_session_id]
 
     if media_items_set
-      session[:selected_items], session[:next_page_token] = list_selected_media_items(session_id)
-      Rails.logger.info "selected_items: #{session[:selected_items]}"
-      Rails.logger.info "next_page_token: #{session[:next_page_token]}"
+      selected_items, @next_page_token = list_selected_media_items(session_id)
+      Rails.logger.info "selected_items: #{selected_items}"
+      Rails.logger.info "next_page_token: #{@next_page_token}"
+      @base_urls = selected_items.map { |item| item['mediaFile']['baseUrl'] }
 
-      @photos = session[:selected_items].map do |item|
-        response = Faraday.get("#{item['mediaFile']['baseUrl']}=w256-h256") do |req|
+      @photo_thumbnails = @base_urls.map do |url|
+        response = Faraday.get("#{url}=w256-h256") do |req|
           req.headers['Authorization'] = "Bearer #{session[:access_token]}"
         end
         response.body
       end
 
       delete_picking_session(session_id)
-      if @photos.present?
-        render turbo_stream: turbo_stream.replace("selected_items", partial: "entries/selected_items", locals: { photos: @photos })
+      if @photo_thumbnails.present?
+        @contest_id = params[:contest_id]
+        render turbo_stream: turbo_stream.replace("selected_items", partial: "entries/selected_items")
       else
         redirect_to new_contest_entry_path, alert: "予期せぬエラーが発生しました。再度お試しください。"
       end
@@ -51,23 +52,21 @@ class EntriesController < ApplicationController
   end
 
   def create
-    selected_items = session[:selected_items]
+    if params[:baseUrls].present?
+      base_urls = JSON.parse(params[:baseUrls])
 
-    if selected_items.present?
-      selected_items.each do |item|
+      base_urls.each do |url|
         Entry.create!(
-          photo_url: item['mediaFile']['baseUrl'],
+          photo_url: url,
           contest_id: params[:contest_id],
           user_id: current_user.id
         )
       end
 
-      session.delete(:selected_items)
-      redirect_to contest_path(params[:contest_id])
+      render json: { redirect_url: contest_path(params[:contest_id]) }
     else
-      redirect_to new_contest_entry_path(params[:contest_id]), alert: '登録する写真がありません。もう1度やり直してください。'
+      render json: { redirect_url: new_contest_entry_path(params[:contest_id]), alert: '登録する写真がありません。もう1度やり直してください。' }
     end
-
   end
 
   private
