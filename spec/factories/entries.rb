@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :entry do
-    photo_url { 'MyString' }
-    contest { nil }
-    user { nil }
+    photo_url { 'https://example.com/photo.jpg' }
+    contest
+    user
   end
 end

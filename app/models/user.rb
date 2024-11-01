@@ -21,13 +21,13 @@ class User < ApplicationRecord
   def token_expired?(token_expires_at)
     return true if token_expires_at.nil?
 
-    Time.zone.at(token_expires_at) < Time.current
+    token_expires_at < Time.current
   end
 
   def request_token_refresh(refresh_token)
     response = post_token_request(refresh_token)
 
-    if response.is_a?(Net::HTTPSuccess)
+    if response.success?
       JSON.parse(response.body)
     else
       logger.error "アクセストークン更新失敗: #{response.body}"
@@ -38,14 +38,13 @@ class User < ApplicationRecord
   private
 
   def post_token_request(refresh_token)
-    Net::HTTP.post_form(
-      URI('https://oauth2.googleapis.com/token'),
-      {
+    Faraday.post('https://oauth2.googleapis.com/token') do |req|
+      req.body = {
         client_id: ENV.fetch('GOOGLE_CLIENT_ID', nil),
         client_secret: ENV.fetch('GOOGLE_CLIENT_SECRET', nil),
         refresh_token:,
         grant_type: 'refresh_token'
       }
-    )
+    end
   end
 end

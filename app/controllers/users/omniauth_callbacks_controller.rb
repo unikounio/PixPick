@@ -30,7 +30,7 @@ module Users
     def store_tokens(credentials)
       session[:access_token] = credentials.token
       session[:refresh_token] = credentials.refresh_token
-      session[:token_expires_at] = credentials.expires_at
+      session[:token_expires_at] = Time.zone.at(credentials.expires_at)
     end
   end
 end

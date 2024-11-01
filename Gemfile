@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 gem 'bootsnap', require: false
 gem 'devise'
 gem 'devise-i18n'
+gem 'faraday'
 gem 'importmap-rails'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection'
