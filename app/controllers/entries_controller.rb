@@ -16,7 +16,7 @@ class EntriesController < ApplicationController
       render :new
     else
       Rails.logger.error "PickingSessionの作成に失敗: #{response.body}"
-      redirect_to root_path, alert: 'セッションの作成に失敗しました。再試行してください。'
+      redirect_to root_path, alert: t('activerecord.errors.messages.unexpected_error')
     end
   end
 
@@ -43,11 +43,11 @@ class EntriesController < ApplicationController
         @contest_id = params[:contest_id]
         render turbo_stream: turbo_stream.replace("selected_items", partial: "entries/selected_items")
       else
-        redirect_to new_contest_entry_path, alert: "予期せぬエラーが発生しました。再度お試しください。"
+        redirect_to new_contest_entry_path, alert: t('activerecord.errors.messages.unexpected_error')
       end
     else
       delete_picking_session(session_id)
-      redirect_to new_contest_entry_path, alert: "予期せぬエラーが発生しました。再度お試しください。"
+      redirect_to new_contest_entry_path, alert: t('activerecord.errors.messages.unexpected_error')
     end
   end
 
@@ -65,7 +65,7 @@ class EntriesController < ApplicationController
 
       render json: { redirect_url: contest_path(params[:contest_id]) }
     else
-      render json: { redirect_url: new_contest_entry_path(params[:contest_id]), alert: '登録する写真がありません。もう1度やり直してください。' }
+      render json: { redirect_url: new_contest_entry_path(params[:contest_id]), alert: t('activerecord.errors.messages.no_photos_to_register') }
     end
   end
 

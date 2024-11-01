@@ -8,7 +8,7 @@
       - @photo_thumbnails.each do |photo|
         - encoded_photo = Base64.strict_encode64(photo)
         li
-          = image_tag("data:image/jpeg;base64,#{encoded_photo}", alt: 'Googleフォト画像')
-    = button_tag '登録', data: { action: 'entry-submission#submitEntries' }
+          = image_tag("data:image/jpeg;base64,#{encoded_photo}", alt: t('views.entries.selected_items.google_photo_image'))
+    = button_tag t('helpers.submit.entry.create'), data: { action: 'entry-submission#submitEntries' }
 - else
-  p 画像が見つかりませんでした。
+  p #{t('views.entries.selected_items.image_not_found')}

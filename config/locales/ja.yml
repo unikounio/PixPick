@@ -23,6 +23,8 @@ ja:
         participated: このコンテストには既に参加しています
         registered: このユーザーは既に登録されています
         failed_to_refresh_token: アクセストークンの更新に失敗しました。再度ログインしてください。
+        unexpected_error: 予期せぬエラーが発生しました。再度お試しください。
+        no_photos_to_register: 登録する写真がありません。もう1度やり直してください。
     notices:
       messages:
         create: '%{model}を作成しました'
@@ -140,7 +142,9 @@ ja:
       submit: 保存する
       update: 更新する
       contest:
-        create: 作成
+        create: 作成する
+      entry:
+        create: エントリーする
   number:
     currency:
       format:
@@ -205,24 +209,34 @@ ja:
   users:
     guest: ゲストユーザー
   views:
+    common:
+      back_to_home: トップページへ
     contests:
       new:
-        title: "コンテストを作成"
-        description_with_contests: "フォームにコンテスト名と投票期日を入力して作成ボタンを押すことで、新しいコンテストを作成することができます。"
+        title: コンテストを作成
+        description_with_contests: フォームにコンテスト名と投票期日を入力して作成ボタンを押すことで、新しいコンテストを作成することができます。
         welcome_message:
           title: "%{name}さん"
-          welcome: "ようこそPixPickへ"
-          description: "PixPickは、Googleフォトから気になる写真をピックアップしてコンテストを開催し、参加者の投票によりベストショットを決めることができるサービスです。"
+          welcome: ようこそPixPickへ
+          description: PixPickは、Googleフォトから気になる写真をピックアップしてコンテストを開催し、参加者の投票によりベストショットを決めることができるサービスです。
           no_contests: "まだ、%{name}さんが参加しているコンテストはありません。"
-          usage: "このサービスは、自分でコンテストを開催するか、招待されたコンテストに参加することで、利用することができます。"
-          form_prompt: "以下のフォームからコンテストを開催できます。"
+          usage: このサービスは、自分でコンテストを開催するか、招待されたコンテストに参加することで、利用することができます。
+          form_prompt: 以下のフォームからコンテストを開催できます。
           encouragement: "さっそく%{name}さんのコンテストを開催してみましょう！"
       index:
-        title: "コンテスト一覧"
-        no_contests: "まだコンテストはありません。"
+        title: コンテスト一覧
+        no_contests: まだコンテストはありません。
+    entries:
+      selected_items:
+        google_photo_image: Googleフォト画像
+        image_not_found: 画像が見つかりませんでした。
+      new:
+        entry_photos: コンテストに写真をエントリーする
+        add_photos_from_google_photos: Googleフォトから写真を追加
+
     layouts:
       header:
         greeting: "%{name} さん"
-        guest: "ゲストさん"
-        logout: "ログアウト"
-        login_with_google: "Googleでログイン"
+        guest: ゲストさん
+        logout: ログアウト
+        login_with_google: Googleでログイン
