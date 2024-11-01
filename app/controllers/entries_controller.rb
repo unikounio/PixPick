@@ -72,6 +72,7 @@ class EntriesController < ApplicationController
       redirect_to new_contest_entry_path, alert: t('activerecord.errors.messages.unexpected_error')
     end
   end
+
   def delete_picking_session(client, session_id)
     response = client.delete_session(session_id)
     session.delete(:picking_session_id) if response.success? && session[:delete_picking_session].present?
