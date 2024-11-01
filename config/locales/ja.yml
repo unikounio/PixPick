@@ -227,7 +227,7 @@ ja:
         title: コンテスト一覧
         no_contests: まだコンテストはありません。
     entries:
-      selected_items:
+      media_items:
         google_photo_image: Googleフォト画像
         image_not_found: 画像が見つかりませんでした。
       new:

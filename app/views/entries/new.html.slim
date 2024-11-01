@@ -3,12 +3,14 @@ h1 #{t('views.entries.new.entry_photos')}
 - if @picking_session.present?
   div(
     data-controller="poll"
-    data-poll-session-url-value=@polling_url
+    data-poll-session-get-endpoint-value=@polling_url
     data-poll-access-token-value=session[:access_token]
     data-poll-poll-finish-path-value=finish_polling_contest_entries_path
   )
-    = link_to t('views.entries.new.add_photos_from_google_photos'), @picking_session['pickerUri'], data: { action: 'poll#startPolling' }
+    = link_to t('views.entries.new.add_photos_from_google_photos'),
+      @picking_session['pickerUri'],
+      data: { action: 'poll#startPolling' }
 
-= turbo_frame_tag 'selected_items'
+= turbo_frame_tag 'media_items'
 
 = link_to t('views.common.back_to_home'), root_path
