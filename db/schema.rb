@@ -22,13 +22,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_16_030239) do
   end
 
   create_table "entries", force: :cascade do |t|
-    t.string "photo_url", null: false
+    t.string "base_url", null: false
     t.bigint "contest_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["contest_id"], name: "index_entries_on_contest_id"
-    t.index ["photo_url", "contest_id"], name: "index_entries_on_photo_url_and_contest_id", unique: true
+    t.index ["base_url", "contest_id"], name: "index_entries_on_base_url_and_contest_id"
     t.index ["user_id"], name: "index_entries_on_user_id"
   end
 

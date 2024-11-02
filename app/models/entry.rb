@@ -4,13 +4,13 @@ class Entry < ApplicationRecord
   belongs_to :contest
   belongs_to :user
 
-  validates :photo_url, presence: true,
-                        uniqueness: { scope: :contest_id, message: :entered }
+  validates :base_url, presence: true,
+                       uniqueness: { scope: :contest_id, message: :entered }
 
   def self.create_from_base_urls(base_urls, contest_id, user_id)
     base_urls.each do |url|
       create!(
-        photo_url: url,
+        base_url: url,
         contest_id: contest_id,
         user_id: user_id
       )

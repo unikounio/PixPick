@@ -14,24 +14,24 @@ RSpec.describe Entry do
 
     it { is_expected.to be_valid }
 
-    it 'is invalid without a photo_url' do
-      entry.photo_url = nil
+    it 'is invalid without a base_url' do
+      entry.base_url = nil
       expect(entry).not_to be_valid
-      expect(entry.errors[:photo_url]).to include(I18n.t('errors.messages.blank'))
+      expect(entry.errors[:base_url]).to include(I18n.t('errors.messages.blank'))
     end
 
-    context 'when a photo_url is already taken within the same contest' do
-      before { create(:entry, photo_url: entry.photo_url, contest: contest, user: user) }
+    context 'when a base_url is already taken within the same contest' do
+      before { create(:entry, base_url: entry.base_url, contest: contest, user: user) }
 
-      it 'is invalid with a duplicate photo_url within the same contest' do
+      it 'is invalid with a duplicate base_url within the same contest' do
         expect(entry).not_to be_valid
-        expect(entry.errors[:photo_url]).to include(I18n.t('activerecord.errors.messages.entered'))
+        expect(entry.errors[:base_url]).to include(I18n.t('activerecord.errors.messages.entered'))
       end
     end
 
-    it 'is valid with the same photo_url in a different contest' do
+    it 'is valid with the same base_url in a different contest' do
       another_contest = create(:contest)
-      described_class.create!(photo_url: 'https://example.com/photo.jpg', contest: another_contest, user: user)
+      described_class.create!(base_url: 'https://example.com/photo.jpg', contest: another_contest, user: user)
       expect(entry).to be_valid
     end
   end
@@ -43,7 +43,7 @@ RSpec.describe Entry do
       end.to change(described_class, :count).by(2)
 
       base_urls.each do |url|
-        entry = described_class.find_by(photo_url: url)
+        entry = described_class.find_by(base_url: url)
         expect(entry).not_to be_nil
         expect(entry.contest_id).to eq(contest.id)
         expect(entry.user_id).to eq(user.id)
