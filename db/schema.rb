@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_16_030239) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_02_112320) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,8 +27,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_16_030239) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "media_item_id"
+    t.datetime "base_url_updated_at"
+    t.index ["base_url_updated_at"], name: "index_entries_on_base_url_updated_at"
     t.index ["contest_id"], name: "index_entries_on_contest_id"
-    t.index ["base_url", "contest_id"], name: "index_entries_on_base_url_and_contest_id"
+    t.index ["media_item_id", "contest_id"], name: "index_entries_on_media_item_id_and_contest_id", unique: true
     t.index ["user_id"], name: "index_entries_on_user_id"
   end
 
