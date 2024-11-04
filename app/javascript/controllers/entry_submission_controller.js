@@ -1,15 +1,14 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static values = { baseUrls: String, contestEntriesPath: String };
+  static values = { entryAttributes: String, contestEntriesPath: String };
 
   async submitEntries(event) {
     event.preventDefault();
-    console.log(this.contestEntriesPathValue);
     const token = document
       .querySelector("meta[name='csrf-token']")
       .getAttribute("content");
-    const baseUrls = this.baseUrlsValue;
+    const entryAttributes = this.entryAttributesValue;
 
     const response = await fetch(this.contestEntriesPathValue, {
       method: "POST",
@@ -17,7 +16,7 @@ export default class extends Controller {
         "X-CSRF-Token": token,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ baseUrls: baseUrls }),
+      body: JSON.stringify({ entryAttributes: entryAttributes }),
     });
 
     const data = await response.json();

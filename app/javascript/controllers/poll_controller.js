@@ -63,7 +63,14 @@ export default class extends Controller {
         body: JSON.stringify({ mediaItemsSet: mediaItemsSet }),
       });
 
-      document.querySelector("#media_items").innerHTML = await response.text();
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const { redirect_url, alert: alertMessage } = await response.json();
+        alert(alertMessage);
+        window.location.href = redirect_url;
+      } else {
+        document.querySelector("#media_items").innerHTML = await response.text();
+      }
     } catch (error) {
       console.error("ポーリング終了処理の送信に失敗しました:", error.message);
     }

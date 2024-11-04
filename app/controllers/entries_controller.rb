@@ -18,29 +18,50 @@ class EntriesController < ApplicationController
   end
 
   def finish_polling
-    media_items_set = params[:mediaItemsSet]
+    entry_params = entry_finish_polling_params
+    contest_id = entry_params[:contest_id]
     session_id = session[:picking_session_id]
     client = GooglePhotosPickerApiClient.new(session[:access_token])
 
-    if media_items_set
-      handle_media_items(client, session_id)
+    if entry_params[:media_items_set]
+      handle_media_items(client, session_id, entry_params[:contest_id])
     else
       delete_picking_session(client, session_id)
-      redirect_to new_contest_entry_path, alert: t('activerecord.errors.messages.unexpected_error')
+      render json: {
+        redirect_url: new_contest_entry_path(contest_id),
+        alert: t('activerecord.errors.messages.unexpected_error')
+      }
     end
   end
 
   def create
-    if params[:baseUrls].present?
-      base_urls = JSON.parse(params[:baseUrls])
-      handle_base_urls(base_urls)
+    entry_params = entry_create_params
+    entries_attributes = entry_params[:entries_attributes]
+    contest_id = entry_params[:contest_id]
+
+    if entries_attributes.present?
+      create_entry_and_redirect_contest(entries_attributes, contest_id)
     else
-      render json: { redirect_url: new_contest_entry_path(params[:contest_id]),
+      render json: { redirect_url: new_contest_entry_path(contest_id),
                      alert: t('activerecord.errors.messages.no_photos_to_register') }
     end
   end
 
   private
+
+  def entry_finish_polling_params
+    { media_items_set: params.require(:mediaItemsSet), contest_id: params.require(:contest_id) }
+  end
+
+  def entry_create_params
+    parsed_attributes = JSON.parse(params.require(:entryAttributes))
+
+    entries_attributes = parsed_attributes.map do |entry_attribute|
+      ActionController::Parameters.new(entry_attribute).permit(:media_item_id, :base_url)
+    end
+
+    { entries_attributes: entries_attributes, contest_id: params.require(:contest_id) }
+  end
 
   def ensure_valid_access_token!
     return if session[:token_expires_at].nil? || !current_user.token_expired?(session[:token_expires_at])
@@ -59,17 +80,23 @@ class EntriesController < ApplicationController
     session[:token_expires_at] = Time.current + result['expires_in'].seconds
   end
 
-  def handle_media_items(client, session_id)
+  def handle_media_items(client, session_id, contest_id)
     media_items, @next_page_token = client.fetch_media_items(session_id)
-    @base_urls = Entry.extract_base_urls(media_items)
-    @photo_thumbnails = Entry.get_photo_images(@base_urls, session[:access_token], 256, 256)
+    @entries_attributes = Entry.extract_ids_and_urls_from_media_items(media_items)
+    # rubocop:disable Rails/Pluck
+    base_urls = JSON.parse(@entries_attributes).map { |attribute| attribute['base_url'] }
+    # rubocop:enable Rails/Pluck
+    @photo_thumbnails = Entry.get_photo_images(base_urls, session[:access_token])
     delete_picking_session(client, session_id)
 
     if @photo_thumbnails.present?
-      @contest_id = params[:contest_id]
+      @contest_id = contest_id
       render turbo_stream: turbo_stream.replace('media_items', partial: 'entries/media_items')
     else
-      redirect_to new_contest_entry_path, alert: t('activerecord.errors.messages.unexpected_error')
+      render json: {
+        redirect_url: new_contest_entry_path(contest_id),
+        alert: t('activerecord.errors.messages.unexpected_error')
+      }
     end
   end
 
@@ -78,8 +105,8 @@ class EntriesController < ApplicationController
     session.delete(:picking_session_id) if response.success? && session[:delete_picking_session].present?
   end
 
-  def handle_base_urls(base_urls)
-    Entry.create_from_base_urls(base_urls, params[:contest_id], current_user.id)
-    render json: { redirect_url: contest_path(params[:contest_id]) }
+  def create_entry_and_redirect_contest(entries_attributes, contest_id)
+    Entry.create_from_entries_attributes(entries_attributes, contest_id, current_user.id)
+    render json: { redirect_url: contest_path(contest_id) }
   end
 end
