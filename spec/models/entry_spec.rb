@@ -6,12 +6,6 @@ RSpec.describe Entry do
   let(:contest) { create(:contest) }
   let(:user) { create(:user) }
   let(:access_token) { 'mock_access_token' }
-  let(:entries_attributes) do
-    [{ media_item_id: '1', base_url: 'https://example.com/photo1.jpg' },
-     { media_item_id: '2', base_url: 'https://example.com/photo2.jpg' }]
-  end
-  let(:base_urls) { ['https://example.com/photo1.jpg', 'https://example.com/photo2.jpg'] }
-  let(:mock_image_data) { 'fake image data' }
 
   describe 'validations' do
     subject(:entry) { build(:entry, contest: contest, user: user) }
@@ -43,6 +37,11 @@ RSpec.describe Entry do
   end
 
   describe '.create_from_entries_attributes' do
+    let(:entries_attributes) do
+      [{ media_item_id: '1', base_url: 'https://example.com/photo1.jpg' },
+       { media_item_id: '2', base_url: 'https://example.com/photo2.jpg' }]
+    end
+
     it 'creates Entry records for each entry attribute' do
       expect do
         described_class.create_from_entries_attributes(entries_attributes, contest.id, user.id)
@@ -96,7 +95,7 @@ RSpec.describe Entry do
       ]
       entries_attributes = described_class.extract_ids_and_urls_from_media_items(media_items)
       expect(entries_attributes).to eq([{ media_item_id: '1', base_url: 'https://example.com/photo1.jpg' },
-                                      { media_item_id: '2', base_url: 'https://example.com/photo2.jpg' }].to_json)
+                                        { media_item_id: '2', base_url: 'https://example.com/photo2.jpg' }].to_json)
     end
 
     it 'returns an empty array and logs an error when media_items is empty' do
@@ -105,6 +104,54 @@ RSpec.describe Entry do
 
       expect(entries_attributes).to eq([])
       expect(Rails.logger).to have_received(:error).with('media_itemsが空です')
+    end
+  end
+
+  describe '#refresh_base_url' do
+    let(:entry) { create(:entry, base_url: 'https://example.com/original_base_url.jpg') }
+
+    context 'when updating successfully' do
+      let(:success_response) do
+        instance_double(
+          Faraday::Response,
+          success?: true,
+          body: { baseUrl: 'https://example.com/new_base_url.jpg' }.to_json
+        )
+      end
+
+      before do
+        allow(Faraday).to receive(:get).and_return(success_response)
+      end
+
+      it 'updates base_url and base_url_updated_at' do
+        result = entry.refresh_base_url(access_token)
+
+        expect(result).to eq 'https://example.com/new_base_url.jpg'
+        expect(entry.reload.base_url).to eq 'https://example.com/new_base_url.jpg'
+        expect(entry.base_url_updated_at).to be_within(1.second).of(Time.current)
+      end
+    end
+
+    context 'when API request fails' do
+      let(:failure_response) do
+        instance_double(
+          Faraday::Response,
+          success?: false,
+          status: 404,
+          body: 'Not Found'
+        )
+      end
+
+      before do
+        allow(Faraday).to receive(:get).and_return(failure_response)
+      end
+
+      it 'returns nil and does not update base_url' do
+        result = entry.refresh_base_url(access_token)
+
+        expect(result).to be_nil
+        expect(entry.reload.base_url).to eq 'https://example.com/original_base_url.jpg'
+      end
     end
   end
 end
