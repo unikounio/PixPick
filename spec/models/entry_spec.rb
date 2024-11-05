@@ -6,6 +6,10 @@ RSpec.describe Entry do
   let(:contest) { create(:contest) }
   let(:user) { create(:user) }
   let(:access_token) { 'mock_access_token' }
+  let(:entries_attributes) do
+    [{ media_item_id: '1', base_url: 'https://example.com/photo1.jpg' },
+     { media_item_id: '2', base_url: 'https://example.com/photo2.jpg' }]
+  end
   let(:base_urls) { ['https://example.com/photo1.jpg', 'https://example.com/photo2.jpg'] }
   let(:mock_image_data) { 'fake image data' }
 
@@ -14,36 +18,38 @@ RSpec.describe Entry do
 
     it { is_expected.to be_valid }
 
-    it 'is invalid without a base_url' do
-      entry.base_url = nil
+    it 'is invalid without a media_item_id' do
+      entry.media_item_id = nil
       expect(entry).not_to be_valid
-      expect(entry.errors[:base_url]).to include(I18n.t('errors.messages.blank'))
+      expect(entry.errors[:media_item_id]).to include(I18n.t('errors.messages.blank'))
     end
 
-    context 'when a base_url is already taken within the same contest' do
-      before { create(:entry, base_url: entry.base_url, contest: contest, user: user) }
+    context 'when a media_item_id is already taken within the same contest' do
+      before { create(:entry, media_item_id: entry.media_item_id, contest: contest, user: user) }
 
-      it 'is invalid with a duplicate base_url within the same contest' do
+      it 'is invalid with a duplicate media_item_id within the same contest' do
         expect(entry).not_to be_valid
-        expect(entry.errors[:base_url]).to include(I18n.t('activerecord.errors.messages.entered'))
+        expect(entry.errors[:media_item_id]).to include(I18n.t('activerecord.errors.messages.entered'))
       end
     end
 
-    it 'is valid with the same base_url in a different contest' do
+    it 'is valid with the same media_item_id in a different contest' do
       another_contest = create(:contest)
-      described_class.create!(base_url: 'https://example.com/photo.jpg', contest: another_contest, user: user)
+      described_class.create!(media_item_id: '1', base_url: 'https://example.com/photo.jpg',
+                              base_url_updated_at: '2024-11-04 00:00:00.700888000 +0900',
+                              contest: another_contest, user: user)
       expect(entry).to be_valid
     end
   end
 
-  describe '.create_from_base_urls' do
-    it 'creates Entry records for each base URL' do
+  describe '.create_from_entries_attributes' do
+    it 'creates Entry records for each entry attribute' do
       expect do
-        described_class.create_from_base_urls(base_urls, contest.id, user.id)
+        described_class.create_from_entries_attributes(entries_attributes, contest.id, user.id)
       end.to change(described_class, :count).by(2)
 
-      base_urls.each do |url|
-        entry = described_class.find_by(base_url: url)
+      entries_attributes.each do |attributes|
+        entry = described_class.find_by(media_item_id: attributes[:media_item_id])
         expect(entry).not_to be_nil
         expect(entry.contest_id).to eq(contest.id)
         expect(entry.user_id).to eq(user.id)
@@ -62,9 +68,7 @@ RSpec.describe Entry do
     end
 
     it 'fetches images from baseUrls with correct size parameters' do
-      width = 256
-      height = 256
-      images = described_class.get_photo_images(base_urls, access_token, width, height)
+      images = described_class.get_photo_images(base_urls, access_token)
 
       expect(images.size).to eq(2)
       expect(images).to all(eq(mock_image_data))
@@ -74,31 +78,32 @@ RSpec.describe Entry do
       allow(Faraday).to receive(:get).and_raise(Faraday::ResourceNotFound)
 
       expect do
-        described_class.get_photo_images(base_urls, access_token, 256, 256)
+        described_class.get_photo_images(base_urls, access_token)
       end.to raise_error(Faraday::ResourceNotFound)
     end
 
     it 'returns an empty array and logs an error when baseUrls is empty' do
-      described_class.get_photo_images([], access_token, 256, 256)
+      described_class.get_photo_images([], access_token)
       expect(Rails.logger).to have_received(:error).with('base_urlsが空です')
     end
   end
 
-  describe '.extract_base_urls' do
-    it 'extracts baseUrls from media items' do
+  describe '.extract_ids_and_urls_from_media_items' do
+    it 'extracts media item ids and base urls from media items' do
       media_items = [
-        { 'mediaFile' => { 'baseUrl' => 'https://example.com/photo1.jpg' } },
-        { 'mediaFile' => { 'baseUrl' => 'https://example.com/photo2.jpg' } }
+        { 'id' => '1', 'mediaFile' => { 'baseUrl' => 'https://example.com/photo1.jpg' } },
+        { 'id' => '2', 'mediaFile' => { 'baseUrl' => 'https://example.com/photo2.jpg' } }
       ]
-      base_urls = described_class.extract_base_urls(media_items)
-      expect(base_urls).to eq(%w[https://example.com/photo1.jpg https://example.com/photo2.jpg])
+      entries_attributes = described_class.extract_ids_and_urls_from_media_items(media_items)
+      expect(entries_attributes).to eq([{ media_item_id: '1', base_url: 'https://example.com/photo1.jpg' },
+                                      { media_item_id: '2', base_url: 'https://example.com/photo2.jpg' }].to_json)
     end
 
     it 'returns an empty array and logs an error when media_items is empty' do
       allow(Rails.logger).to receive(:error)
-      base_urls = described_class.extract_base_urls([])
+      entries_attributes = described_class.extract_ids_and_urls_from_media_items([])
 
-      expect(base_urls).to eq([])
+      expect(entries_attributes).to eq([])
       expect(Rails.logger).to have_received(:error).with('media_itemsが空です')
     end
   end
