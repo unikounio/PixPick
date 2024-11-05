@@ -69,7 +69,8 @@ export default class extends Controller {
         alert(alertMessage);
         window.location.href = redirect_url;
       } else {
-        document.querySelector("#media_items").innerHTML = await response.text();
+        document.querySelector("#media_items").innerHTML =
+          await response.text();
       }
     } catch (error) {
       console.error("ポーリング終了処理の送信に失敗しました:", error.message);
