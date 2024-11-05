@@ -6,6 +6,10 @@ class ContestsController < ApplicationController
     render :index
   end
 
+  def show
+    # entry = Entry.find()
+  end
+
   def new
     @contest = Contest.new
     @contests = current_user.contests
