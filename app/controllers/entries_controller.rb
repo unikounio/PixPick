@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class EntriesController < ApplicationController
-  before_action :ensure_valid_access_token!
+  before_action :ensure_valid_access_token!, only: %i[new finish_polling]
 
   def new
     client = GooglePhotosPickerApiClient.new(session[:access_token])
@@ -24,7 +24,7 @@ class EntriesController < ApplicationController
     client = GooglePhotosPickerApiClient.new(session[:access_token])
 
     if entry_params[:media_items_set]
-      handle_media_items(client, session_id, entry_params[:contest_id])
+      handle_media_items(client, session_id, contest_id)
     else
       delete_picking_session(client, session_id)
       render json: {
