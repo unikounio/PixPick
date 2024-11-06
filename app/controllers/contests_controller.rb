@@ -9,8 +9,12 @@ class ContestsController < ApplicationController
   def show
     contest = Contest.find(params[:id])
     entries = contest.entries
-    base_urls = entries.map(&:base_url)
-    @entry_photos = Entry.get_photo_images(base_urls, session[:access_token])
+    access_token = session[:access_token]
+    base_urls = entries.map do |entry|
+      entry.refresh_base_url(access_token) if Time.current > entry.base_url_updated_at + 60.minutes
+      entry.base_url
+    end
+    @entry_photos = Entry.get_photo_images(base_urls, access_token)
   end
 
   def new
