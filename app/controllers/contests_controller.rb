@@ -7,7 +7,10 @@ class ContestsController < ApplicationController
   end
 
   def show
-    # entry = Entry.find()
+    contest = Contest.find(params[:id])
+    entries = contest.entries
+    base_urls = entries.map(&:base_url)
+    @entry_photos = Entry.get_photo_images(base_urls, session[:access_token])
   end
 
   def new

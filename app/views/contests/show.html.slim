@@ -1,4 +1,8 @@
-h1 Contests#show
-p Find me in app/views/contests/show.html.slim
+h1 コンテスト画面
+- @entry_photos.each do |photo|
+  - encoded_photo = Base64.strict_encode64(photo)
+  li
+    = image_tag("data:image/jpeg;base64,#{encoded_photo}",
+      alt: 'エントリー写真画像')
 
 = link_to t('views.common.back_to_home'), root_path
