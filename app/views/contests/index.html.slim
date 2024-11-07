@@ -4,8 +4,9 @@ h1 = t('views.contests.index.title')
   ul
     - @contests.each do |contest|
       li
-        = contest.name
+        = link_to contest.name, contest_path(contest)
+        = link_to '編集', edit_contest_path(contest)
 - else
   p = t('views.contests.index.no_contests')
 
-= link_to 'トップページへ', root_path
+= link_to '新しいコンテストを作成', new_contest_path

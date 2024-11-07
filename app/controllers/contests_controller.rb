@@ -3,7 +3,6 @@
 class ContestsController < ApplicationController
   def index
     @contests = current_user.contests
-    render :index
   end
 
   def show
@@ -20,6 +19,10 @@ class ContestsController < ApplicationController
   def new
     @contest = Contest.new
     @contests = current_user.contests
+  end
+
+  def edit
+    @contest = Contest.find(params[:id])
   end
 
   def create
