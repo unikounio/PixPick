@@ -38,6 +38,12 @@ class ContestsController < ApplicationController
     render :new, status: :unprocessable_entity
   end
 
+  def destroy
+    @contest = Contest.find(params[:id])
+    @contest.destroy
+    redirect_to user_contests_path(current_user), notice: 'コンテストが削除されました。'
+  end
+
   private
 
   def contest_params
