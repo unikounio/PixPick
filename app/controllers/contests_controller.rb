@@ -3,7 +3,6 @@
 class ContestsController < ApplicationController
   def index
     @contests = current_user.contests
-    render :index
   end
 
   def show
