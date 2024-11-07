@@ -21,6 +21,10 @@ class ContestsController < ApplicationController
     @contests = current_user.contests
   end
 
+  def edit
+    @contest = Contest.find(params[:id])
+  end
+
   def create
     @contest = current_user.contests.new(contest_params)
     ActiveRecord::Base.transaction do
