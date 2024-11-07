@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class ContestsController < ApplicationController
+  before_action :set_contest, only: %i[show edit destroy]
   def index
     @contests = current_user.contests
   end
 
   def show
-    contest = Contest.find(params[:id])
-    entries = contest.entries
+    entries = @contest.entries
     access_token = session[:access_token]
     base_urls = entries.map do |entry|
       entry.refresh_base_url(access_token) if Time.current > entry.base_url_updated_at + 60.minutes
@@ -21,9 +21,7 @@ class ContestsController < ApplicationController
     @contests = current_user.contests
   end
 
-  def edit
-    @contest = Contest.find(params[:id])
-  end
+  def edit; end
 
   def create
     @contest = current_user.contests.new(contest_params)
@@ -39,7 +37,6 @@ class ContestsController < ApplicationController
   end
 
   def destroy
-    @contest = Contest.find(params[:id])
     @contest.destroy
     redirect_to user_contests_path(current_user), notice: 'コンテストが削除されました。'
   end
@@ -48,5 +45,9 @@ class ContestsController < ApplicationController
 
   def contest_params
     params.require(:contest).permit(:name, :deadline)
+  end
+
+  def set_contest
+    @contest = Contest.find(params[:id])
   end
 end
