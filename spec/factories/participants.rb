@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :participant do
-    contest { nil }
-    user { nil }
+    contest
+    user
   end
 end
