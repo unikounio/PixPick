@@ -1,0 +1,6 @@
+header
+  div
+    = link_to 'PixPick', root_path
+  div
+    - if current_user
+      = render 'shared/menu'

@@ -1,0 +1,16 @@
+div(
+  data-controller="dropdown"
+  data-action="click->dropdown#toggle\
+               click@window->dropdown#hide\
+               touchstart@window->dropdown#hide\
+               keydown.up->dropdown#previousItem\
+               keydown.down->dropdown#nextItem\
+               keydown.esc->dropdown#hide"
+  class="inline-block relative flex justify-end"
+)
+  button data-action="dropdown#toggle:stop" class="px-2.5 py-1 bg-blue-500 text-white text-sm rounded" ユーザーアイコン
+  div data-dropdown-target="menu" class="hidden absolute top-4 right-0 mt-8 flex w-screen max-w-max"
+    div.text-s.bg-white.rounded-lg.border-2.overflow-hidden.w-52.z-30
+      = link_to t('views.layouts.user_menu.contest_index'), user_contests_path(current_user), data: { dropdown_target: "menuItem" }, class: 'no-underline block p-4 bg-white hover:bg-slate-200 focus:ring-inset focus:ring-2 focus:ring-blue-500 focus:rounded-lg'
+      = link_to t('views.layouts.user_menu.logout'), destroy_user_session_path, data: { turbo_method: :delete, dropdown_target: "menuItem" }, class: 'no-underline block p-4 bg-white hover:bg-slate-200 focus:ring-inset focus:ring-2 focus:ring-blue-500 focus:rounded-lg'
+      = link_to t('views.layouts.user_menu.leave'), root_path, data: { dropdown_target: "menuItem" }, class: 'no-underline block p-4 bg-white hover:bg-slate-200 focus:ring-inset focus:ring-2 focus:ring-blue-500 focus:rounded-lg'
