@@ -20,4 +20,19 @@ class GoogleDriveService
       nil
     end
   end
+
+  def share_file(file_id)
+    permission_object = Google::Apis::DriveV3::Permission.new(
+      type: 'anyone',
+      role: 'writer'
+    )
+
+    begin
+      permission = @service.create_permission(file_id, permission_object, fields: 'id')
+      permission.id
+    rescue Google::Apis::Error => e
+      Rails.logger.error("フォルダ共有に失敗しました: #{e.message}")
+      nil
+    end
+  end
 end

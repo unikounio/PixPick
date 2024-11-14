@@ -26,13 +26,13 @@ class ContestsController < ApplicationController
 
   def create
     @contest = current_user.contests.new(contest_params)
-    folder_id = setup_drive_folder
+    folder_id, permission_id = setup_drive_folder
 
-    if folder_id.present? && save_contest_and_create_participant(folder_id)
+    if folder_id.present? && save_contest_and_create_participant(folder_id, permission_id)
       redirect_to new_contest_entry_path(@contest),
                   notice: t('activerecord.notices.messages.create', model: t('activerecord.models.contest'))
     else
-      redirect_with_failure(folder_id)
+      redirect_with_failure
     end
   end
 
@@ -53,12 +53,20 @@ class ContestsController < ApplicationController
 
   def setup_drive_folder
     drive_service = GoogleDriveService.new(session[:access_token])
-    drive_service.create_folder(@contest.name)
+    folder_id = drive_service.create_folder(@contest.name)
+
+    if folder_id.present?
+      permission_id = drive_service.share_file(folder_id)
+      return nil if permission_id.nil?
+    end
+
+    [folder_id, permission_id]
   end
 
-  def save_contest_and_create_participant(folder_id)
+  def save_contest_and_create_participant(folder_id, permission_id)
     ActiveRecord::Base.transaction do
       @contest.drive_file_id = folder_id
+      @contest.drive_permission_id = permission_id
       @contest.save!
       @contest.participants.create!(user: current_user)
     end
@@ -66,8 +74,7 @@ class ContestsController < ApplicationController
     false
   end
 
-  def redirect_with_failure(folder_id)
-    Rails.logger.error 'Google Driveフォルダ作成に失敗しました' if folder_id.nil?
+  def redirect_with_failure
     @contests = current_user.contests
     render :new, status: :unprocessable_entity
   end
