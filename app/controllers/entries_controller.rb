@@ -63,23 +63,6 @@ class EntriesController < ApplicationController
     { entries_attributes: entries_attributes, contest_id: params.require(:contest_id) }
   end
 
-  def ensure_valid_access_token!
-    return if session[:token_expires_at].nil? || !current_user.token_expired?(session[:token_expires_at])
-
-    result = current_user.request_token_refresh(session[:refresh_token])
-    if result.present?
-      store_access_token(result)
-    else
-      sign_out current_user
-      redirect_to root_path, alert: t('activerecord.errors.messages.failed_to_refresh_token')
-    end
-  end
-
-  def store_access_token(result)
-    session[:access_token] = result['access_token']
-    session[:token_expires_at] = Time.current + result['expires_in'].seconds
-  end
-
   def handle_media_items(client, session_id, contest_id)
     media_items, @next_page_token = client.fetch_media_items(session_id)
     @entries_attributes = Entry.extract_ids_and_urls_from_media_items(media_items)
