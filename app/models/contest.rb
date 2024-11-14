@@ -7,6 +7,7 @@ class Contest < ApplicationRecord
 
   validates :name, presence: true
   validates :deadline, presence: true
+  validates :drive_permission_id, uniqueness: { scope: :drive_file_id }
   validate :deadline_cannot_be_in_the_past
 
   private
