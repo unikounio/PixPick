@@ -6,6 +6,7 @@ gem 'bootsnap', require: false
 gem 'devise'
 gem 'devise-i18n'
 gem 'faraday'
+gem 'google-apis-drive_v3'
 gem 'importmap-rails'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection'
