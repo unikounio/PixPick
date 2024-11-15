@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_02_112320) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_14_082309) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,6 +19,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_02_112320) do
     t.datetime "deadline", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "drive_file_id"
+    t.string "drive_permission_id"
+    t.index ["drive_file_id", "drive_permission_id"], name: "index_contests_on_drive_file_id_and_drive_permission_id", unique: true
   end
 
   create_table "entries", force: :cascade do |t|
