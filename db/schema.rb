@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_14_082309) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_15_124142) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,16 +25,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_14_082309) do
   end
 
   create_table "entries", force: :cascade do |t|
-    t.string "base_url", null: false
     t.bigint "contest_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "media_item_id"
-    t.datetime "base_url_updated_at"
-    t.index ["base_url_updated_at"], name: "index_entries_on_base_url_updated_at"
+    t.string "drive_file_id"
     t.index ["contest_id"], name: "index_entries_on_contest_id"
-    t.index ["media_item_id", "contest_id"], name: "index_entries_on_media_item_id_and_contest_id", unique: true
+    t.index ["drive_file_id", "contest_id"], name: "index_entries_on_drive_file_id_and_contest_id", unique: true
     t.index ["user_id"], name: "index_entries_on_user_id"
   end
 
