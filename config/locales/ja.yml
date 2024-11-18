@@ -232,7 +232,9 @@ ja:
         image_not_found: 画像が見つかりませんでした。
       new:
         entry_photos: コンテストに写真をエントリーする
-        add_photos_from_google_photos: Googleフォトから写真を追加
+        to_contest_page: コンテストページへ
+        drag_and_drop_to_add: 写真をドラッグ＆ドロップして追加してください
+        enter: 写真をエントリーする
 
     layouts:
       header:

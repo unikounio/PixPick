@@ -1,95 +1,53 @@
 # frozen_string_literal: true
 
 class EntriesController < ApplicationController
-  before_action :ensure_valid_access_token!, only: %i[new finish_polling]
+  before_action :ensure_valid_access_token!, only: %i[new]
 
   def new
-    client = GooglePhotosPickerApiClient.new(session[:access_token])
-    @picking_session = client.create_session
-
-    if @picking_session.present?
-      Rails.logger.info "PickingSession: #{@picking_session}"
-      session[:picking_session_id] = @picking_session['id']
-      @polling_url = "https://photospicker.googleapis.com/v1/sessions/#{session[:picking_session_id]}"
-      render :new
-    else
-      redirect_to root_path, alert: t('activerecord.errors.messages.unexpected_error')
-    end
-  end
-
-  def finish_polling
-    entry_params = entry_finish_polling_params
-    contest_id = entry_params[:contest_id]
-    session_id = session[:picking_session_id]
-    client = GooglePhotosPickerApiClient.new(session[:access_token])
-
-    if entry_params[:media_items_set]
-      handle_media_items(client, session_id, contest_id)
-    else
-      delete_picking_session(client, session_id)
-      render json: {
-        redirect_url: new_contest_entry_path(contest_id),
-        alert: t('activerecord.errors.messages.unexpected_error')
-      }
-    end
+    @contest = Contest.find(params[:contest_id])
+    @folder_id = @contest.drive_file_id
+    @access_token = session[:access_token]
   end
 
   def create
-    entry_params = entry_create_params
-    entries_attributes = entry_params[:entries_attributes]
-    contest_id = entry_params[:contest_id]
+    files = files_params[:files]
+    contest = Contest.find(params[:contest_id])
 
-    if entries_attributes.present?
-      create_entry_and_redirect_contest(entries_attributes, contest_id)
-    else
-      render json: { redirect_url: new_contest_entry_path(contest_id),
-                     alert: t('activerecord.errors.messages.no_photos_to_register') }
+    if files.blank?
+      render json: { error: 'ファイルが見つかりません' }, status: :unprocessable_entity
+      return
+    end
+
+    begin
+      upload_and_create_entries!(files, contest)
+      render json: { redirect_url: contest_path(contest) }, status: :ok
+    rescue StandardError => e
+      Rails.logger.error("ファイルの処理注に次のエラーが発生: #{e.message}")
+      render json: { error: 'ファイルの処理中にエラーが発生しました' }, status: :unprocessable_entity
     end
   end
 
   private
 
-  def entry_finish_polling_params
-    { media_items_set: params.require(:mediaItemsSet), contest_id: params.require(:contest_id) }
+  def files_params
+    params.permit(files: [])
   end
 
-  def entry_create_params
-    parsed_attributes = JSON.parse(params.require(:entryAttributes))
+  def upload_and_create_entries!(files, contest)
+    files.each do |file|
+      drive_file_id = upload_to_google_drive(file, contest)
+      raise 'Google Driveへのアップロードに失敗' if drive_file_id.nil?
 
-    entries_attributes = parsed_attributes.map do |entry_attribute|
-      ActionController::Parameters.new(entry_attribute).permit(:media_item_id, :base_url)
-    end
-
-    { entries_attributes: entries_attributes, contest_id: params.require(:contest_id) }
-  end
-
-  def handle_media_items(client, session_id, contest_id)
-    media_items, @next_page_token = client.fetch_media_items(session_id)
-    @entries_attributes = Entry.extract_ids_and_urls_from_media_items(media_items)
-    # rubocop:disable Rails/Pluck
-    base_urls = JSON.parse(@entries_attributes).map { |attribute| attribute['base_url'] }
-    # rubocop:enable Rails/Pluck
-    @photo_thumbnails = Entry.get_photo_images(base_urls, session[:access_token])
-    delete_picking_session(client, session_id)
-
-    if @photo_thumbnails.present?
-      @contest_id = contest_id
-      render turbo_stream: turbo_stream.replace('media_items', partial: 'entries/media_items')
-    else
-      render json: {
-        redirect_url: new_contest_entry_path(contest_id),
-        alert: t('activerecord.errors.messages.unexpected_error')
-      }
+      Entry.create!(
+        user: current_user,
+        contest: contest,
+        drive_file_id: drive_file_id
+      )
     end
   end
 
-  def delete_picking_session(client, session_id)
-    response = client.delete_session(session_id)
-    session.delete(:picking_session_id) if response.success? && session[:delete_picking_session].present?
-  end
-
-  def create_entry_and_redirect_contest(entries_attributes, contest_id)
-    Entry.create_from_entries_attributes(entries_attributes, contest_id, current_user.id)
-    render json: { redirect_url: contest_path(contest_id) }
+  def upload_to_google_drive(file, contest)
+    drive_service = GoogleDriveService.new(session[:access_token])
+    drive_service.upload_file(file, contest.drive_file_id)
   end
 end
