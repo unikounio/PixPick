@@ -5,153 +5,31 @@ require 'rails_helper'
 RSpec.describe Entry do
   let(:contest) { create(:contest) }
   let(:user) { create(:user) }
-  let(:access_token) { 'mock_access_token' }
 
   describe 'validations' do
     subject(:entry) { build(:entry, contest: contest, user: user) }
 
     it { is_expected.to be_valid }
 
-    it 'is invalid without a media_item_id' do
-      entry.media_item_id = nil
+    it 'is invalid without a drive_file_id' do
+      entry.drive_file_id = nil
       expect(entry).not_to be_valid
-      expect(entry.errors[:media_item_id]).to include(I18n.t('errors.messages.blank'))
+      expect(entry.errors[:drive_file_id]).to include(I18n.t('errors.messages.blank'))
     end
 
-    context 'when a media_item_id is already taken within the same contest' do
-      before { create(:entry, media_item_id: entry.media_item_id, contest: contest, user: user) }
+    context 'when a drive_file_id is already taken within the same contest' do
+      before { create(:entry, drive_file_id: entry.drive_file_id, contest: contest, user: user) }
 
-      it 'is invalid with a duplicate media_item_id within the same contest' do
+      it 'is invalid with a duplicate drive_file_id within the same contest' do
         expect(entry).not_to be_valid
-        expect(entry.errors[:media_item_id]).to include(I18n.t('activerecord.errors.messages.entered'))
+        expect(entry.errors[:drive_file_id]).to include(I18n.t('activerecord.errors.messages.entered'))
       end
     end
 
-    it 'is valid with the same media_item_id in a different contest' do
+    it 'is valid with the same drive_file_id in a different contest' do
       another_contest = create(:contest)
-      described_class.create!(media_item_id: '1', base_url: 'https://example.com/photo.jpg',
-                              base_url_updated_at: '2024-11-04 00:00:00.700888000 +0900',
-                              contest: another_contest, user: user)
+      described_class.create!(drive_file_id: entry.drive_file_id, contest: another_contest, user: user)
       expect(entry).to be_valid
-    end
-  end
-
-  describe '.create_from_entries_attributes' do
-    let(:entries_attributes) do
-      [{ media_item_id: '1', base_url: 'https://example.com/photo1.jpg' },
-       { media_item_id: '2', base_url: 'https://example.com/photo2.jpg' }]
-    end
-
-    it 'creates Entry records for each entry attribute' do
-      expect do
-        described_class.create_from_entries_attributes(entries_attributes, contest.id, user.id)
-      end.to change(described_class, :count).by(2)
-
-      entries_attributes.each do |attributes|
-        entry = described_class.find_by(media_item_id: attributes[:media_item_id])
-        expect(entry).not_to be_nil
-        expect(entry.contest_id).to eq(contest.id)
-        expect(entry.user_id).to eq(user.id)
-      end
-    end
-  end
-
-  describe '.get_photo_images' do
-    let(:base_urls) { ['https://example.com/photo1.jpg', 'https://example.com/photo2.jpg'] }
-    let(:access_token) { 'mock_access_token' }
-    let(:mock_image_data) { 'fake image data' }
-
-    before do
-      allow(Faraday).to receive(:get).and_return(instance_double(Faraday::Response, body: mock_image_data))
-      allow(Rails.logger).to receive(:error)
-    end
-
-    it 'fetches images from baseUrls with correct size parameters' do
-      images = described_class.get_photo_images(base_urls, access_token)
-
-      expect(images.size).to eq(2)
-      expect(images).to all(eq(mock_image_data))
-    end
-
-    it 'raises an error if an image cannot be fetched' do
-      allow(Faraday).to receive(:get).and_raise(Faraday::ResourceNotFound)
-
-      expect do
-        described_class.get_photo_images(base_urls, access_token)
-      end.to raise_error(Faraday::ResourceNotFound)
-    end
-
-    it 'returns an empty array and logs an error when baseUrls is empty' do
-      described_class.get_photo_images([], access_token)
-      expect(Rails.logger).to have_received(:error).with('base_urlsが空です')
-    end
-  end
-
-  describe '.extract_ids_and_urls_from_media_items' do
-    it 'extracts media item ids and base urls from media items' do
-      media_items = [
-        { 'id' => '1', 'mediaFile' => { 'baseUrl' => 'https://example.com/photo1.jpg' } },
-        { 'id' => '2', 'mediaFile' => { 'baseUrl' => 'https://example.com/photo2.jpg' } }
-      ]
-      entries_attributes = described_class.extract_ids_and_urls_from_media_items(media_items)
-      expect(entries_attributes).to eq([{ media_item_id: '1', base_url: 'https://example.com/photo1.jpg' },
-                                        { media_item_id: '2', base_url: 'https://example.com/photo2.jpg' }].to_json)
-    end
-
-    it 'returns an empty array and logs an error when media_items is empty' do
-      allow(Rails.logger).to receive(:error)
-      entries_attributes = described_class.extract_ids_and_urls_from_media_items([])
-
-      expect(entries_attributes).to eq([])
-      expect(Rails.logger).to have_received(:error).with('media_itemsが空です')
-    end
-  end
-
-  describe '#refresh_base_url' do
-    let(:entry) { create(:entry, base_url: 'https://example.com/original_base_url.jpg') }
-
-    context 'when updating successfully' do
-      let(:success_response) do
-        instance_double(
-          Faraday::Response,
-          success?: true,
-          body: { baseUrl: 'https://example.com/new_base_url.jpg' }.to_json
-        )
-      end
-
-      before do
-        allow(Faraday).to receive(:get).and_return(success_response)
-      end
-
-      it 'updates base_url and base_url_updated_at' do
-        result = entry.refresh_base_url(access_token)
-
-        expect(result).to eq 'https://example.com/new_base_url.jpg'
-        expect(entry.reload.base_url).to eq 'https://example.com/new_base_url.jpg'
-        expect(entry.base_url_updated_at).to be_within(1.second).of(Time.current)
-      end
-    end
-
-    context 'when API request fails' do
-      let(:failure_response) do
-        instance_double(
-          Faraday::Response,
-          success?: false,
-          status: 404,
-          body: 'Not Found'
-        )
-      end
-
-      before do
-        allow(Faraday).to receive(:get).and_return(failure_response)
-      end
-
-      it 'returns nil and does not update base_url' do
-        result = entry.refresh_base_url(access_token)
-
-        expect(result).to be_nil
-        expect(entry.reload.base_url).to eq 'https://example.com/original_base_url.jpg'
-      end
     end
   end
 end
