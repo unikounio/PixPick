@@ -1,16 +1,21 @@
-h1 #{t('views.entries.new.entry_photos')}
+h1 = t('views.entries.new.entry_photos')
+= link_to t('views.entries.new.to_contest_page'), contest_path(@contest)
 
-- if @picking_session.present?
-  div(
-    data-controller="poll"
-    data-poll-session-get-endpoint-value=@polling_url
-    data-poll-access-token-value=session[:access_token]
-    data-poll-poll-finish-path-value=finish_polling_contest_entries_path
+#drop-zone.drop-zone(
+  data-controller="drag-drop"
+  data-drag-drop-entries-create-path-value=contest_entries_path
+  data-drag-drop-target="dropZone"
+  data-action="dragover->drag-drop#dragOver \
+               dragleave->drag-drop#dragLeave \
+               drop->drag-drop#drop"
+)
+  = t('views.entries.new.drag_and_drop_to_add')
+  input#file-input(
+    type="file"
+    multiple
+    hidden
+    data-drag-drop-target="fileInput"
   )
-    = link_to t('views.entries.new.add_photos_from_google_photos'),
-      @picking_session['pickerUri'],
-      data: { action: 'poll#startPolling' }
-
-= turbo_frame_tag 'media_items'
-
-= link_to t('views.common.back_to_home'), root_path
+  #preview.preview-container data-drag-drop-target="preview"
+  button#upload-button.upload-button data-action="click->drag-drop#upload"
+    = t('views.entries.new.enter')

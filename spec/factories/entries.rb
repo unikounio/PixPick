@@ -2,9 +2,7 @@
 
 FactoryBot.define do
   factory :entry do
-    media_item_id { '1' }
-    base_url { 'https://example.com/photo.jpg' }
-    base_url_updated_at { '2024-11-04 00:00:00.700888000 +0900' }
+    sequence(:drive_file_id, &:to_s)
     contest
     user
   end

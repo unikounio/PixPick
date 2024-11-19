@@ -30,8 +30,6 @@ RSpec.describe 'Contests' do
     end
 
     it 'creates a new contest successfully' do
-      allow(GooglePhotosPickerApiClient).to receive(:new).and_return(client)
-      allow(client).to receive(:create_session).and_return(mock_picking_session)
       visit new_contest_path
 
       fill_in 'contest_name', with: 'New Contest'
