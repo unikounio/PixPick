@@ -34,20 +34,29 @@ class EntriesController < ApplicationController
   end
 
   def upload_and_create_entries!(files, contest)
-    files.each do |file|
-      drive_file_id = upload_to_google_drive(file, contest)
-      raise 'Google Driveへのアップロードに失敗' if drive_file_id.nil?
+    ActiveRecord::Base.transaction do
+      files.each do |file|
+        drive_file_id, permission_id = upload_to_google_drive(file, contest)
 
-      Entry.create!(
-        user: current_user,
-        contest: contest,
-        drive_file_id: drive_file_id
-      )
+        Entry.create!(
+          user: current_user,
+          contest: contest,
+          drive_file_id: drive_file_id,
+          drive_permission_id: permission_id
+        )
+      end
     end
   end
 
   def upload_to_google_drive(file, contest)
     drive_service = GoogleDriveService.new(session[:access_token])
-    drive_service.upload_file(file, contest.drive_file_id)
+
+    drive_file_id = drive_service.upload_file(file, contest.drive_file_id)
+    raise 'Google Driveへのアップロードに失敗' if drive_file_id.nil?
+
+    permission_id = drive_service.share_file(drive_file_id)
+    raise 'Google Drive共有設定に失敗' if permission_id.nil?
+
+    [drive_file_id, permission_id]
   end
 end

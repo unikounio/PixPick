@@ -30,8 +30,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_15_124142) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "drive_file_id"
+    t.string "drive_permission_id"
     t.index ["contest_id"], name: "index_entries_on_contest_id"
     t.index ["drive_file_id", "contest_id"], name: "index_entries_on_drive_file_id_and_contest_id", unique: true
+    t.index ["drive_file_id", "drive_permission_id"], name: "index_entries_on_drive_file_id_and_drive_permission_id", unique: true
     t.index ["user_id"], name: "index_entries_on_user_id"
   end
 

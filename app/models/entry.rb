@@ -6,4 +6,5 @@ class Entry < ApplicationRecord
 
   validates :drive_file_id, presence: true,
                             uniqueness: { scope: :contest_id, message: :entered }
+  validates :drive_permission_id, uniqueness: { scope: :drive_file_id }
 end
