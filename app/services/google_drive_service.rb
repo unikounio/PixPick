@@ -53,4 +53,12 @@ class GoogleDriveService
     Rails.logger.error("Google Driveアップロードに失敗しました: #{e.message}")
     nil
   end
+
+  def get_thumbnail_link(file_id)
+    file = @service.get_file(file_id, fields: 'thumbnailLink')
+    file.thumbnail_link
+  rescue Google::Apis::Error => e
+    Rails.logger.error("ファイル情報の取得に失敗しました: #{e.message}")
+    nil
+  end
 end
