@@ -2,19 +2,15 @@
 
 class ContestsController < ApplicationController
   before_action :set_contest, only: %i[show edit destroy]
+  before_action :set_drive_service, only: %i[show create]
   before_action :ensure_valid_access_token!
   def index
     @contests = current_user.contests
   end
 
   def show
-    entries = @contest.entries
-    access_token = session[:access_token]
-    base_urls = entries.map do |entry|
-      entry.refresh_base_url(access_token) if Time.current > entry.base_url_updated_at + 60.minutes
-      entry.base_url
-    end
-    @entry_photos = Entry.get_photo_images(base_urls, access_token)
+    entries = @contest.entries.order(created_at: :desc)
+    @thumbnail_links = entries.map { |entry| @drive_service.get_thumbnail_link(entry.drive_file_id) }
   end
 
   def new
@@ -51,12 +47,15 @@ class ContestsController < ApplicationController
     @contest = Contest.find(params[:id])
   end
 
+  def set_drive_service
+    @drive_service = GoogleDriveService.new(session[:access_token])
+  end
+
   def setup_drive_folder
-    drive_service = GoogleDriveService.new(session[:access_token])
-    folder_id = drive_service.create_folder(@contest.name)
+    folder_id = @drive_service.create_folder(@contest.name)
 
     if folder_id.present?
-      permission_id = drive_service.share_file(folder_id)
+      permission_id = @drive_service.share_file(folder_id)
       return nil if permission_id.nil?
     end
 

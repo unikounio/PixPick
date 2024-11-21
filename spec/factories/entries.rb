@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :entry do
     sequence(:drive_file_id, &:to_s)
+    sequence(:drive_permission_id, &:to_s)
     contest
     user
   end

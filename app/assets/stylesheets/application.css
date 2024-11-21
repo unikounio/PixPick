@@ -71,3 +71,16 @@ button {
 .preview-item button:hover {
     background-color: darkred;
 }
+
+.image-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 150px)); /* 最小150px、最大で等分割 */
+    gap: 10px;
+    padding: 10px;
+}
+
+.image-gallery img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
