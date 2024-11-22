@@ -69,5 +69,7 @@ jobs:
           bundler-cache: true
       - name: Set up DB
         run: bin/rails db:migrate
+      - name: Precompile assets
+        run: RAILS_ENV=test bundle exec rails assets:precompile
       - name: Run tests
         run: bundle exec rspec

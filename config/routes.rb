@@ -10,7 +10,10 @@ Rails.application.routes.draw do
 
   resources :contests, except: :index do
     resources :entries, except: %i[index edit] do
-      patch 'finish_polling', on: :collection
+      collection do
+        patch 'finish_polling'
+        delete 'destroy_picking_session'
+      end
     end
   end
 

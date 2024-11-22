@@ -238,7 +238,9 @@ ja:
 
     layouts:
       header:
-        greeting: "%{name} さん"
-        guest: ゲストさん
-        logout: ログアウト
         login_with_google: Googleでログイン
+      user_menu:
+        contest_index: コンテスト一覧
+        logout: ログアウト
+        leave: 退会
+
