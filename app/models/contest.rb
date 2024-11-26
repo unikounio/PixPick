@@ -10,6 +10,8 @@ class Contest < ApplicationRecord
   validates :drive_permission_id, uniqueness: { scope: :drive_file_id }
   validate :deadline_cannot_be_in_the_past
 
+  scope :recently_updated, ->(limit_count) { order(updated_at: :desc).limit(limit_count) }
+
   private
 
   def deadline_cannot_be_in_the_past

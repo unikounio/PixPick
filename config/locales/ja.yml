@@ -239,8 +239,9 @@ ja:
     layouts:
       header:
         login_with_google: Googleでログイン
-      user_menu:
+        select_contest: コンテストを選択してください
         contest_index: コンテスト一覧
+      user_menu:
         logout: ログアウト
         leave: 退会
 
