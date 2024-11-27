@@ -4,13 +4,18 @@ class ContestsController < ApplicationController
   before_action :set_contest, only: %i[show edit destroy]
   before_action :set_drive_service, only: %i[show create]
   before_action :ensure_valid_access_token!
+
   def index
     @contests = current_user.contests
   end
 
   def show
     entries = @contest.entries.order(created_at: :desc)
-    @thumbnail_links = entries.map { |entry| @drive_service.get_thumbnail_link(entry.drive_file_id) }
+    @thumbnail_links_and_ids = entries.map do |entry|
+      thumbnail_link = @drive_service.get_thumbnail_link(entry.drive_file_id)
+      entry_id = entry.id
+      [thumbnail_link, entry_id]
+    end
   end
 
   def new

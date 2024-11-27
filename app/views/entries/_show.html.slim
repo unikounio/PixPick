@@ -1,0 +1,4 @@
+.p-8.relative
+  = image_tag photo_contest_entry_path(@contest, @entry), alt: 'エントリー写真画像'
+  button.absolute.top-2.right-2.text-lg.font-bold.text-gray-600
+    .hover:text-gray-800 data-action="click->modal#close" ✕

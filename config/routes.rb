@@ -10,9 +10,8 @@ Rails.application.routes.draw do
 
   resources :contests, except: :index do
     resources :entries, except: %i[index edit] do
-      collection do
-        patch 'finish_polling'
-        delete 'destroy_picking_session'
+      member do
+        get 'photo', to: 'entries#image_proxy'
       end
     end
   end

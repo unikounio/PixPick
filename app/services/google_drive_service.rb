@@ -61,4 +61,14 @@ class GoogleDriveService
     Rails.logger.error("ファイル情報の取得に失敗しました: #{e.message}")
     nil
   end
+
+  def download_file(file_id)
+    buffer = StringIO.new
+    metadata = @service.get_file(file_id, fields: 'mimeType')
+    @service.get_file(file_id, download_dest: buffer)
+    [buffer.string, metadata.mime_type]
+  rescue Google::Apis::Error => e
+    Rails.logger.error("Google Driveファイルのダウンロードに失敗しました: #{e.message}")
+    nil
+  end
 end
