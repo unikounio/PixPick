@@ -15,7 +15,10 @@ class EntriesController < ApplicationController
 
     image_data, mime_type = Rails.cache.fetch(cache_key, expires_in: 1.hour) do
       drive_service = GoogleDriveService.new(session[:access_token])
-      drive_service.download_file(entry.drive_file_id)
+      original_data, mime_type = drive_service.download_file(entry.drive_file_id)
+
+      resized_data = resize_and_convert_image(original_data, mime_type, 600, 400)
+      [resized_data, mime_type]
     end
 
     if image_data
@@ -80,5 +83,42 @@ class EntriesController < ApplicationController
     raise 'Google Drive共有設定に失敗' if permission_id.nil?
 
     [drive_file_id, permission_id]
+  end
+
+  def resize_and_convert_image(image_data, mime_type, width, height)
+    format = mime_type_to_format(mime_type) || 'jpg'
+    tempfile = create_tempfile(image_data, format)
+
+    begin
+      resized_image = ImageProcessing::MiniMagick
+                      .source(tempfile.path)
+                      .resize_to_fit(width, height)
+                      .convert(format)
+                      .call
+
+      File.binread(resized_image.path)
+    ensure
+      tempfile.close!
+      tempfile.unlink
+    end
+  end
+
+  def mime_type_to_format(mime_type)
+    case mime_type
+    when 'image/jpeg', 'image/jpg' then 'jpg'
+    when 'image/png'               then 'png'
+    when 'image/webp'              then 'webp'
+    else
+      Rails.logger.warn "Unsupported MIME type: #{mime_type}"
+      nil
+    end
+  end
+
+  def create_tempfile(image_data, format)
+    tempfile = Tempfile.new(['image', ".#{format}"])
+    tempfile.binmode
+    tempfile.write(image_data.read)
+    tempfile.rewind
+    tempfile
   end
 end
