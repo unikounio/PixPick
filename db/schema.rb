@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_15_124142) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_29_022254) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -57,8 +57,22 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_15_124142) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  create_table "votes", force: :cascade do |t|
+    t.integer "score", null: false
+    t.bigint "user_id", null: false
+    t.bigint "entry_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["entry_id", "user_id"], name: "index_votes_on_entry_id_and_user_id", unique: true
+    t.index ["entry_id"], name: "index_votes_on_entry_id"
+    t.index ["user_id"], name: "index_votes_on_user_id"
+    t.check_constraint "score >= 1 AND score <= 3", name: "check_score_range"
+  end
+
   add_foreign_key "entries", "contests"
   add_foreign_key "entries", "users"
   add_foreign_key "participants", "contests"
   add_foreign_key "participants", "users"
+  add_foreign_key "votes", "entries"
+  add_foreign_key "votes", "users"
 end
