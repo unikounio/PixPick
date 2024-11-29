@@ -3,9 +3,8 @@ header(class='flex justify-between items-center px-6 py-4 \
   div
     = link_to 'PixPick', root_path,
       class: 'text-4xl font-bold text-black no-underline hover:text-gray-700'
-  div
+  .ml-auto.flex.items-center.space-x-10
     - if current_user.contests.any?
       = render 'shared/contest_selection'
-  div
     - if current_user
       = render 'shared/menu'

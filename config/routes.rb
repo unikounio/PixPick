@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       member do
         get 'photo', to: 'entries#image_proxy'
       end
+      resources :votes, only: :create
     end
   end
 

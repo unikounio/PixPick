@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :participants, dependent: :destroy
   has_many :contests, through: :participants
   has_many :entries, dependent: :destroy
+  has_many :votes, dependent: :destroy
 
   validates :name, presence: true
   validates :uid, uniqueness: { scope: :provider, message: :registered }
