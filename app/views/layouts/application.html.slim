@@ -20,10 +20,10 @@ html
 body
   header
     #flash.fixed.top-0.left-0.w-full.z-50
-      = render 'layouts/flash'
+      = render 'shared/flash'
     #toast.fixed.top-5.left-1/2.transform.-translate-x-1/2.z-50.space-y-4
-      = render 'layouts/toast'
+      = render 'shared/toast'
     - unless current_page?(root_path)
-      = render 'shared/header'
+      = render 'layouts/header/main'
   main
     = yield
