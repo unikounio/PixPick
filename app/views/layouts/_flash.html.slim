@@ -1,2 +1,34 @@
-- flash.each do |_flash_type, message|
-    = message
+- flash.each do |flash_type, message|
+  div(
+    data-controller='alert'
+    data-alert-dismiss-after-value='5000'
+    class="alert flex items-start p-4 mb-4 rounded-lg shadow-lg \
+      max-w-fit mx-auto #{tailwind_classes_for(flash_type)}"
+    role='alert'
+  )
+    .flex-shrink-0
+      - if flash_type.to_s == 'notice'
+        svg(
+          xmlns='http://www.w3.org/2000/svg'
+          class='h-5 w-5 text-green-500'
+          viewBox='0 0 20 20'
+          fill='currentColor'
+        )
+          path d='M16.707 5.293a1 1 0 00-1.414 0L8 12.586l-3.293-3.293a1 \
+            1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z'
+      - elsif flash_type.to_s == 'alert'
+        svg(
+          xmlns='http://www.w3.org/2000/svg'
+          class='h-5 w-5 text-red-500'
+          viewBox='0 0 20 20'
+          fill='currentColor'
+        )
+          path fill-rule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 \
+          16zm1-11h-2v4h2V7zm0 6h-2v2h2v-2z' clip-rule='evenodd'
+    .ml-3.text-sm
+      = message
+    button.ml-auto.btn.btn-sm.btn-circle.btn-ghost (
+      type='button'
+      data-action='alert#close'
+    )
+      |　✕

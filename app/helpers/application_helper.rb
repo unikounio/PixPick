@@ -5,6 +5,13 @@ module ApplicationHelper
     current_user&.avatar_url || asset_path('default_avatar.png')
   end
 
+  def tailwind_classes_for(flash_type)
+    {
+      notice: 'bg-white border-l-4 border-green-500 text-black',
+      error: 'bg-white border-l-4 border-red-500 text-black'
+    }.stringify_keys[flash_type.to_s] || flash_type.to_s
+  end
+
   def toast_border_css(type)
     if type == :success
       'border-gray-200 dark:bg-neutral-800 dark:border-neutral-700'
