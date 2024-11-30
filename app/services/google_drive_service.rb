@@ -74,4 +74,12 @@ class GoogleDriveService
     Rails.logger.error("Google Driveファイルのダウンロードに失敗しました: #{e.message}")
     nil
   end
+
+  def delete_file(file_id)
+    @service.delete_file(file_id)
+    true
+  rescue Google::Apis::Error => e
+    Rails.logger.error("Google Driveファイルの削除に失敗しました: #{e.message}")
+    false
+  end
 end

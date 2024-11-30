@@ -2,20 +2,19 @@
 
 class EntriesController < ApplicationController
   before_action :set_contest, only: %i[show new create]
+  before_action :set_entry, only: %i[show image_proxy destroy]
+  before_action :set_drive_service, only: %i[image_proxy create destroy]
   before_action :ensure_valid_access_token!, only: %i[new]
 
   def show
-    @entry = Entry.find(params[:id])
     render partial: 'entries/show', formats: [:html]
   end
 
   def image_proxy
-    entry = Entry.find(params[:id])
-    cache_key = "entry_image_#{entry.id}"
+    cache_key = "entry_image_#{@entry.id}"
 
     image_data, mime_type = Rails.cache.fetch(cache_key, expires_in: 1.hour) do
-      drive_service = GoogleDriveService.new(session[:access_token])
-      original_data, mime_type = drive_service.download_file(entry.drive_file_id)
+      original_data, mime_type = @drive_service.download_file(@entry.drive_file_id)
 
       resized_data = resize_and_convert_image(original_data, mime_type, 600, 400)
       [resized_data, mime_type]
@@ -50,6 +49,20 @@ class EntriesController < ApplicationController
     end
   end
 
+  def destroy
+    authorize_user!
+
+    if @drive_service.delete_file(@entry.drive_file_id) && @entry.destroy
+      render turbo_stream: turbo_stream.append('toast', partial: 'shared/toast',
+                                                        locals: { toasts: [{ type: :success,
+                                                                             message: 'エントリーが削除されました。' }] })
+    else
+      render turbo_stream: turbo_stream.append('toast', partial: 'shared/toast',
+                                                        locals: { toasts: [{ type: :error,
+                                                                             message: 'エントリーの削除に失敗しました。' }] })
+    end
+  end
+
   private
 
   def files_params
@@ -58,6 +71,14 @@ class EntriesController < ApplicationController
 
   def set_contest
     @contest = Contest.find(params[:contest_id])
+  end
+
+  def set_entry
+    @entry = Entry.find(params[:id])
+  end
+
+  def set_drive_service
+    @drive_service = GoogleDriveService.new(session[:access_token])
   end
 
   def upload_and_create_entries!(files, contest)
@@ -74,12 +95,10 @@ class EntriesController < ApplicationController
   end
 
   def upload_to_google_drive(file, contest)
-    drive_service = GoogleDriveService.new(session[:access_token])
-
-    drive_file_id = drive_service.upload_file(file, contest.drive_file_id)
+    drive_file_id = @drive_service.upload_file(file, contest.drive_file_id)
     raise 'Google Driveへのアップロードに失敗' if drive_file_id.nil?
 
-    permission_id = drive_service.share_file(drive_file_id)
+    permission_id = @drive_service.share_file(drive_file_id)
     raise 'Google Drive共有設定に失敗' if permission_id.nil?
 
     [drive_file_id, permission_id]
@@ -120,5 +139,13 @@ class EntriesController < ApplicationController
     tempfile.write(image_data.read)
     tempfile.rewind
     tempfile
+  end
+
+  def authorize_user!
+    return if @entry.user == current_user
+
+    render turbo_stream: turbo_stream.append('toast', partial: 'shared/toast',
+                                                      locals: { toasts: [{ type: :error,
+                                                                           message: 'このエントリーを削除する権限がありません。' }] })
   end
 end
