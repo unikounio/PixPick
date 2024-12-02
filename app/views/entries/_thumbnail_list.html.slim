@@ -1,0 +1,15 @@
+.image-gallery data-controller="modal"
+  dialog data-modal-target="dialog" class="p-8 rounded-lg backdrop:bg-black/80"
+    .modal-content data-modal-target="content"
+
+  - @thumbnail_data.each do |thumbnail_link, entry_id, score|
+    = turbo_frame_tag "entry_#{entry_id}"
+      .relative
+        - entries_show_url = contest_entry_path(@contest.id, entry_id)
+        = button_tag type: 'button',
+          data: { action: 'click->modal#open',
+                  modal_entries_show_url_value: entries_show_url },
+          class: 'thumbnail-button text-white font-bold py-2 px-4 rounded'
+          = image_tag thumbnail_link, alt: 'エントリー写真画像', class: 'w-full h-auto'
+
+        = render 'entries/score', entry_id: entry_id, score: score

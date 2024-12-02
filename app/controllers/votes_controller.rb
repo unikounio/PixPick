@@ -6,9 +6,12 @@ class VotesController < ApplicationController
     @vote.score = params[:score]
 
     if @vote.save
-      render turbo_stream: turbo_stream.append('toast', partial: 'shared/toast',
-                                                        locals: { toasts: [{ type: :success,
-                                                                             message: '投票が保存されました！' }] })
+      render turbo_stream: [
+        turbo_stream.replace("score_#{params[:entry_id]}", partial: 'entries/score',
+                                                           locals: { entry_id: params[:entry_id], score: @vote.score }),
+        turbo_stream.append('toast', partial: 'shared/toast',
+                                     locals: { toasts: [{ type: :success, message: '投票が保存されました！' }] })
+      ]
     else
       render turbo_stream: turbo_stream.append('toast', partial: 'shared/toast',
                                                         locals: { toasts: [{ type: :error,

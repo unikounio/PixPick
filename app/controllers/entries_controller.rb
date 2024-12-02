@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class EntriesController < ApplicationController
-  before_action :set_contest, only: %i[show new create]
+  before_action :set_contest, only: %i[show new create destroy]
   before_action :set_entry, only: %i[show image_proxy destroy]
   before_action :set_drive_service, only: %i[image_proxy create destroy]
   before_action :ensure_valid_access_token!, only: %i[new]
@@ -55,9 +55,11 @@ class EntriesController < ApplicationController
     authorize_user!
 
     if @drive_service.delete_file(@entry.drive_file_id) && @entry.destroy
-      render turbo_stream: turbo_stream.append('toast', partial: 'shared/toast',
-                                                        locals: { toasts: [{ type: :success,
-                                                                             message: 'エントリーが削除されました。' }] })
+      render turbo_stream: [
+        turbo_stream.remove("entry_#{params[:id]}"),
+        turbo_stream.append('toast', partial: 'shared/toast',
+                            locals: { toasts: [{ type: :success, message: 'エントリーが削除されました。' }] })
+      ]
     else
       render turbo_stream: turbo_stream.append('toast', partial: 'shared/toast',
                                                         locals: { toasts: [{ type: :error,
