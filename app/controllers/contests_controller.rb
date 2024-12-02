@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class ContestsController < ApplicationController
+  include GoogleApiActions
+
+  before_action :ensure_valid_access_token!, only: %i[show create]
   before_action :set_contest, only: %i[show edit destroy]
   before_action :set_drive_service, only: %i[show create]
-  before_action :ensure_valid_access_token!
 
   def index
     @contests = current_user.contests
@@ -50,10 +52,6 @@ class ContestsController < ApplicationController
 
   def set_contest
     @contest = Contest.find(params[:id])
-  end
-
-  def set_drive_service
-    @drive_service = GoogleDriveService.new(session[:access_token])
   end
 
   def setup_drive_folder
