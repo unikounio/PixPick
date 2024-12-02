@@ -7,6 +7,8 @@ class EntriesController < ApplicationController
   before_action :ensure_valid_access_token!, only: %i[new]
 
   def show
+    @previous_entry = @entry.contest.entries.where('id > ?', @entry.id).order(id: :asc).first
+    @next_entry = @entry.contest.entries.where(id: ...@entry.id).order(id: :desc).first
     render partial: 'entries/show', formats: [:html]
   end
 
