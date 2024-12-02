@@ -59,10 +59,12 @@ class EntriesController < ApplicationController
     if @drive_service.delete_file(@entry.drive_file_id) && @entry.destroy
       render turbo_stream: [
         turbo_stream.remove("entry_#{params[:id]}"),
-        append_turbo_toast(:success, 'エントリーが削除されました。')
+        append_turbo_toast(:success, t('activerecord.notices.messages.delete', model: t('activerecord.models.entry')))
       ]
     else
-      render turbo_stream: append_turbo_toast(:error, 'エントリーの削除に失敗しました。')
+      render turbo_stream: append_turbo_toast(:error,
+                                              t('activerecord.errors.messages.delete',
+                                                model: t('activerecord.models.entry')))
     end
   end
 
@@ -83,6 +85,8 @@ class EntriesController < ApplicationController
   def authorize_user!
     return if @entry.user == current_user
 
-    render turbo_stream: append_turbo_toast(:error, 'このエントリーを削除する権限がありません。')
+    render turbo_stream: append_turbo_toast(:error,
+                                            t('activerecord.errors.messages.unauthorized',
+                                              model: t('activerecord.models.entry')))
   end
 end

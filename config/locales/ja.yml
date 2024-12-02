@@ -3,9 +3,10 @@ ja:
   activerecord:
     models:
       contest: コンテスト
-      entry: エントリー写真
+      entry: エントリー
       participant: 参加者
       user: ユーザー
+      vote: 投票
     attributes:
       contest:
         name: コンテスト名
@@ -25,9 +26,14 @@ ja:
         failed_to_refresh_token: アクセストークンの更新に失敗しました。再度ログインしてください。
         unexpected_error: 予期せぬエラーが発生しました。再度お試しください。
         no_photos_to_register: 登録する写真がありません。もう1度やり直してください。
+        delete: '%{model}の削除に失敗しました'
+        unauthorized: 'この%{model}を削除する権限がありません'
+        save: '%{model}の保存に失敗しました'
     notices:
       messages:
         create: '%{model}を作成しました'
+        delete: '%{model}を削除しました'
+        save: '%{model}を保存しました'
   date:
     abbr_day_names:
     - 日
@@ -211,6 +217,14 @@ ja:
   views:
     common:
       back_to_home: トップページへ
+    layouts:
+      header:
+        login_with_google: Googleでログイン
+        select_contest: コンテストを選択してください
+        contest_index: コンテスト一覧
+      user_menu:
+        logout: ログアウト
+        leave: 退会
     contests:
       new:
         title: コンテストを作成
@@ -235,13 +249,11 @@ ja:
         to_contest_page: コンテストページへ
         drag_and_drop_to_add: 写真をドラッグ＆ドロップして追加してください
         enter: 写真をエントリーする
-
-    layouts:
-      header:
-        login_with_google: Googleでログイン
-        select_contest: コンテストを選択してください
-        contest_index: コンテスト一覧
-      user_menu:
-        logout: ログアウト
-        leave: 退会
+      show:
+        delete_photo: この写真を削除する
+        confirm_delete_photo: 選択した写真をコンテストから削除します。よろしいですか？
+        prev: 前へ
+        next: 次へ
+        delete_photo_hint: 自分が登録した写真は、コンテストから削除することができます。
+      alt_text: エントリー写真画像
 

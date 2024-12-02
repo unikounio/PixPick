@@ -8,7 +8,9 @@ class VotesController < ApplicationController
     if @vote.save
       broadcast_vote_feedback
     else
-      render turbo_stream: append_turbo_toast(:error, '投票の保存に失敗しました。')
+      render turbo_stream: append_turbo_toast(:error,
+                                              t('activerecord.errors.messages.save',
+                                                model: t('activerecord.models.vote')))
     end
   end
 
@@ -20,7 +22,7 @@ class VotesController < ApplicationController
       turbo_stream.replace("score_#{entry_id}",
                            partial: 'entries/score',
                            locals: { entry_id:, score: @vote.score }),
-      append_turbo_toast(:success, '投票が保存されました！')
+      append_turbo_toast(:success, t('activerecord.notices.messages.save', model: t('activerecord.models.vote')))
     ]
   end
 end

@@ -10,6 +10,8 @@
           data: { action: 'click->modal#open',
                   modal_entries_show_url_value: entries_show_url },
           class: 'thumbnail-button text-white font-bold py-2 px-4 rounded'
-          = image_tag thumbnail_link, alt: 'エントリー写真画像', class: 'w-full h-auto'
+          = image_tag thumbnail_link,
+            alt: t('views.entries.alt_text'),
+            class: 'w-full h-auto'
 
         = render 'entries/score', entry_id: entry_id, score: score
