@@ -11,10 +11,10 @@ class ContestsController < ApplicationController
 
   def show
     entries = @contest.entries.order(created_at: :desc)
-    @thumbnail_links_and_ids = entries.map do |entry|
+    @thumbnail_data = entries.map do |entry|
       thumbnail_link = @drive_service.get_thumbnail_link(entry.drive_file_id)
-      entry_id = entry.id
-      [thumbnail_link, entry_id]
+      score = current_user.votes.find_by(entry_id: entry.id)&.score
+      [thumbnail_link, entry.id, score]
     end
   end
 

@@ -4,12 +4,18 @@ h1 コンテスト画面
   dialog data-modal-target="dialog" class="p-8 rounded-lg backdrop:bg-black/80"
     .modal-content data-modal-target="content"
 
-  - @thumbnail_links_and_ids.each do |thumbnail_link, entry_id|
-    - entries_show_url = contest_entry_path(@contest.id, entry_id)
-    = button_tag type: 'button',
-      data: { action: 'click->modal#open',
-              modal_entries_show_url_value: entries_show_url },
-      class: 'thumbnail-button text-white font-bold py-2 px-4 rounded'
-      = image_tag thumbnail_link, alt: 'エントリー写真画像', class: 'w-full h-auto'
+  - @thumbnail_data.each do |thumbnail_link, entry_id, score|
+    .relative
+      - entries_show_url = contest_entry_path(@contest.id, entry_id)
+      = button_tag type: 'button',
+        data: { action: 'click->modal#open',
+                modal_entries_show_url_value: entries_show_url },
+        class: 'thumbnail-button text-white font-bold py-2 px-4 rounded'
+        = image_tag thumbnail_link, alt: 'エントリー写真画像', class: 'w-full h-auto'
+
+      - if score.present?
+        .absolute.top-0.right-1.bg-blue-500.text-white.rounded-full
+          .w-6.h-6.flex.items-center.justify-center.text-sm.font-bold
+            = score
 
 = link_to t('views.common.back_to_home'), root_path
