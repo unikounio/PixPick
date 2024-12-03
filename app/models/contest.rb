@@ -8,6 +8,7 @@ class Contest < ApplicationRecord
   validates :name, presence: true
   validates :deadline, presence: true
   validates :drive_permission_id, uniqueness: { scope: :drive_file_id }
+  validates :invitation_token, uniqueness: true
   validate :deadline_cannot_be_in_the_past
 
   scope :recently_updated, ->(limit_count) { order(updated_at: :desc).limit(limit_count) }
