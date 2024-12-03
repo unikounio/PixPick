@@ -1,0 +1,48 @@
+= turbo_frame_tag 'entry_content' do
+  .p-8.relative
+    = image_tag photo_contest_entry_path(@contest, @entry),
+      alt: t('views.entries.alt_text')
+
+    button.absolute.-top-7.-right-5.text-4xl.font-bold
+      .text-gray-600 data-action='click->modal#close'
+        |✕
+
+    .flex.justify-center.mt-6.space-x-8
+      - [1, 2, 3].each do |score|
+        = button_to score.to_s,
+          contest_entry_votes_path(@contest, @entry, score: score),
+          method: :post,
+          remote: true,
+          data: { action: 'click->modal#close' },
+          class: 'flex items-center justify-center w-12 h-12 text-sm \
+                  font-medium text-white bg-blue-500 rounded-full shadow \
+                  hover:bg-blue-600 focus:outline-none \
+                  focus:ring-2 focus:ring-blue-300'
+
+    .flex.justify-between.items-center.mt-6
+      - if @previous_entry
+        = link_to t('views.entries.show.prev'),
+          contest_entry_path(@contest, @previous_entry),
+          data: { turbo_frame: 'entry_content' },
+          class: 'flex items-center px-6 py-2 bg-white \
+                  rounded-full shadow hover:bg-slate-200'
+
+      - if @next_entry
+        = link_to t('views.entries.show.next'),
+          contest_entry_path(@contest, @next_entry),
+          data: { turbo_frame: 'entry_content' },
+          class: 'flex items-center px-6 py-2 bg-white \
+                  rounded-full shadow hover:bg-slate-200 ml-auto'
+
+    - if @entry.user_id == current_user.id
+      .mt-6.text-center
+        = button_to t('views.entries.show.delete_photo'),
+          contest_entry_path(@contest, @entry),
+          method: :delete,
+          data: { action: 'click->modal#close',
+                  turbo_confirm: t('views.entries.show.confirm_delete_photo') },
+          class: 'text-red-500 underline underline-offset-4 \
+                  hover:text-red-700 cursor-pointer'
+
+        .mt-2.text-sm.text-gray-700
+          = t('views.entries.show.delete_photo_hint')
