@@ -4,7 +4,7 @@ class ContestsController < ApplicationController
   include GoogleApiActions
 
   before_action :ensure_valid_access_token!, only: %i[show create]
-  before_action :set_contest, only: %i[show edit destroy]
+  before_action :set_contest, only: %i[show edit invite destroy]
   before_action :set_drive_service, only: %i[show create]
 
   def index
@@ -37,6 +37,10 @@ class ContestsController < ApplicationController
     else
       redirect_with_failure
     end
+  end
+
+  def invite
+    @invite_url = join_contest_url(token: @contest.invitation_token)
   end
 
   def destroy

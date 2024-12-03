@@ -8,12 +8,18 @@ Rails.application.routes.draw do
     delete 'logout', to: 'devise/sessions#destroy', as: :destroy_user_session
   end
 
+  get 'contests/invite', to: 'contests#participate', as: :join_contest
+
   resources :contests, except: :index do
     resources :entries, except: %i[index edit] do
       member do
         get 'photo', to: 'entries#image_proxy'
       end
       resources :votes, only: :create
+    end
+
+    member do
+      get 'invite', to: 'contests#invite'
     end
   end
 
