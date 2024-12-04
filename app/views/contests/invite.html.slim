@@ -7,10 +7,11 @@
     | URLをコピーして家族や友人をコンテストに招待しましょう！
 
   .mt-6
-    input#invite-link.w-full.p-2.text-lg.border.border-gray-300.rounded-lg.shadow-sm(
+    input#invite-link(
       type="text"
       value=@invite_url
       readonly=true
+      class="w-full p-2 text-lg border border-gray-300 rounded-lg shadow-sm"
     )
 
       .mt-6.text-center
@@ -18,7 +19,9 @@
           data: { controller: 'clipboard',
                   action: 'clipboard#copy',
                   clipboard_url_value: @invite_url },
-          class: 'bg-blue-500 text-white font-bold py-3 px-4 rounded-full hover:bg-blue-600 shadow-md'
+          class: 'bg-blue-500 text-white font-bold py-3 px-4 \
+                  rounded-full hover:bg-blue-600 shadow-md'
 
   p.mt-6.text-center
-    = link_to 'キャンセル', contest_path(@contest), class: 'text-slate-700 hover:underline'
+    = link_to 'キャンセル', contest_path(@contest),
+      class: 'text-slate-700 hover:underline'

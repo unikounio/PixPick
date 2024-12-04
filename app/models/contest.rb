@@ -15,6 +15,12 @@ class Contest < ApplicationRecord
 
   before_create :generate_invitation_token
 
+  def add_participant(user_id)
+    participant = Participant.new(user_id: user_id, contest_id: id)
+    Rails.logger.debug { "participant: #{participant}" }
+    participant.save
+  end
+
   private
 
   def deadline_cannot_be_in_the_past

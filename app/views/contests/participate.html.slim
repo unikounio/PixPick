@@ -29,12 +29,17 @@
 
   .mt-8.text-center
     - if user_signed_in?
-      = button_to 'コンテストに参加する', root_path, class: 'bg-blue-500 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-600'
+      = button_to 'コンテストに参加する',
+        participate_contest_path(@contest),
+        class: 'bg-blue-500 text-white font-bold \
+                py-3 px-6 rounded-full hover:bg-blue-600'
     - else
       = button_to 'Googleでログイン', user_google_oauth2_omniauth_authorize_path,
         method: :post,
         data: { turbo: false },
-        class: 'bg-blue-500 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-600'
+        class: 'bg-blue-500 text-white font-bold \
+                py-3 px-6 rounded-full hover:bg-blue-600'
 
   .mt-6.text-center
-    = link_to 'トップページへ', root_path, class: 'text-slate-700 hover:underline hover:underline-offset-4'
+    = link_to 'トップページへ', root_path,
+      class: 'text-slate-700 hover:underline hover:underline-offset-4'

@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     delete 'logout', to: 'devise/sessions#destroy', as: :destroy_user_session
   end
 
-  get 'contests/invite', to: 'contests#participate', as: :join_contest
+  get 'contests/invite', to: 'contests#join', as: :join_contest
 
   resources :contests, except: :index do
     resources :entries, except: %i[index edit] do
@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
     member do
       get 'invite', to: 'contests#invite'
+      post 'participate', to: 'contests#participate'
     end
   end
 
