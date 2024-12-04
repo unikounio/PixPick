@@ -4,8 +4,10 @@ class ContestsController < ApplicationController
   include GoogleApiActions
 
   before_action :ensure_valid_access_token!, only: %i[show create]
-  before_action :set_contest, only: %i[show edit destroy]
+  before_action :set_contest, only: %i[show edit invite participate destroy]
   before_action :set_drive_service, only: %i[show create]
+
+  skip_before_action :authenticate_user!, only: [:join]
 
   def index
     @contests = current_user.contests
@@ -36,6 +38,38 @@ class ContestsController < ApplicationController
                   notice: t('activerecord.notices.messages.create', model: t('activerecord.models.contest'))
     else
       redirect_with_failure
+    end
+  end
+
+  def invite
+    @invite_url = join_contest_url(token: @contest.invitation_token)
+  end
+
+  def join
+    token = params[:token]
+    @contest = Contest.find_by(invitation_token: token)
+
+    if @contest.present?
+      session[:contest_id] = @contest.id unless user_signed_in?
+      render :participate
+    else
+      redirect_to root_path, alert: '無効な招待トークンです。'
+    end
+  end
+
+  def participate
+    if Participant.find_by(user_id: current_user.id, contest_id: @contest.id)
+      flash[:participation_alert] = 'このコンテストは既に参加済みです。'
+      redirect_to root_path
+      return
+    end
+
+    if @contest.add_participant(current_user.id)
+      flash[:participation_notice] = 'コンテストに参加しました。'
+      redirect_to contest_path(@contest)
+    else
+      flash[:participation_alert] = 'コンテストへの参加に失敗しました。'
+      redirect_to root_path
     end
   end
 

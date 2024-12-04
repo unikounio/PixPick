@@ -7,10 +7,7 @@ module Users
       @user = User.from_omniauth(auth)
 
       if @user.persisted?
-        request.env['devise.mapping'] = Devise.mappings[:user]
-        store_tokens(auth.credentials)
-        set_flash_message(:notice, :success, kind: 'Google') if is_navigational_format?
-        sign_in_and_redirect @user, event: :authentication
+        process_successful_authentication(auth)
       else
         set_flash_message(:alert, :failure, kind: 'Google') if is_navigational_format?
         redirect_to root_path
@@ -27,10 +24,50 @@ module Users
 
     private
 
+    def process_successful_authentication(auth)
+      request.env['devise.mapping'] = Devise.mappings[:user]
+      store_tokens(auth.credentials)
+      result =
+        (participate_contest(@user) if session[:contest_id].present?)
+      set_flash_message(:notice, :success, kind: 'Google') if is_navigational_format?
+      sign_in_and_redirect @user, result
+    end
+
     def store_tokens(credentials)
       session[:access_token] = credentials.token
       session[:refresh_token] = credentials.refresh_token
       session[:token_expires_at] = Time.zone.at(credentials.expires_at)
+    end
+
+    def participate_contest(user)
+      @contest_id = session.delete(:contest_id)
+
+      if Participant.find_by(user_id: user.id, contest_id: @contest_id)
+        flash[:participation_alert] = 'このコンテストは既に参加済みです。'
+        return true
+      end
+
+      contest = Contest.find(@contest_id)
+      if contest.add_participant(user.id)
+        flash[:participation_notice] = 'コンテストに参加しました。'
+        true
+      else
+        flash[:participation_alert] = 'コンテストへの参加に失敗しました。'
+        false
+      end
+    end
+
+    def sign_in_and_redirect(user, participation_result)
+      sign_in user
+      redirect_to after_sign_in_path_for(@user, participation_result)
+    end
+
+    def after_sign_in_path_for(resource_or_scope, participation_result)
+      if participation_result
+        contest_path(@contest_id)
+      else
+        super(resource_or_scope)
+      end
     end
   end
 end
