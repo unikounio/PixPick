@@ -1,0 +1,40 @@
+.container.mx-auto.max-w-lg.p-6
+  p.text-2xl.font-bold.text-gray-800.mb-6.text-center
+    - if user_signed_in?
+      | コンテストに参加する
+    - else
+      | ようこそPixPickへ！
+
+  p.text-lg.text-gray-700.leading-relaxed
+    | あなたは以下のコンテストに招待されています。
+    br
+    | コンテスト名と投票期日をご確認の上、
+
+    span.font-bold.text-gray-800
+      - if user_signed_in?
+        | 「コンテストに参加する」ボタンを押していただくことで、
+      - else
+        | Googleでログインしていただくことで
+
+      | コンテストにご参加いただけます。
+
+  .mt-6.text-center
+    p.font-bold.text-lg.text-gray-900.mb-2
+      span.text-gray-500 = 'コンテスト名 '
+      = @contest.name
+
+    p.font-bold.text-lg.text-gray-900
+      span.text-gray-500 = '投票期日 '
+      = "#{@contest.deadline.strftime('%Y/%m/%d')} まで"
+
+  .mt-8.text-center
+    - if user_signed_in?
+      = button_to 'コンテストに参加する', root_path, class: 'bg-blue-500 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-600'
+    - else
+      = button_to 'Googleでログイン', user_google_oauth2_omniauth_authorize_path,
+        method: :post,
+        data: { turbo: false },
+        class: 'bg-blue-500 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-600'
+
+  .mt-6.text-center
+    = link_to 'トップページへ', root_path, class: 'text-slate-700 hover:underline hover:underline-offset-4'
