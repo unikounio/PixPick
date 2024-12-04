@@ -7,6 +7,8 @@ class ContestsController < ApplicationController
   before_action :set_contest, only: %i[show edit invite destroy]
   before_action :set_drive_service, only: %i[show create]
 
+  skip_before_action :authenticate_user!, only: [:participate]
+
   def index
     @contests = current_user.contests
   end
@@ -41,6 +43,17 @@ class ContestsController < ApplicationController
 
   def invite
     @invite_url = join_contest_url(token: @contest.invitation_token)
+  end
+
+  def participate
+    token = params[:token]
+    @contest = Contest.find_by(invitation_token: token)
+
+    if @contest.present?
+      render :participate
+    else
+      redirect_to root_path, alert: '無効な招待トークンです。'
+    end
   end
 
   def destroy
