@@ -24,6 +24,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :users, only: :destroy
+
   get 'users/:user_id/contests', to: 'contests#index', as: :user_contests
 
   get 'up' => 'rails/health#show', as: :rails_health_check
