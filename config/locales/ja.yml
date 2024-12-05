@@ -19,7 +19,7 @@ ja:
         restrict_dependent_destroy:
           has_one: "#{record}が存在しているので削除できません"
           has_many: "%{record}が存在しているので削除できません"
-        past: "%{attribute}は過去に設定できません"
+        past: 'は過去に設定できません'
         entered: この写真は既にエントリーされています
         participated: このコンテストには既に参加しています
         registered: このユーザーは既に登録されています

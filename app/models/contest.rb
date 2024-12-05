@@ -17,7 +17,6 @@ class Contest < ApplicationRecord
 
   def add_participant(user_id)
     participant = Participant.new(user_id: user_id, contest_id: id)
-    Rails.logger.debug { "participant: #{participant}" }
     participant.save
   end
 
