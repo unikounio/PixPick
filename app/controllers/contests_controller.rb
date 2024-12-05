@@ -3,8 +3,8 @@
 class ContestsController < ApplicationController
   include GoogleApiActions
 
-  before_action :ensure_valid_access_token!, only: %i[show create]
-  before_action :set_contest, only: %i[show edit invite participate destroy]
+  before_action :ensure_valid_access_token!, only: %i[show create update]
+  before_action :set_contest, only: %i[show edit update invite participate destroy]
   before_action :set_drive_service, only: %i[show create]
 
   skip_before_action :authenticate_user!, only: [:join]
@@ -27,7 +27,9 @@ class ContestsController < ApplicationController
     @contests = current_user.contests
   end
 
-  def edit; end
+  def edit
+    @is_editing_contest = true
+  end
 
   def create
     @contest = current_user.contests.new(contest_params)
@@ -38,6 +40,27 @@ class ContestsController < ApplicationController
                   notice: t('activerecord.notices.messages.create', model: t('activerecord.models.contest'))
     else
       redirect_with_failure
+    end
+  end
+
+  def update
+    if @contest.name == contest_params[:name] && @contest.deadline == Time.zone.parse(contest_params[:deadline])
+      render turbo_stream: append_turbo_toast(:error, '更新する項目がありません')
+      return
+    end
+
+    if @contest.update(contest_params)
+      updated_message =
+        if @contest.saved_change_to_name? && @contest.saved_change_to_deadline?
+          'コンテスト名と投票期日'
+        elsif @contest.saved_change_to_name?
+          'コンテスト名'
+        elsif @contest.saved_change_to_deadline?
+          '投票期日'
+        end
+      render turbo_stream:  append_turbo_toast(:success, "#{updated_message}を更新しました")
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 

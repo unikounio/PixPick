@@ -1,7 +1,4 @@
-h1 コンテスト編集
-p
-  | コンテスト名：
-  = @contest.name
+= render 'form'
 
 = link_to 'コンテスト一覧へ', user_contests_path(current_user)
 = button_to 'コンテストを削除する', contest_path(@contest), method: :delete,

@@ -13,9 +13,7 @@ class ApplicationController < ActionController::Base
     contest_id = params[:contest_id] || params[:id]
     return unless user_signed_in? && contest_id.present?
 
-    @selected_contest_name = Rails.cache.fetch("contest_name_#{contest_id}", expires_in: 12.hours) do
-      Contest.find(contest_id)&.name
-    end
+    @selected_contest_name = Contest.find(contest_id)&.name
   end
 
   def set_recent_contests
