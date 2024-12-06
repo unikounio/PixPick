@@ -18,6 +18,8 @@ Rails.application.routes.draw do
       resources :votes, only: :create
     end
 
+    resources :participants, only: :destroy
+
     member do
       get 'invite', to: 'contests#invite'
       post 'participate', to: 'contests#participate'

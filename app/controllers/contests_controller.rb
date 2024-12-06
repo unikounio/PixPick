@@ -29,7 +29,7 @@ class ContestsController < ApplicationController
 
   def edit
     @is_editing_contest = true
-    @participants = @contest.users
+    @users = User.eager_load(:participants).where(participants: { contest_id: @contest.id })
   end
 
   def create
