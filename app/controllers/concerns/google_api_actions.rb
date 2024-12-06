@@ -25,4 +25,15 @@ module GoogleApiActions
   def set_drive_service
     @drive_service = GoogleDriveService.new(session[:access_token])
   end
+
+  def setup_drive_folder
+    folder_id = @drive_service.create_folder(@contest.name)
+
+    if folder_id.present?
+      permission_id = @drive_service.share_file(folder_id)
+      return nil if permission_id.nil?
+    end
+
+    [folder_id, permission_id]
+  end
 end

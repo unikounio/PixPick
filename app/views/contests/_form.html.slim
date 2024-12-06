@@ -1,23 +1,33 @@
-= turbo_frame_tag 'contest_form'
-  .my-4.flex.justify-center
-    = form_with model: @contest, locale: true do |f|
-      - if @contest.errors.any?
-        ul
-          - @contest.errors.full_messages.each do |message|
-            li.text-rose-600.text-sm.mb-1.text-left
-              = message
+.my-4.flex.justify-center
+  = form_with model: @contest, locale: true do |f|
+    - if @contest.errors.any?
+      ul
+        - @contest.errors.full_messages.each do |message|
+          li.text-rose-600.text-sm.mb-1.text-left
+            = message
 
-      .mb-4.flex.items-center
-        = f.label :name, t('activerecord.attributes.contest.name'), class: 'text-base font-medium text-gray-700 text-right pr-2 flex-shrink-0 w-32'
-        = f.text_field :name, class: 'block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
+    .mb-4.flex.items-center
+      = f.label :name, t('activerecord.attributes.contest.name'),
+        class: 'text-base font-medium text-gray-700 text-right \
+                        pr-2 flex-shrink-0 w-32'
+      = f.text_field :name, class: 'block w-full border-gray-300 rounded-md \
+                                    focus:ring-blue-500 focus:border-blue-500'
 
-      .mb-4.flex.items-center
-        = f.label :deadline, t('activerecord.attributes.contest.deadline'), class: 'text-base font-medium text-gray-700 text-right pr-2 flex-shrink-0 w-32'
-        = f.date_field :deadline, class: 'block w-30 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
-        .ml-2 まで
+    .mb-4.flex.items-center
+      = f.label :deadline, t('activerecord.attributes.contest.deadline'),
+        class: 'text-base font-medium text-gray-700 text-right \
+                        pr-2 flex-shrink-0 w-32'
+      = f.date_field :deadline,
+        class: 'block w-30 border-gray-300 rounded-md \
+                              focus:ring-blue-500 focus:border-blue-500'
+      .ml-2 まで
 
-      .flex.justify-center
-        - if @contest.new_record?
-          = f.submit t('helpers.submit.contest.create'), class: 'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full'
-        - else
-          = f.submit '更新する', class: 'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full'
+    .flex.justify-center
+      - if @contest.new_record?
+        = f.submit t('helpers.submit.contest.create'),
+          class: 'bg-blue-500 hover:bg-blue-600 text-white \
+                            font-bold py-2 px-4 rounded-full'
+      - else
+        = f.submit '更新する',
+          class: 'bg-blue-500 hover:bg-blue-600 \
+                           text-white font-bold py-2 px-4 rounded-full'
