@@ -1,4 +1,5 @@
-= render 'form'
+= turbo_frame_tag 'contest_form'
+  = render 'form'
 
 .my-4.flex.justify-end
   = link_to '新しい参加者を招待する', invite_contest_path(@contest), class: 'bg-gray-300 hover:bg-gray-400 py-3 px-4 rounded-full inline-block shadow-lg'
