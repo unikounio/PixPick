@@ -1,5 +1,5 @@
 = turbo_frame_tag 'contest_form'
-  .mt-2.place-items-center
+  .my-4.flex.justify-center
     = form_with model: @contest, locale: true do |f|
       - if @contest.errors.any?
         ul
@@ -13,9 +13,10 @@
 
       .mb-4.flex.items-center
         = f.label :deadline, t('activerecord.attributes.contest.deadline'), class: 'text-base font-medium text-gray-700 text-right pr-2 flex-shrink-0 w-32'
-        = f.date_field :deadline, class: 'block w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
+        = f.date_field :deadline, class: 'block w-30 border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
+        .ml-2 まで
 
-      .text-center
+      .flex.justify-center
         - if @contest.new_record?
           = f.submit t('helpers.submit.contest.create'), class: 'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full'
         - else
