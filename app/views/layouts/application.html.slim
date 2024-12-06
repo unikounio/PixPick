@@ -1,5 +1,5 @@
 doctype html
-html
+html.bg-slate-50
   head
     title = content_for(:title) || 'Pix Pick'
     meta name="viewport" content="width=device-width,initial-scale=1"
@@ -17,13 +17,13 @@ html
     = stylesheet_link_tag 'application', 'data-turbo-track': 'reload'
     = javascript_importmap_tags
 
-body
-  header
-    #flash.fixed.top-0.left-0.w-full.z-50
-      = render 'shared/flash'
-    #toast.fixed.top-5.left-1/2.transform.-translate-x-1/2.z-50.space-y-4
-      = render 'shared/toast'
-    - unless current_page?(root_path) || current_page?(join_contest_path)
-      = render 'layouts/header/main'
-  main
-    = yield
+  body.max-w-screen-md.mx-auto.h-screen.flex.flex-col.bg-white
+    header
+      #flash.fixed.top-0.left-0.w-full.z-50
+        = render 'shared/flash'
+      #toast.fixed.top-5.left-1/2.transform.-translate-x-1/2.z-50.space-y-4
+        = render 'shared/toast'
+      - unless current_page?(root_path) || current_page?(join_contest_path)
+        = render 'layouts/header/main'
+    main
+      = yield

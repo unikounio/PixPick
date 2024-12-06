@@ -82,4 +82,9 @@ class GoogleDriveService
     Rails.logger.error("Google Driveファイルの削除に失敗しました: #{e.message}")
     false
   end
+
+  def update_file_name(file_id, file_name)
+    file_metadata = Google::Apis::DriveV3::File.new(name: file_name)
+    @service.update_file(file_id, file_metadata)
+  end
 end

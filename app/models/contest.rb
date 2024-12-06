@@ -17,8 +17,18 @@ class Contest < ApplicationRecord
 
   def add_participant(user_id)
     participant = Participant.new(user_id: user_id, contest_id: id)
-    Rails.logger.debug { "participant: #{participant}" }
     participant.save
+  end
+
+  def save_contest_and_create_participant(folder_id, permission_id, user_id)
+    ActiveRecord::Base.transaction do
+      self.drive_file_id = folder_id
+      self.drive_permission_id = permission_id
+      save!
+      participants.create!(user_id:)
+    end
+  rescue ActiveRecord::RecordInvalid
+    false
   end
 
   private
