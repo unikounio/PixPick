@@ -5,7 +5,7 @@ class ContestsController < ApplicationController
 
   before_action :ensure_valid_access_token!, only: %i[show create update]
   before_action :set_contest, only: %i[show edit update invite participate destroy]
-  before_action :set_drive_service, only: %i[show create]
+  before_action :set_drive_service, only: %i[show create update]
 
   skip_before_action :authenticate_user!, only: [:join]
 
@@ -58,6 +58,9 @@ class ContestsController < ApplicationController
         elsif @contest.saved_change_to_deadline?
           '投票期日'
         end
+
+      @drive_service.update_file_name(@contest.drive_file_id, @contest.name)
+
       render turbo_stream:  append_turbo_toast(:success, "#{updated_message}を更新しました")
     else
       render :edit, status: :unprocessable_entity
