@@ -1,5 +1,8 @@
 = render 'form'
 
+.my-4.text-right
+  = link_to '新しい参加者を招待する', invite_contest_path(@contest), class: 'bg-gray-300 hover:bg-gray-400 py-3 px-4 rounded-full inline-block shadow-lg'
+
 = link_to 'コンテスト一覧へ', user_contests_path(current_user)
 = button_to 'コンテストを削除する', contest_path(@contest), method: :delete,
   data: { turbo_confirm: '選択したコンテストを削除します。よろしいですか？' }
