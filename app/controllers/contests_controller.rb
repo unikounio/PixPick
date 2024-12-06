@@ -29,6 +29,7 @@ class ContestsController < ApplicationController
 
   def edit
     @is_editing_contest = true
+    @participants = @contest.users
   end
 
   def create
