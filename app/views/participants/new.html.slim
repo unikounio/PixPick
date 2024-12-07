@@ -30,7 +30,7 @@
   .mt-8.text-center
     - if user_signed_in?
       = button_to 'コンテストに参加する',
-        participate_contest_path(@contest),
+        contest_participants_path(@contest),
         class: 'bg-blue-500 text-white font-bold \
                 py-3 px-6 rounded-full hover:bg-blue-600'
     - else
