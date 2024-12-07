@@ -1,11 +1,20 @@
-= turbo_frame_tag 'contest_form'
-  = render 'form'
+= render 'form'
 
-.my-4.flex.justify-end
-  = link_to '新しい参加者を招待する',
-            invite_contest_path(@contest),
-            class: 'bg-gray-300 hover:bg-gray-400 py-3 px-4 \
-                    rounded-full inline-block shadow-lg'
+.my-4.flex.justify-center
+  .w-full.max-w-lg.flex
+    .w-1/4.flex.flex-col.justify-start
+      | 【参加者】
+      = turbo_frame_tag 'participants_list'
+        = render 'participants_list'
+      - @users.each do |user|
+        - if user == current_user
+          = render partial: 'contests/participant', locals: { user: }
+
+    .w-3/4.flex.justify-end.items-center
+      = link_to '新しい参加者を招待する',
+        invite_contest_path(@contest),
+        class: 'bg-gray-300 hover:bg-gray-400 py-3 px-3 \
+                        rounded-full inline-block shadow-lg'
 
 .my-4.flex.justify-center
   = link_to 'コンテストを削除する',

@@ -36,6 +36,10 @@ class User < ApplicationRecord
     end
   end
 
+  def participant_for(contest)
+    participants.find { |p| p.contest_id == contest.id }
+  end
+
   private
 
   def post_token_request(refresh_token)

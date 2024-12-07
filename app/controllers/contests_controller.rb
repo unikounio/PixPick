@@ -4,10 +4,8 @@ class ContestsController < ApplicationController
   include GoogleApiActions
 
   before_action :ensure_valid_access_token!, only: %i[show create update]
-  before_action :set_contest, only: %i[show edit update invite participate destroy]
+  before_action :set_contest, only: %i[show edit update invite destroy]
   before_action :set_drive_service, only: %i[show create update]
-
-  skip_before_action :authenticate_user!, only: [:join]
 
   def index
     @contests = current_user.contests
@@ -29,6 +27,7 @@ class ContestsController < ApplicationController
 
   def edit
     @is_editing_contest = true
+    @users = User.eager_load(:participants).where(participants: { contest_id: @contest.id })
   end
 
   def create
@@ -60,35 +59,7 @@ class ContestsController < ApplicationController
   end
 
   def invite
-    @invite_url = join_contest_url(token: @contest.invitation_token)
-  end
-
-  def join
-    token = params[:token]
-    @contest = Contest.find_by(invitation_token: token)
-
-    if @contest.present?
-      session[:contest_id] = @contest.id unless user_signed_in?
-      render :participate
-    else
-      redirect_to root_path, alert: '無効な招待トークンです。'
-    end
-  end
-
-  def participate
-    if Participant.find_by(user_id: current_user.id, contest_id: @contest.id)
-      flash[:participation_alert] = 'このコンテストは既に参加済みです。'
-      redirect_to root_path
-      return
-    end
-
-    if @contest.add_participant(current_user.id)
-      flash[:participation_notice] = 'コンテストに参加しました。'
-      redirect_to contest_path(@contest)
-    else
-      flash[:participation_alert] = 'コンテストへの参加に失敗しました。'
-      redirect_to root_path
-    end
+    @invite_url = new_contest_participant_url(contest_id: params[:id], token: @contest.invitation_token)
   end
 
   def destroy

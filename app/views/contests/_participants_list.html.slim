@@ -1,0 +1,3 @@
+- @users.each do |user|
+  - unless user == current_user
+    = render partial: 'contests/participant', locals: { user: }
