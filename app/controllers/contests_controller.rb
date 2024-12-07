@@ -43,6 +43,7 @@ class ContestsController < ApplicationController
   end
 
   def update
+    @users = @contest.users
     if no_changes_to_update?
       render turbo_stream: append_turbo_toast(:error, '更新する項目がありません')
       return

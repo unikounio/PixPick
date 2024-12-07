@@ -2,4 +2,8 @@ h1 コンテスト画面
 
 = render 'entries/thumbnail_list'
 
-= link_to t('views.common.back_to_home'), root_path
+= link_to new_contest_entry_path(@contest),
+  class: 'fixed bottom-14 left-1/2 transform -translate-x-1/2 \
+          w-12 h-12 rounded-full bg-white text-black shadow-lg \
+          z-50 flex items-center justify-center leading-none' do
+  i.fas.fa-plus
