@@ -3,9 +3,9 @@
 class ContestsController < ApplicationController
   include GoogleApiActions
 
-  before_action :ensure_valid_access_token!, only: %i[show create update]
-  before_action :set_contest, only: %i[show edit update invite destroy]
-  before_action :set_drive_service, only: %i[show create update]
+  before_action :ensure_valid_access_token!, only: %i[show ranking create update]
+  before_action :set_contest, only: %i[show ranking edit update invite destroy]
+  before_action :set_drive_service, only: %i[show ranking create update]
 
   def index
     @contests = current_user.contests
@@ -18,6 +18,31 @@ class ContestsController < ApplicationController
       score = current_user.votes.find_by(entry_id: entry.id)&.score
       [thumbnail_link, entry.id, score]
     end
+  end
+
+  def ranking
+    entries_with_scores = @contest.entries
+                                  .with_total_scores
+                                  .order(total_score: :desc, id: :asc)
+
+    @ranked_entries = []
+    current_rank = 0
+    previous_score = nil
+
+    entries_with_scores.each_with_index do |entry, index|
+      if entry.total_score != previous_score
+        current_rank = index + 1
+        previous_score = entry.total_score
+      end
+
+      @ranked_entries << {
+        rank: current_rank,
+        thumbnail_link: @drive_service.get_thumbnail_link(entry.drive_file_id),
+        total_score: entry.total_score
+      }
+    end
+
+    render :show
   end
 
   def new

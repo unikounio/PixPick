@@ -1,9 +1,21 @@
-h1 コンテスト画面
+h1.text-2xl.font-bold.text-center.mt-4 = @contest.name
 
-= render 'entries/thumbnail_list'
+= turbo_frame_tag 'content' do
+  div class='flex justify-center items-center mt-6 \
+              border border-gray-300 rounded-lg overflow-hidden w-fit mx-auto'
+    = link_to '全てのエントリー', contest_path(@contest),
+      data: { turbo_frame: 'content' },
+      class: tab_link_classes(request.fullpath,
+                              contest_path(@contest),
+                              'w-32 h-10 leading-10 px-2 font-bold \
+                               text-center border-r border-gray-300')
+    = link_to 'ランキング', ranking_contest_path(@contest),
+      data: { turbo_frame: 'content' },
+      class: tab_link_classes(request.fullpath,
+                              ranking_contest_path(@contest),
+                              'w-32 h-10 leading-10 px-2 font-bold text-center')
 
-= link_to new_contest_entry_path(@contest),
-  class: 'fixed bottom-14 left-1/2 transform -translate-x-1/2 \
-          w-12 h-12 rounded-full bg-white text-black shadow-lg \
-          z-50 flex items-center justify-center leading-none' do
-  i.fas.fa-plus
+  - if current_page?(contest_path(@contest))
+    = render 'contests/all_entries'
+  - elsif current_page?(ranking_contest_path(@contest))
+    = render 'contests/ranking'

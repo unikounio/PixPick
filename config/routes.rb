@@ -9,14 +9,17 @@ Rails.application.routes.draw do
   end
 
   resources :contests, except: :index do
+    member do
+      get 'ranking'
+      get 'invite'
+    end
+
     resources :entries, except: %i[index edit] do
       get 'photo', to: 'entries#image_proxy', on: :member
       resources :votes, only: :create
     end
 
     resources :participants, only: %i[new create destroy]
-
-    get 'invite', to: 'contests#invite', on: :member
   end
 
   resources :users, only: :destroy

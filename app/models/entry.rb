@@ -9,6 +9,13 @@ class Entry < ApplicationRecord
                             uniqueness: { scope: :contest_id, message: :entered }
   validates :drive_permission_id, uniqueness: { scope: :drive_file_id }
 
+  scope :with_total_scores, lambda {
+    left_joins(:votes)
+      .select('entries.*, COALESCE(SUM(votes.score), 0) AS total_score')
+      .group('entries.id')
+      .order('total_score DESC')
+  }
+
   def self.upload_and_create_entries!(files, current_user, contest, drive_service)
     files.each do |file|
       drive_file_id, permission_id = upload_to_google_drive(file, contest, drive_service)
