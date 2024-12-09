@@ -5,7 +5,7 @@ class ContestsController < ApplicationController
 
   before_action :ensure_valid_access_token!, only: %i[show create update]
   before_action :set_contest, only: %i[show ranking edit update invite destroy]
-  before_action :set_drive_service, only: %i[show create update]
+  before_action :set_drive_service, only: %i[show ranking create update]
 
   def index
     @contests = current_user.contests
@@ -21,7 +21,13 @@ class ContestsController < ApplicationController
   end
 
   def ranking
-    @entries_with_scores = @contest.entries.with_total_scores
+    @entries_with_scores = @contest.entries.with_total_scores.map do |entry|
+      {
+        id: entry.id,
+        thumbnail_link: @drive_service.get_thumbnail_link(entry.drive_file_id),
+        total_score: entry.total_score
+      }
+    end
   end
 
   def new
