@@ -1,5 +1,5 @@
 .mx-auto.mt-8.w-3/5
-  - if @entries_with_scores.any?
+  - if @ranked_entries.any?
     table.w-full.border-collapse
       thead
         tr.bg-gray-100
@@ -7,9 +7,9 @@
           th.p-2
           th.text-left.p-2 合計点
       tbody
-        - @entries_with_scores.each_with_index do |entry, index|
+        - @ranked_entries.each do |entry|
           tr
-            td.p-2.text-lg.font-bold.text-right = "#{index + 1}位"
+            td.p-2.text-lg.font-bold.text-right = "#{entry[:rank]}位"
             td.p-2.flex.justify-center.items-center
               = image_tag entry[:thumbnail_link],
                 class: 'w-32 h-32 object-cover'
