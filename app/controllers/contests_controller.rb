@@ -4,7 +4,7 @@ class ContestsController < ApplicationController
   include GoogleApiActions
 
   before_action :ensure_valid_access_token!, only: %i[show create update]
-  before_action :set_contest, only: %i[show edit update invite destroy]
+  before_action :set_contest, only: %i[show ranking edit update invite destroy]
   before_action :set_drive_service, only: %i[show create update]
 
   def index
@@ -18,6 +18,10 @@ class ContestsController < ApplicationController
       score = current_user.votes.find_by(entry_id: entry.id)&.score
       [thumbnail_link, entry.id, score]
     end
+  end
+
+  def ranking
+    @entries_with_scores = @contest.entries.with_total_scores
   end
 
   def new
