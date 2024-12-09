@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
 
   def set_recent_contests
     @recent_contests = if user_signed_in?
-                         current_user.contests.order(updated_at: :desc).limit(4)
+                         current_user.contests.recently_updated(4)
                        else
                          []
                        end
