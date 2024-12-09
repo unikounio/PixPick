@@ -28,6 +28,8 @@ class ContestsController < ApplicationController
         total_score: entry.total_score
       }
     end
+
+    render 'show'
   end
 
   def new
