@@ -11,3 +11,8 @@
 }
 
 */
+
+.section-header {
+    @apply text-base my-4 p-1 border-b-2;
+}
+
