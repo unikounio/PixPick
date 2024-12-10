@@ -27,18 +27,14 @@
       span.text-gray-500 = '投票期日 '
       = "#{@contest.deadline.strftime('%Y/%m/%d')} まで"
 
-  .mt-8.text-center
+  .mt-8.flex.justify-center.items-center.flex-col
     - if user_signed_in?
       = button_to 'コンテストに参加する',
         contest_participants_path(@contest),
         class: 'bg-blue-500 text-white font-bold \
                 py-3 px-6 rounded-full hover:bg-blue-600'
     - else
-      = button_to 'Googleでログイン', user_google_oauth2_omniauth_authorize_path,
-        method: :post,
-        data: { turbo: false },
-        class: 'bg-blue-500 text-white font-bold \
-                py-3 px-6 rounded-full hover:bg-blue-600'
+      = render 'shared/login_button'
 
   .mt-6.text-center
     = link_to 'トップページへ', root_path,

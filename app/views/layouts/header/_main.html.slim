@@ -4,5 +4,5 @@
   - if current_user.present?
     .ml-auto.flex.items-center.space-x-10
       - if current_user.contests.any? && !@is_editing_contest
-        = render 'layouts/header/contest_selection'
+        = render 'shared/contest_selection'
       = render 'layouts/header/menu'
