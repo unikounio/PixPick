@@ -27,7 +27,7 @@
       span.text-gray-500 = '投票期日 '
       = "#{@contest.deadline.strftime('%Y/%m/%d')} まで"
 
-  .mt-8.text-center
+  .mt-8.flex.justify-center.items-center.flex-col
     - if user_signed_in?
       = button_to 'コンテストに参加する',
         contest_participants_path(@contest),

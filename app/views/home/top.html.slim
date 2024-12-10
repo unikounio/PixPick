@@ -10,11 +10,7 @@
     br
     | 簡単に選び出すためのサービスです。
 
-  .mt-8
-    - if user_signed_in?
-      / = render 'shared/contest_selection'
-    - else
-      = render 'shared/login_button'
+  = render 'login_or_contest'
 
   .mt-10.flex.justify-center.items-center.flex-col
     ul.list-none.list-inside.mt-4
@@ -38,11 +34,7 @@
           | 自分のペースで写真を評価しましょう。
     p.text-lg.text-center.mt-4 さあ、最高の瞬間を選び出しましょう！
 
-    .mt-8
-      - if user_signed_in?
-        / = render 'shared/contest_selection'
-      - else
-        = render 'shared/login_button'
+    = render 'login_or_contest'
 
   footer.mt-12.text-center.text-sm.text-gray-500
     p.mt-4 © 2024 unikounio
