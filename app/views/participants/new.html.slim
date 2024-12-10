@@ -34,11 +34,7 @@
         class: 'bg-blue-500 text-white font-bold \
                 py-3 px-6 rounded-full hover:bg-blue-600'
     - else
-      = button_to 'Googleでログイン', user_google_oauth2_omniauth_authorize_path,
-        method: :post,
-        data: { turbo: false },
-        class: 'bg-blue-500 text-white font-bold \
-                py-3 px-6 rounded-full hover:bg-blue-600'
+      = render 'shared/login_button'
 
   .mt-6.text-center
     = link_to 'トップページへ', root_path,

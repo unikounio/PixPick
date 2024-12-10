@@ -1,0 +1,14 @@
+.flex.justify-center.items-center.flex-col
+  = button_to 'Googleでログイン',
+    user_google_oauth2_omniauth_authorize_path,
+    method: :post,
+    data: { turbo: false },
+    class: 'bg-blue-500 hover:bg-opacity-75 transition py-3 px-16 \
+            mb-2 rounded-full text-white font-bold shadow-lg;'
+  p.text-xs
+    = link_to '利用規約', terms_path, class: 'text-blue-500 hover:underline'
+    | ・
+    = link_to 'プライバシーポリシー', privacy_path, class: 'text-blue-500 hover:underline'
+    | に
+    br
+    | 同意した上でログインしてください。

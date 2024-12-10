@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  root 'home#index'
+  root 'home#top'
 
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   devise_scope :user do
@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   resources :users, only: :destroy
 
   get 'users/:user_id/contests', to: 'contests#index', as: :user_contests
+  get 'terms', to: 'home#terms'
+  get 'privacy', to: 'home#privacy'
 
   get 'up' => 'rails/health#show', as: :rails_health_check
   get 'service-worker' => 'rails/pwa#service_worker', as: :pwa_service_worker
