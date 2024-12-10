@@ -27,10 +27,10 @@ module Users
     def process_successful_authentication(auth)
       request.env['devise.mapping'] = Devise.mappings[:user]
       store_tokens(auth.credentials)
-      result =
+      participation_result =
         (participate_contest(@user) if session[:contest_id].present?)
       set_flash_message(:notice, :success, kind: 'Google') if is_navigational_format?
-      sign_in_and_redirect @user, result
+      sign_in_and_redirect @user, participation_result
     end
 
     def store_tokens(credentials)
@@ -62,11 +62,15 @@ module Users
       redirect_to after_sign_in_path_for(@user, participation_result)
     end
 
-    def after_sign_in_path_for(resource_or_scope, participation_result)
+    def after_sign_in_path_for(user, participation_result)
       if participation_result
         contest_path(@contest_id)
+      elsif user.contests.count.zero?
+        new_contest_path
+      elsif user.contests.count == 1
+        contest_path(user.contests.first)
       else
-        super(resource_or_scope)
+        user_contests_path(user)
       end
     end
   end
