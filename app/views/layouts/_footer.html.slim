@@ -1,0 +1,15 @@
+footer.bg-white.border-t.border-gray-200.text-xs.text-center.pt-4.pb-3.mt-12
+  ul.flex.justify-center.items-center.pb-2
+    li.inline-block.px-4.hover:underline.hover:text-gray-400
+      = link_to '利用規約', terms_path
+    li.inline-block.px-4.hover:underline.hover:text-gray-400
+      = link_to 'プライバシーポリシー', privacy_path
+    li.text-xl.px-4.hover:text-gray-400
+      = link_to 'https://github.com/unikounio/PixPick', target: '_blank',
+        rel: 'noopener'
+        i.fa-brands.fa-github
+  ul.flex.justify-center.items-center
+    li.px-4
+      p.inline.pr-2 © 2024
+      = link_to 'unikounio', 'https://x.com/unikounio512', target: '_blank',
+        rel: 'noopener', class: 'hover:underline hover:text-gray-400'
