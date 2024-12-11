@@ -27,3 +27,5 @@ html.bg-slate-50
         = render 'layouts/header/main'
     main
       = yield
+    - if current_page?(root_path)
+      = render partial: 'layouts/footer', cached: true
