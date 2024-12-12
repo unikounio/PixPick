@@ -1,7 +1,9 @@
 = turbo_frame_tag 'entry_content' do
-  .p-8.relative
-    = image_tag photo_contest_entry_path(@contest, @entry),
-      alt: t('views.entries.alt_text')
+  .px-2.py-4.relative
+    .max-w-screen-sm.sm:w-96.aspect-square
+      = image_tag photo_contest_entry_path(@contest, @entry),
+        alt: t('views.entries.alt_text'),
+        class: 'max-w-full max-h-full object-contain'
 
     button.absolute.-top-7.-right-5.text-4xl.font-bold
       .text-gray-600 data-action='click->modal#close'
