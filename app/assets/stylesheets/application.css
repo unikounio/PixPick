@@ -84,3 +84,11 @@ button {
     height: auto;
     object-fit: contain;
 }
+
+.loading-spinner {
+    display: none;
+}
+
+[aria-busy="true"] .loading-spinner {
+    display: block;
+}
