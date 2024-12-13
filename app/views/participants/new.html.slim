@@ -31,8 +31,8 @@
     - if user_signed_in?
       = button_to 'コンテストに参加する',
         contest_participants_path(@contest),
-        class: 'bg-blue-500 text-white font-bold \
-                py-3 px-6 rounded-full hover:bg-blue-600'
+        class: 'bg-cyan-500 text-white font-bold \
+                py-3 px-6 rounded-full hover:bg-cyan-600'
     - else
       = render 'shared/login_button'
 
