@@ -1,5 +1,8 @@
 .image-gallery data-controller="modal"
-  dialog data-modal-target="dialog" class="p-8 rounded-lg backdrop:bg-black/80"
+  dialog(
+    data-modal-target="dialog"
+    class="px-4 py-8 rounded-lg backdrop:bg-black/80"
+  )
     .modal-content data-modal-target="content"
 
   - @thumbnail_data.each do |thumbnail_link, entry_id, score|
