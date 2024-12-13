@@ -8,10 +8,10 @@
 
           = image_tag photo_contest_entry_path(@contest, @entry),
             alt: t('views.entries.alt_text'),
-            class: 'entry-img',
+            class: 'entry-img h-72 sm:h-auto',
             data: { action: 'load->image-status#finish' }
 
-    button.absolute.-top-7.-right-5.text-4xl.font-bold
+    button.absolute.-top-7.-right-1.text-4xl.font-bold
       .text-gray-600 data-action='click->modal#close'
         |✕
 
