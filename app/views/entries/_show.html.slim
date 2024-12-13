@@ -1,13 +1,15 @@
 = turbo_frame_tag 'entry_content' do
   .px-2.py-4.relative
     .max-w-screen-sm.sm:w-96.aspect-square
-      = turbo_frame_tag 'entry_image', data: { controller: 'image-status' } do
-        .loading-spinner ロード中...
+      .flex.justify-center.items-center.w-full.h-full
+        = turbo_frame_tag 'entry_image', data: { controller: 'image-status' } do
+          .loading-spinner
+            = render 'shared/spinner'
 
-        = image_tag photo_contest_entry_path(@contest, @entry),
-          alt: t('views.entries.alt_text'),
-          class: 'max-w-full max-h-full object-contain',
-          data: { action: 'load->image-status#finish' }
+          = image_tag photo_contest_entry_path(@contest, @entry),
+            alt: t('views.entries.alt_text'),
+            class: 'max-w-full max-h-full object-contain',
+            data: { action: 'load->image-status#finish' }
 
     button.absolute.-top-7.-right-5.text-4xl.font-bold
       .text-gray-600 data-action='click->modal#close'
