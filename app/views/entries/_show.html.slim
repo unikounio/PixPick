@@ -8,7 +8,7 @@
 
           = image_tag photo_contest_entry_path(@contest, @entry),
             alt: t('views.entries.alt_text'),
-            class: 'max-w-full max-h-full object-contain',
+            class: 'entry-img',
             data: { action: 'load->image-status#finish' }
 
     button.absolute.-top-7.-right-5.text-4xl.font-bold

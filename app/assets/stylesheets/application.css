@@ -92,3 +92,13 @@ button {
 [aria-busy="true"] .loading-spinner {
     display: block;
 }
+
+.entry-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+[aria-busy="true"] .entry-img {
+    display: none;
+}
