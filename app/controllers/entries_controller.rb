@@ -20,7 +20,7 @@ class EntriesController < ApplicationController
     image_data, mime_type = Rails.cache.fetch(cache_key, expires_in: 1.hour) do
       original_data, mime_type = @drive_service.download_file(@entry.drive_file_id)
 
-      resized_data = EntryResizer.resize_and_convert_image(original_data, mime_type, 600, 400)
+      resized_data = EntryResizer.resize_and_convert_image(original_data, mime_type, 400, 400)
       [resized_data, mime_type]
     end
 
