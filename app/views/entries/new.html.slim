@@ -1,7 +1,7 @@
 h1 = t('views.entries.new.entry_photos')
 = link_to t('views.entries.new.to_contest_page'), contest_path(@contest)
 
-#drop-zone.drop-zone(
+#drop-zone.drop-zone.hidden.sm:block(
   data-controller="drag-drop"
   data-drag-drop-entries-create-path-value=contest_entries_path
   data-drag-drop-target="dropZone"
@@ -19,3 +19,5 @@ h1 = t('views.entries.new.entry_photos')
   #preview.preview-container data-drag-drop-target="preview"
   button#upload-button.upload-button data-action="click->drag-drop#upload"
     = t('views.entries.new.enter')
+
+.sm:hidden スマホ用エリア
