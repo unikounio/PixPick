@@ -31,37 +31,38 @@ export default class extends Controller {
   }
 
   addFile(file) {
-    this.files.push(file);
-    this.updatePreview();
+    const fileWithId = { file: file, id: crypto.randomUUID() };
+    this.files.push(fileWithId);
+
+    if (file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const wrapper = this.createPreviewItem(
+          e.target.result,
+          file.name,
+          fileWithId.id,
+        );
+        this.previewTarget.appendChild(wrapper);
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
-  removeFile(index) {
-    this.files.splice(index, 1);
-    this.updatePreview();
-  }
+  removeFile(id) {
+    this.files = this.files.filter((file) => file.id !== id);
 
-  updatePreview() {
-    this.previewTarget.innerHTML = "";
-
-    this.files.forEach((file, index) => {
-      if (file.type.startsWith("image/")) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const wrapper = this.createPreviewItem(
-            e.target.result,
-            file.name,
-            index,
-          );
-          this.previewTarget.appendChild(wrapper);
-        };
-        reader.readAsDataURL(file);
+    const previewItems = this.previewTarget.querySelectorAll(".preview-item");
+    previewItems.forEach((item) => {
+      if (item.dataset.id === id) {
+        item.remove();
       }
     });
   }
 
-  createPreviewItem(imageSrc, fileName, index) {
+  createPreviewItem(imageSrc, fileName, id) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("preview-item");
+    wrapper.dataset.id = id;
 
     const img = document.createElement("img");
     img.src = imageSrc;
@@ -69,9 +70,9 @@ export default class extends Controller {
 
     const button = document.createElement("button");
     button.type = "button";
-    button.innerText = "×";
+    button.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
     button.classList.add("remove-button");
-    button.addEventListener("click", () => this.removeFile(index));
+    button.addEventListener("click", () => this.removeFile(id)); // IDを渡して削除
 
     wrapper.appendChild(img);
     wrapper.appendChild(button);

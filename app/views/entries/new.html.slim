@@ -5,13 +5,15 @@ div(
   data-controller='file-entry'
   data-file-entry-entries-create-path-value=contest_entries_path
 )
-  #drop-zone.drop-zone.hidden.sm:block(
+  .drop-and-preview-zone(
     data-file-entry-target='dropZone'
     data-action='dragover->file-entry#dragOver \
                  dragleave->file-entry#dragLeave \
                  drop->file-entry#drop'
   )
-    = t('views.entries.new.drag_and_drop_to_add')
+    p.hidden.sm:block.text-gray-500.text-center
+      = t('views.entries.new.drag_and_drop_to_add')
+
     input#file-input.hidden(
       type='file'
       data-file-entry-target='fileInput'
