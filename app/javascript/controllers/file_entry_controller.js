@@ -25,6 +25,11 @@ export default class extends Controller {
     droppedFiles.forEach((file) => this.addFile(file));
   }
 
+  addFiles(event) {
+    const files = event.target.files;
+    Array.from(files).forEach((file) => this.addFile(file));
+  }
+
   addFile(file) {
     this.files.push(file);
     this.updatePreview();

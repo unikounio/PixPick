@@ -1,23 +1,34 @@
 h1 = t('views.entries.new.entry_photos')
 = link_to t('views.entries.new.to_contest_page'), contest_path(@contest)
 
-#drop-zone.drop-zone.hidden.sm:block(
-  data-controller="drag-drop"
-  data-drag-drop-entries-create-path-value=contest_entries_path
-  data-drag-drop-target="dropZone"
-  data-action="dragover->drag-drop#dragOver \
-               dragleave->drag-drop#dragLeave \
-               drop->drag-drop#drop"
+div(
+  data-controller='file-entry'
+  data-file-entry-entries-create-path-value=contest_entries_path
 )
-  = t('views.entries.new.drag_and_drop_to_add')
-  input#file-input(
-    type="file"
-    multiple
-    hidden
-    data-drag-drop-target="fileInput"
+  #drop-zone.drop-zone.hidden.sm:block(
+    data-file-entry-target='dropZone'
+    data-action='dragover->file-entry#dragOver \
+                 dragleave->file-entry#dragLeave \
+                 drop->file-entry#drop'
   )
-  #preview.preview-container data-drag-drop-target="preview"
-  button#upload-button.upload-button data-action="click->drag-drop#upload"
-    = t('views.entries.new.enter')
+    = t('views.entries.new.drag_and_drop_to_add')
+    input#file-input.hidden(
+      type='file'
+      data-file-entry-target='fileInput'
+      data-action='change->file-entry#addFiles'
+    )
+    .preview-container data-file-entry-target='preview'
 
-.sm:hidden スマホ用エリア
+  .sm:hidden
+    label
+      | 画像を選択してください
+      input#mobile-file-input.hidden(
+        type='file'
+        data-file-entry-target='fileInput'
+        data-action='change->file-entry#addFiles'
+      )
+
+  button(
+    data-action='click->file-entry#upload'
+  )
+    = t('views.entries.new.enter')
