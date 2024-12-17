@@ -13,7 +13,8 @@ h1.text-2xl.font-bold.text-center.mt-4 = @contest.name
       data: { turbo_frame: 'content' },
       class: tab_link_classes(request.fullpath,
                               ranking_contest_path(@contest),
-                              'w-32 h-10 leading-10 px-2 font-bold text-center')
+                              'w-32 h-10 leading-10 px-2 font-bold text-center \
+                               bg-gray-100 hover:bg-white')
 
   - if current_page?(contest_path(@contest))
     = render 'contests/all_entries'
