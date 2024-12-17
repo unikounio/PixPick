@@ -62,6 +62,17 @@ class GoogleDriveService
     nil
   end
 
+  def fetch_thumbnail(thumbnail_link)
+    response = Faraday.get(thumbnail_link)
+
+    if response.success?
+      [response.body, response.headers['content-type']]
+    else
+      Rails.logger.error("サムネイル画像の取得に失敗しました: #{response.status}")
+      [nil, nil]
+    end
+  end
+
   def download_file(file_id)
     buffer = StringIO.new
     metadata = @service.get_file(file_id, fields: 'mimeType')

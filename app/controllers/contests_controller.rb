@@ -13,10 +13,9 @@ class ContestsController < ApplicationController
 
   def show
     entries = @contest.entries.order(created_at: :desc)
-    @thumbnail_data = entries.map do |entry|
-      thumbnail_link = @drive_service.get_thumbnail_link(entry.drive_file_id)
+    @entry_scores = entries.map do |entry|
       score = current_user.votes.find_by(entry_id: entry.id)&.score
-      [thumbnail_link, entry.id, score]
+      [entry.id, score]
     end
   end
 
@@ -37,7 +36,7 @@ class ContestsController < ApplicationController
 
       @ranked_entries << {
         rank: current_rank,
-        thumbnail_link: @drive_service.get_thumbnail_link(entry.drive_file_id),
+        entry_id: entry.id,
         total_score: entry.total_score
       }
     end

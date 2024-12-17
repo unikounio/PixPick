@@ -5,8 +5,28 @@ class EntriesController < ApplicationController
 
   before_action :ensure_valid_access_token!, only: %i[image_proxy create destroy]
   before_action :set_contest, only: %i[show new create]
-  before_action :set_entry, only: %i[show image_proxy destroy]
-  before_action :set_drive_service, only: %i[image_proxy create destroy]
+  before_action :set_entry, only: %i[thumbnail_proxy show image_proxy destroy]
+  before_action :set_drive_service, only: %i[thumbnail_proxy image_proxy create destroy]
+
+  def thumbnail_proxy
+    cache_key = "entry_thumbnail_#{@entry.id}"
+
+    image_data, mime_type = Rails.cache.fetch(cache_key, expires_in: 1.hour) do
+      thumbnail_link = @drive_service.get_thumbnail_link(@entry.drive_file_id)
+
+      if thumbnail_link.present?
+        @drive_service.fetch_thumbnail(thumbnail_link)
+      else
+        [nil, nil]
+      end
+    end
+
+    if image_data
+      send_data image_data, type: mime_type, disposition: 'inline', cache_control: 'public, max-age=3600'
+    else
+      head :not_found
+    end
+  end
 
   def show
     @previous_entry = @entry.contest.entries.where('id > ?', @entry.id).order(id: :asc).first

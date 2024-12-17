@@ -5,7 +5,7 @@
   )
     .modal-content data-modal-target="content"
 
-  - @thumbnail_data.each do |thumbnail_link, entry_id, score|
+  - @entry_scores.each do |entry_id, score|
     = turbo_frame_tag "entry_#{entry_id}"
       .relative
         - entries_show_url = contest_entry_path(@contest.id, entry_id)
@@ -13,7 +13,7 @@
           data: { action: 'click->modal#open',
                   modal_entries_show_url_value: entries_show_url },
           class: 'thumbnail-button text-white font-bold py-2 px-4 rounded'
-          = image_tag thumbnail_link,
+          = image_tag thumbnail_contest_entry_path(@contest, entry_id),
             alt: t('views.entries.alt_text'),
             class: 'w-full h-auto'
 
