@@ -1,3 +1,9 @@
+- if @contest.deadline_passed?
+  .text-center.my-6.text-lg.font-semibold.text-gray-700
+    | このコンテストは投票を締め切りました。
+    br
+    | ランキングタブから投票結果をご確認ください。
+
 = render 'entries/thumbnail_list'
 
 = link_to new_contest_entry_path(@contest),

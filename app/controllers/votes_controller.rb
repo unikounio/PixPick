@@ -8,9 +8,7 @@ class VotesController < ApplicationController
     if @vote.save
       broadcast_vote_feedback
     else
-      render turbo_stream: append_turbo_toast(:error,
-                                              t('activerecord.errors.messages.save',
-                                                model: t('activerecord.models.vote')))
+      render turbo_stream: append_turbo_toast(:error, @vote.errors.full_messages.to_sentence)
     end
   end
 

@@ -31,6 +31,10 @@ class Contest < ApplicationRecord
     false
   end
 
+  def deadline_passed?
+    deadline.end_of_day.past?
+  end
+
   private
 
   def deadline_cannot_be_in_the_past

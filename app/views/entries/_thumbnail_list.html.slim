@@ -1,20 +1,25 @@
-.image-gallery data-controller="modal"
-  dialog(
-    data-modal-target="dialog"
-    class="px-4 py-8 rounded-lg backdrop:bg-black/80"
-  )
-    .modal-content data-modal-target="content"
+- if @entry_scores.any?
+  .w-full.px-4
+    .grid.grid-cols-2.sm:grid-cols-4.gap-2.mx-auto.mt-4 data-controller="modal"
+      dialog(
+        data-modal-target="dialog"
+        class="px-4 py-8 rounded-lg backdrop:bg-black/80"
+      )
+        .modal-content data-modal-target="content"
 
-  - @entry_scores.each do |entry_id, score|
-    = turbo_frame_tag "entry_#{entry_id}"
-      .relative
-        - entries_show_url = contest_entry_path(@contest.id, entry_id)
-        = button_tag type: 'button',
-          data: { action: 'click->modal#open',
-                  modal_entries_show_url_value: entries_show_url },
-          class: 'thumbnail-button text-white font-bold py-2 px-4 rounded'
-          = image_tag thumbnail_contest_entry_path(@contest, entry_id),
-            alt: t('views.entries.alt_text'),
-            class: 'w-full h-auto'
+      - @entry_scores.each do |entry_id, score|
+        = turbo_frame_tag "entry_#{entry_id}",
+          class: 'flex justify-center items-center'
+          .relative
+            - entries_show_url = contest_entry_path(@contest.id, entry_id)
+            = button_tag type: 'button',
+              data: { action: 'click->modal#open',
+                modal_entries_show_url_value: entries_show_url },
+              class: 'thumbnail-button text-white font-bold py-2 rounded'
+              = image_tag thumbnail_contest_entry_path(@contest, entry_id),
+                alt: t('views.entries.alt_text'),
+                class: 'w-full h-auto'
 
-        = render 'entries/score', entry_id: entry_id, score: score
+            = render 'entries/score', entry_id: entry_id, score: score
+- else
+  p.mt-8.text-center.text-gray-600 エントリーがありません。
