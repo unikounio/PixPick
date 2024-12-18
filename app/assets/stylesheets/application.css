@@ -39,9 +39,11 @@ button {
 .preview-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 13px;
     width: 100%;
+    max-width: 100%;
     margin-top: 10px;
+    justify-content: flex-start;
 }
 
 .preview-item {
@@ -53,8 +55,8 @@ button {
 
 @media (min-width: 640px) {
     .preview-item {
-        flex: 1 1 calc(33.333% - 10px);
-        max-width: calc(33.333% - 10px);
+        flex: 1 1 calc(25% - 10px);
+        max-width: calc(25% - 10px);
     }
 }
 
