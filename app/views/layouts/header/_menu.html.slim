@@ -1,4 +1,4 @@
-.inline-block.relative.flex.justify-end(
+.relative.flex.justify-center(
   data-controller='dropdown'
   data-action='click->dropdown#toggle\
                click@window->dropdown#hide\
@@ -7,7 +7,7 @@
                keydown.down->dropdown#nextItem\
                keydown.esc->dropdown#hide'
 )
-  button data-action='dropdown#toggle:stop' class='flex items-center mr-7'
+  button data-action='dropdown#toggle:stop'
     = image_tag user_avatar_url, alt: 'ユーザーアイコン',
       class: 'h-16 w-16 rounded-full object-cover'
   div(

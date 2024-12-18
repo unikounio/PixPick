@@ -220,7 +220,7 @@ ja:
     layouts:
       header:
         login_with_google: Googleでログイン
-        select_contest: コンテストを選択してください
+        select_contest: コンテストを選択
         contest_index: コンテスト一覧
       user_menu:
         logout: ログアウト

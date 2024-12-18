@@ -1,4 +1,4 @@
-.inline-block.relative.flex.justify-end(
+.relative.flex.justify-end.w-40.sm:w-96.sm:mr-16(
   data-controller='dropdown'
   data-action='click->dropdown#toggle\
                click@window->dropdown#hide\
@@ -9,14 +9,13 @@
 )
   button(
     data-action='dropdown#toggle:stop'
-    class='flex items-center text-lg text-gray-700 font-medium \
-           bg-white px-4 py-2 rounded-md hover:ring-2 \
-           focus:outline-none focus:ring-2 focus:ring-cyan-500'
+    class='text-center text-base sm:text-lg text-gray-700 font-medium \
+           bg-white px-2 sm:px-4 py-2 rounded-md truncate \
+           hover:ring-2 focus:outline-none focus:ring-2 focus:ring-cyan-500'
   )
-    - if @selected_contest_name.present?
-      = "#{@selected_contest_name} ▼"
-    - else
-      = "#{t('views.layouts.header.select_contest')} ▼"
+    = @selected_contest_name.presence \
+      || t('views.layouts.header.select_contest')
+    .ml-1.sm:ml-2.i.fa-solid.fa-chevron-down
   div(
     data-dropdown-target='menu'
     class='hidden absolute top-8 right-0 mt-2 w-64 flex flex-col \
@@ -26,7 +25,7 @@
       = link_to contest.name,
         contest_path(contest),
         data: { dropdown_target: 'menuItem' },
-        class: 'no-underline px-4 py-2 text-gray-700 \
+        class: 'no-underline px-4 py-2 text-gray-700 truncate \
         hover:bg-slate-200 \
         focus:ring-inset focus:ring-2 focus:ring-cyan-500 focus:rounded-lg'
     = link_to t('views.layouts.header.contest_index'),
