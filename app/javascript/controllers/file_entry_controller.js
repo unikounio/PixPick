@@ -72,7 +72,7 @@ export default class extends Controller {
     button.type = "button";
     button.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
     button.classList.add("remove-button");
-    button.addEventListener("click", () => this.removeFile(id)); // IDを渡して削除
+    button.addEventListener("click", () => this.removeFile(id));
 
     wrapper.appendChild(img);
     wrapper.appendChild(button);
@@ -89,7 +89,9 @@ export default class extends Controller {
     }
 
     const formData = new FormData();
-    this.files.forEach((file) => formData.append("files[]", file));
+    this.files.forEach((fileWithId) =>
+      formData.append("files[]", fileWithId.file),
+    );
     const token = document
       .querySelector("meta[name='csrf-token']")
       .getAttribute("content");
