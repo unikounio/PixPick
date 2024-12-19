@@ -1,9 +1,9 @@
-.bg-gray-100.px-4.py-3.flex.justify-between.items-center.border-none
+.bg-stone-100.px-4.py-3.flex.justify-between.items-center.border-none
   h1.text-xl.sm:text-2xl.font-bold.text-black
     = t('views.entries.new.entry_photos')
 
   = link_to t('views.entries.new.to_contest_page'), contest_path(@contest),
-    class: 'bg-gray-300 text-gray-700 hover:bg-gray-400 hover:text-black \
+    class: 'bg-stone-300 text-stone-700 hover:bg-stone-400 hover:text-black \
             px-2 py-2 rounded text-sm sm:text-lg font-semibold'
 
 .mt-6(
@@ -16,7 +16,7 @@
                  dragleave->file-entry#dragLeave \
                  drop->file-entry#drop'
   )
-    p.hidden.sm:block.text-gray-500.text-center.text-sm
+    p.hidden.sm:block.text-stone-500.text-center.text-sm
       = t('views.entries.new.drag_and_drop_to_add')
 
     input#file-input.hidden(
@@ -28,11 +28,11 @@
 
   .sm:hidden.mt-6
     label(
-      class="block w-full h-14 bg-white text-slate-500 font-bold \
-             text-lg text-center border border-slate-400 rounded-lg \
+      class="block w-full h-14 bg-white text-stone-500 font-bold \
+             text-lg text-center border border-stone-400 rounded-lg \
              flex items-center justify-center cursor-pointer transition"
     )
-      i.fa-regular.fa-image.text-gray-500.mr-2.text-2xl
+      i.fa-regular.fa-image.text-stone-500.mr-2.text-2xl
       | 画像を選ぶ
       input#mobile-file-input.hidden(
         type='file'

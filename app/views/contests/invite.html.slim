@@ -1,7 +1,7 @@
 .container.mx-auto.max-w-xl.p-6
   h1.text-2xl.font-bold.mb-4 新たな参加者の招待
 
-  p.text-gray-600
+  p.text-stone-600
     | 以下のURLからログインすることで、このコンテストに参加することができます。
     br
     | URLをコピーして家族や友人をコンテストに招待しましょう！
@@ -11,7 +11,7 @@
       type="text"
       value=@invite_url
       readonly=true
-      class="w-full p-2 text-lg border border-gray-300 rounded-lg shadow-sm"
+      class="w-full p-2 text-lg border border-stone-300 rounded-lg shadow-sm"
     )
 
       .mt-6.text-center
@@ -24,4 +24,4 @@
 
   p.mt-6.text-center
     = link_to 'キャンセル', edit_contest_path(@contest),
-      class: 'text-slate-700 hover:underline'
+      class: 'text-stone-700 hover:underline'

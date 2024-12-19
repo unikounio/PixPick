@@ -12,7 +12,7 @@
             data: { action: 'load->image-status#finish' }
 
     button.absolute.-top-7.-right-1.text-4xl.font-bold
-      .text-gray-600 data-action='click->modal#close'
+      .text-stone-600 data-action='click->modal#close'
         |✕
 
     .flex.justify-center.mt-6.space-x-8
@@ -33,14 +33,14 @@
           contest_entry_path(@contest, @previous_entry),
           data: { turbo_frame: 'entry_content' },
           class: 'flex items-center px-6 py-2 bg-white \
-                  rounded-full shadow hover:bg-slate-200'
+                  rounded-full shadow hover:bg-stone-200'
 
       - if @next_entry
         = link_to t('views.entries.show.next'),
           contest_entry_path(@contest, @next_entry),
           data: { turbo_frame: 'entry_content' },
           class: 'flex items-center px-6 py-2 bg-white \
-                  rounded-full shadow hover:bg-slate-200 ml-auto'
+                  rounded-full shadow hover:bg-stone-200 ml-auto'
 
     - if @entry.user_id == current_user.id
       .mt-6.text-center
@@ -52,5 +52,5 @@
           class: 'text-red-500 underline underline-offset-4 \
                   hover:text-red-700 cursor-pointer'
 
-        .mt-2.text-sm.text-gray-700
+        .mt-2.text-sm.text-stone-700
           = t('views.entries.show.delete_photo_hint')
