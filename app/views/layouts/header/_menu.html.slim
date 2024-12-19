@@ -19,25 +19,25 @@
       = link_to t('views.layouts.header.contest_index'),
         user_contests_path(current_user),
         data: { dropdown_target: 'menuItem' },
-        class: 'no-underline block p-4 bg-white hover:bg-slate-200 \
+        class: 'no-underline block p-4 bg-white hover:bg-stone-200 \
                 focus:ring-inset focus:ring-2 focus:ring-cyan-500 \
                 focus:rounded-lg'
       = link_to '利用規約',
         terms_path,
         data: { dropdown_target: 'menuItem' },
-        class: 'no-underline block p-4 bg-white hover:bg-slate-200 \
+        class: 'no-underline block p-4 bg-white hover:bg-stone-200 \
                       focus:ring-inset focus:ring-2 focus:ring-cyan-500 \
                       focus:rounded-lg'
       = link_to 'プライバシーポリシー',
         privacy_path,
         data: { dropdown_target: 'menuItem' },
-        class: 'no-underline block p-4 bg-white hover:bg-slate-200 \
+        class: 'no-underline block p-4 bg-white hover:bg-stone-200 \
                             focus:ring-inset focus:ring-2 focus:ring-cyan-500 \
                             focus:rounded-lg'
       = link_to t('views.layouts.user_menu.logout'),
         destroy_user_session_path,
         data: { turbo_method: :delete, dropdown_target: 'menuItem' },
-        class: 'no-underline block p-4 bg-white hover:bg-slate-200 \
+        class: 'no-underline block p-4 bg-white hover:bg-stone-200 \
                 focus:ring-inset focus:ring-2 focus:ring-cyan-500 \
                 focus:rounded-lg'
       = link_to t('views.layouts.user_menu.leave'),
@@ -45,6 +45,6 @@
         data: { dropdown_target: 'menuItem',
                 turbo_method: :delete,
                 turbo_confirm: 'データをすべて削除して退会します。よろしいですか？' },
-        class: 'no-underline block p-4 bg-white hover:bg-slate-200 \
+        class: 'no-underline block p-4 bg-white hover:bg-stone-200 \
                 focus:ring-inset focus:ring-2 focus:ring-cyan-500 \
                 focus:rounded-lg'

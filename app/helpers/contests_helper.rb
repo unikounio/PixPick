@@ -5,7 +5,7 @@ module ContestsHelper
     if current_path == target_path
       "bg-white text-black #{extra_classes}"
     else
-      "bg-gray-100 text-gray-500 #{extra_classes}"
+      "bg-stone-100 text-stone-500 #{extra_classes}"
     end
   end
 end

@@ -1,27 +1,27 @@
-.flex.justify-between.items-center.bg-gray-100.px-4.py-3
+.flex.justify-between.items-center.bg-stone-100.px-4.py-3
   .overflow-hidden
     h1.text-2xl.font-bold.my-2.truncate = @contest.name
-    p.text-base.text-gray-600 投票期日：#{@contest.deadline.strftime('%Y年%-m月%-d日')}
+    p.text-base.text-stone-600 投票期日：#{@contest.deadline.strftime('%Y年%-m月%-d日')}
 
   = link_to '編集', edit_contest_path(@contest),
-    class: 'bg-gray-300 text-gray-700 hover:bg-gray-400 hover:text-black \
+    class: 'bg-stone-300 text-stone-700 hover:bg-stone-400 hover:text-black \
             py-2 w-20 text-center rounded text-lg font-semibold flex-shrink-0'
 
 = turbo_frame_tag 'content' do
   div class='flex justify-center items-center mt-6 \
-              border border-gray-300 rounded-lg overflow-hidden w-fit mx-auto'
+              border border-stone-300 rounded-lg overflow-hidden w-fit mx-auto'
     = link_to '全てのエントリー', contest_path(@contest),
       data: { turbo_frame: 'content' },
       class: tab_link_classes(request.fullpath,
                               contest_path(@contest),
                               'w-32 h-10 leading-10 px-2 font-bold \
-                               text-center border-r border-gray-300')
+                               text-center border-r border-stone-300')
     = link_to 'ランキング', ranking_contest_path(@contest),
       data: { turbo_frame: 'content' },
       class: tab_link_classes(request.fullpath,
                               ranking_contest_path(@contest),
                               'w-32 h-10 leading-10 px-2 font-bold text-center \
-                               bg-gray-100 hover:bg-white')
+                               bg-stone-100 hover:bg-white')
 
   - if current_page?(contest_path(@contest))
     = render 'contests/all_entries'

@@ -8,17 +8,17 @@
 
     .mb-4.flex.items-center
       = f.label :name, t('activerecord.attributes.contest.name'),
-        class: 'text-base font-medium text-gray-700 text-right \
+        class: 'text-base font-medium text-stone-700 text-right \
                         pr-2 flex-shrink-0 w-32'
-      = f.text_field :name, class: 'block w-full border-gray-300 rounded-md \
+      = f.text_field :name, class: 'block w-full border-stone-300 rounded-md \
                                     focus:ring-cyan-500 focus:border-cyan-500'
 
     .mb-4.flex.items-center
       = f.label :deadline, t('activerecord.attributes.contest.deadline'),
-        class: 'text-base font-medium text-gray-700 text-right \
+        class: 'text-base font-medium text-stone-700 text-right \
                         pr-2 flex-shrink-0 w-32'
       = f.date_field :deadline,
-        class: 'block w-30 border-gray-300 rounded-md \
+        class: 'block w-30 border-stone-300 rounded-md \
                               focus:ring-cyan-500 focus:border-cyan-500'
       .ml-2 まで
 
