@@ -31,6 +31,13 @@ export default class extends Controller {
   }
 
   addFile(file) {
+    if (!file.type.startsWith("image/")) {
+      alert(
+        `"${file.name}" は画像ではありません。画像ファイルのみアップロードできます。`,
+      );
+      return;
+    }
+
     const fileWithId = { file: file, id: crypto.randomUUID() };
     this.files.push(fileWithId);
 
