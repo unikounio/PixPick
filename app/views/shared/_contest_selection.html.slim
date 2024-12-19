@@ -1,4 +1,4 @@
-.relative.flex.justify-end.w-40.sm:w-96.sm:mr-16(
+.relative.flex.justify-end.w-40.sm:w-96.mr-2.sm:mr-6(
   data-controller='dropdown'
   data-action='click->dropdown#toggle\
                click@window->dropdown#hide\
@@ -18,7 +18,7 @@
     .ml-1.sm:ml-2.i.fa-solid.fa-chevron-down
   div(
     data-dropdown-target='menu'
-    class='hidden absolute top-8 right-0 mt-2 w-64 flex flex-col \
+    class='hidden absolute top-8 right-0 mt-2 w-40 sm:w-64 flex flex-col \
            bg-white border border-stone-200 rounded-md shadow-lg z-50'
   )
     - @recent_contests.each do |contest|
