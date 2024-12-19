@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  skip_before_action :set_selected_contest, only: :destroy
+  skip_before_action :set_contest, only: :destroy
 
   def destroy
     current_user.destroy!

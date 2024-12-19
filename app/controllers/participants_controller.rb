@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ParticipantsController < ApplicationController
-  before_action :set_contest, only: %i[new create destroy]
   skip_before_action :authenticate_user!, only: :new
 
   def new
@@ -42,11 +41,5 @@ class ParticipantsController < ApplicationController
         append_turbo_toast(:success, '参加を取り消しました')
       ]
     end
-  end
-
-  private
-
-  def set_contest
-    @contest = Contest.find(params[:contest_id])
   end
 end
