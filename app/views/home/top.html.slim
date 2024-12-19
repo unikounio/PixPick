@@ -10,7 +10,8 @@
     br
     | 簡単に選び出すためのサービスです。
 
-  = render 'login_or_contest'
+  .mt-8.flex.justify-center.items-center.flex-col
+    = render 'shared/login_button'
 
   .mt-10.flex.justify-center.items-center.flex-col
     ul.list-none.list-inside.mt-4
@@ -34,4 +35,5 @@
           | 自分のペースで写真を評価しましょう。
     p.text-lg.text-center.mt-4 さあ、最高の瞬間を選び出しましょう！
 
-    = render 'login_or_contest'
+  .mt-8.flex.justify-center.items-center.flex-col
+    = render 'shared/login_button'
