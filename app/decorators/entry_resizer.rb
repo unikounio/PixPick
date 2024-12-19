@@ -21,9 +21,9 @@ class EntryResizer
 
   def self.mime_type_to_format(mime_type)
     case mime_type
-    when 'image/jpeg', 'image/jpg' then 'jpg'
-    when 'image/png'               then 'png'
-    when 'image/webp'              then 'webp'
+    when 'image/jpeg', 'image/jpg', 'image/heic', 'image/heif' then 'jpg'
+    when 'image/png'                                           then 'png'
+    when 'image/webp'                                          then 'webp'
     else
       Rails.logger.warn "対応していないMIMEタイプです: #{mime_type}"
       nil
