@@ -4,7 +4,6 @@ class EntriesController < ApplicationController
   include GoogleApiActions
 
   before_action :ensure_valid_access_token!, only: %i[image_proxy create destroy]
-  before_action :set_contest, only: %i[show new create]
   before_action :set_entry, only: %i[thumbnail_proxy show image_proxy destroy]
   before_action :set_drive_service, only: %i[thumbnail_proxy image_proxy create destroy]
 
@@ -92,10 +91,6 @@ class EntriesController < ApplicationController
 
   def files_params
     params.permit(files: [])
-  end
-
-  def set_contest
-    @contest = Contest.find(params[:contest_id])
   end
 
   def set_entry

@@ -13,8 +13,10 @@
            bg-white px-2 sm:px-4 py-2 rounded-md truncate \
            hover:ring-2 focus:outline-none focus:ring-2 focus:ring-cyan-500'
   )
-    = @selected_contest_name.presence \
-      || t('views.layouts.header.select_contest')
+    - if @contest.present?
+      = @contest.name
+    - else
+      = t('views.layouts.header.select_contest')
     .ml-1.sm:ml-2.i.fa-solid.fa-chevron-down
   div(
     data-dropdown-target='menu'

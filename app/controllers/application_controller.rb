@@ -5,15 +5,15 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
   before_action :authenticate_user!
   before_action :set_recent_contests
-  before_action :set_selected_contest
+  before_action :set_contest
 
   private
 
-  def set_selected_contest
+  def set_contest
     contest_id = params[:contest_id] || params[:id]
     return unless user_signed_in? && contest_id.present?
 
-    @selected_contest_name = Contest.find(contest_id)&.name
+    @contest = Contest.find(contest_id)
   end
 
   def set_recent_contests

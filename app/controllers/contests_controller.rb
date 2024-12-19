@@ -4,7 +4,6 @@ class ContestsController < ApplicationController
   include GoogleApiActions
 
   before_action :ensure_valid_access_token!, only: %i[show ranking create update]
-  before_action :set_contest, only: %i[show ranking edit update invite destroy]
   before_action :set_drive_service, only: %i[show ranking create update]
 
   def index
@@ -96,10 +95,6 @@ class ContestsController < ApplicationController
 
   def contest_params
     params.require(:contest).permit(:name, :deadline)
-  end
-
-  def set_contest
-    @contest = Contest.find(params[:id])
   end
 
   def redirect_with_failure
