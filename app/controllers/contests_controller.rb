@@ -55,11 +55,16 @@ class ContestsController < ApplicationController
 
   def create
     @contest = current_user.contests.new(contest_params)
-    folder_id, permission_id = setup_drive_folder
 
-    if folder_id.present? && @contest.save_contest_and_create_participant(folder_id, permission_id, current_user.id)
-      redirect_to new_contest_entry_path(@contest),
-                  notice: t('activerecord.notices.messages.create', model: t('activerecord.models.contest'))
+    if @contest.valid?
+      folder_id, permission_id = setup_drive_folder
+
+      if folder_id.present? && @contest.save_contest_and_create_participant(folder_id, permission_id, current_user.id)
+        redirect_to new_contest_entry_path(@contest),
+                    notice: t('activerecord.notices.messages.create', model: t('activerecord.models.contest'))
+      else
+        render_error_toast
+      end
     else
       render_error_toast
     end
