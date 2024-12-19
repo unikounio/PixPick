@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import heic2any from "heic2any";
 
 export default class extends Controller {
   static targets = ["fileInput", "preview"];
@@ -25,34 +26,76 @@ export default class extends Controller {
     droppedFiles.forEach((file) => this.addFile(file));
   }
 
-  addFiles(event) {
-    const files = event.target.files;
-    Array.from(files).forEach((file) => this.addFile(file));
+  async addFiles(event) {
+    const files = Array.from(event.target.files);
+    const processPromises = files.map((file) => this.addFile(file));
+
+    try {
+      await Promise.all(processPromises);
+    } catch (error) {
+      console.error("ファイル処理中にエラーが発生しました:", error);
+    }
   }
 
-  addFile(file) {
-    if (!file.type.startsWith("image/")) {
+  async addFile(file) {
+    const allowedExtensions = [
+      ".jpg",
+      ".jpeg",
+      ".png",
+      ".webp",
+      ".heic",
+      ".heif",
+    ];
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+
+    if (
+      !file.type.startsWith("image/") &&
+      !allowedExtensions.includes(`.${fileExtension}`)
+    ) {
       alert(
         `"${file.name}" は画像ではありません。画像ファイルのみアップロードできます。`,
       );
       return;
     }
 
+    if (fileExtension === "heic" || fileExtension === "heif") {
+      try {
+        const convertedBlob = await heic2any({
+          blob: file,
+          toType: "image/jpeg",
+        });
+        const convertedFile = new File(
+          [convertedBlob],
+          file.name.replace(/\.(heic|heif)$/i, ".jpg"),
+          {
+            type: "image/jpeg",
+          },
+        );
+
+        this.addFileToList(convertedFile, convertedFile.name);
+      } catch (error) {
+        console.error("HEIC変換エラー:", error);
+        alert("HEICファイルの変換に失敗しました。");
+      }
+    } else {
+      this.addFileToList(file, file.name);
+    }
+  }
+
+  addFileToList(file, name) {
     const fileWithId = { file: file, id: crypto.randomUUID() };
     this.files.push(fileWithId);
 
-    if (file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const wrapper = this.createPreviewItem(
-          e.target.result,
-          file.name,
-          fileWithId.id,
-        );
-        this.previewTarget.appendChild(wrapper);
-      };
-      reader.readAsDataURL(file);
-    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const wrapper = this.createPreviewItem(
+        e.target.result,
+        name,
+        fileWithId.id,
+      );
+      this.previewTarget.appendChild(wrapper);
+    };
+    reader.readAsDataURL(file);
   }
 
   removeFile(id) {
