@@ -62,7 +62,7 @@ class EntriesController < ApplicationController
       if files.blank?
         'ファイルが見つかりません'
       else
-        validate_mime_type(files)
+        Entry.validate_mime_type(files)
       end
 
     if error_message.present?
@@ -104,15 +104,6 @@ class EntriesController < ApplicationController
 
   def set_entry
     @entry = Entry.find(params[:id])
-  end
-
-  def validate_mime_type(files)
-    allowed_mime_types = %w[image/jpeg image/jpg image/png image/webp]
-    invalid_files = files.reject { |file| allowed_mime_types.include?(file.content_type) }
-
-    return unless invalid_files.any?
-
-    '対応していない形式のファイルが含まれています。画面を更新してやり直してください。'
   end
 
   def authorize_user!
