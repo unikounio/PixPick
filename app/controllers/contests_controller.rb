@@ -61,7 +61,7 @@ class ContestsController < ApplicationController
       redirect_to new_contest_entry_path(@contest),
                   notice: t('activerecord.notices.messages.create', model: t('activerecord.models.contest'))
     else
-      redirect_with_failure
+      render_error_toast
     end
   end
 
@@ -78,7 +78,7 @@ class ContestsController < ApplicationController
 
       render turbo_stream: append_turbo_toast(:success, "#{updated_message}を更新しました")
     else
-      render :edit, status: :unprocessable_entity
+      render_error_toast
     end
   end
 
@@ -97,9 +97,12 @@ class ContestsController < ApplicationController
     params.require(:contest).permit(:name, :deadline)
   end
 
-  def redirect_with_failure
-    @contests = current_user.contests
-    render :new, status: :unprocessable_entity
+  def render_error_toast
+    turbo_streams = @contest.errors.full_messages.map do |message|
+      append_turbo_toast(:error, message)
+    end
+
+    render turbo_stream: turbo_streams
   end
 
   def no_changes_to_update?
