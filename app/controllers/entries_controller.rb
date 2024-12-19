@@ -58,13 +58,22 @@ class EntriesController < ApplicationController
   def create
     files = files_params[:files]
 
-    if files.blank?
-      render json: { error: 'ファイルが見つかりません' }, status: :unprocessable_entity
+    error_message =
+      if files.blank?
+        'ファイルが見つかりません'
+      else
+        validate_mime_type(files)
+      end
+
+    if error_message.present?
+      render json: { error: error_message }, status: :unprocessable_entity
       return
     end
 
-    ActiveRecord::Base.transaction do
-      Entry.upload_and_create_entries!(files, current_user, @contest, @drive_service)
+    begin
+      ActiveRecord::Base.transaction do
+        Entry.upload_and_create_entries!(files, current_user, @contest, @drive_service)
+      end
       render json: { redirect_url: contest_path(@contest) }, status: :ok
     rescue StandardError => e
       Rails.logger.error("ファイルの処理中に次のエラーが発生: #{e.message}")
@@ -95,6 +104,15 @@ class EntriesController < ApplicationController
 
   def set_entry
     @entry = Entry.find(params[:id])
+  end
+
+  def validate_mime_type(files)
+    allowed_mime_types = %w[image/jpeg image/jpg image/png image/webp]
+    invalid_files = files.reject { |file| allowed_mime_types.include?(file.content_type) }
+
+    return unless invalid_files.any?
+
+    '対応していない形式のファイルが含まれています。画面を更新してやり直してください。'
   end
 
   def authorize_user!
