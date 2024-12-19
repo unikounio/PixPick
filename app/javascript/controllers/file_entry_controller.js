@@ -59,27 +59,42 @@ export default class extends Controller {
     }
 
     if (fileExtension === "heic" || fileExtension === "heif") {
-      try {
-        const convertedBlob = await heic2any({
-          blob: file,
-          toType: "image/jpeg",
-        });
-        const convertedFile = new File(
-          [convertedBlob],
-          file.name.replace(/\.(heic|heif)$/i, ".jpg"),
-          {
-            type: "image/jpeg",
-          },
-        );
+      const canDisplayHEIC = await this.canDisplayHEIC();
+      if (!canDisplayHEIC) {
+        try {
+          const convertedBlob = await heic2any({
+            blob: file,
+            toType: "image/jpeg",
+          });
+          const convertedFile = new File(
+            [convertedBlob],
+            file.name.replace(/\.(heic|heif)$/i, ".jpg"),
+            {
+              type: "image/jpeg",
+            },
+          );
 
-        this.addFileToList(convertedFile, convertedFile.name);
-      } catch (error) {
-        console.error("HEIC変換エラー:", error);
-        alert("HEICファイルの変換に失敗しました。");
+          this.addFileToList(convertedFile, convertedFile.name);
+        } catch (error) {
+          console.error("HEIC変換エラー:", error);
+          alert("HEICファイルの変換に失敗しました。");
+        }
+      } else {
+        this.addFileToList(file, file.name);
       }
     } else {
       this.addFileToList(file, file.name);
     }
+  }
+
+  async canDisplayHEIC() {
+    const img = new Image();
+    img.src = "data:image/heic;base64,AAAAGGZ0eXBoZWljAAAAAG1pZjFoZWljAAAEzG1ldGEAAAAAAAAAIWhkbHIAAAAAAAAAAHBpY3QAAAAAAAAAAAAAAAAAAAAADnBpdG0AAAAAAAEAAABNaWluZgAAAAAAAwAAABVpbmZlAgAAAAABAAB";
+
+    return new Promise((resolve) => {
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+    });
   }
 
   addFileToList(file, name) {
