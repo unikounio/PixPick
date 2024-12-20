@@ -1,6 +1,6 @@
 - if @entry_scores.any?
   .w-full.px-4
-    .grid.grid-cols-2.sm:grid-cols-4.gap-2.mx-auto.mt-4 data-controller="modal"
+    .grid.grid-cols-2.sm:grid-cols-4.mx-auto.mt-4 data-controller="modal"
       dialog(
         data-modal-target="dialog"
         class="px-4 py-8 rounded-lg backdrop:bg-black/80"
@@ -15,7 +15,7 @@
             = button_tag type: 'button',
               data: { action: 'click->modal#open',
                 modal_entries_show_url_value: entries_show_url },
-              class: 'thumbnail-button text-white font-bold py-2 rounded'
+              class: 'p-2 rounded hover:shadow-md'
               = image_tag thumbnail_contest_entry_path(@contest, entry_id),
                 alt: t('views.entries.alt_text'),
                 class: 'w-full h-auto'
