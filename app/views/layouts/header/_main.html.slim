@@ -13,5 +13,5 @@
   - if current_user.present?
     .ml-auto.flex.justify-end.items-center
       - if current_user.contests.any? && !@is_editing_contest
-        = render 'shared/contest_selection'
+        = render 'layouts/header/contest_selection'
       = render 'layouts/header/menu'
