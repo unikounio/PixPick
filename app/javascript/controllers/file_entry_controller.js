@@ -75,8 +75,9 @@ export default class extends Controller {
   }
 
   async processHEICFile(file, fileId, wrapper) {
-    const canDisplayHEIC = await this.canDisplayHEIC();
+    this.addFileToList(file, fileId);
 
+    const canDisplayHEIC = await this.canDisplayHEIC();
     if (!canDisplayHEIC) {
       try {
         const convertedBlob = await heic2any({
@@ -84,18 +85,8 @@ export default class extends Controller {
           toType: "image/jpeg",
         });
 
-        const convertedFile = new File(
-          [convertedBlob],
-          file.name.replace(/\.(heic|heif)$/i, ".jpg"),
-          { type: "image/jpeg" },
-        );
-
-        await this.updatePreviewAndAddFile(
-          convertedFile,
-          fileId,
-          wrapper,
-          convertedBlob,
-        );
+        const fileURL = URL.createObjectURL(convertedBlob);
+        this.updatePreview(wrapper, fileId, fileURL, file.name);
       } catch (error) {
         console.error("HEIC変換エラー:", error);
         this.showErrorOnPreview(wrapper);
@@ -105,8 +96,8 @@ export default class extends Controller {
     }
   }
 
-  async updatePreviewAndAddFile(file, fileId, wrapper, FileOrBlob = file) {
-    const fileURL = URL.createObjectURL(FileOrBlob);
+  async updatePreviewAndAddFile(file, fileId, wrapper) {
+    const fileURL = URL.createObjectURL(file);
     this.updatePreview(wrapper, fileId, fileURL, file.name);
     this.addFileToList(file, fileId);
   }
