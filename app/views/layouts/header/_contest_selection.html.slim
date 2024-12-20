@@ -13,7 +13,7 @@
            bg-white px-2 sm:px-4 py-2 rounded-md truncate \
            hover:ring-2 focus:outline-none focus:ring-2 focus:ring-cyan-500'
   )
-    - if @contest.present?
+    - if @contest.present? && !@contest.new_record?
       = @contest.name
     - else
       = t('views.layouts.header.select_contest')
