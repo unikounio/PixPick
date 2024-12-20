@@ -59,7 +59,7 @@ export default class extends Controller {
     }
 
     const fileId = crypto.randomUUID();
-    const wrapper = this.createPreviewItem(file.name, fileId);
+    const wrapper = this.createPreviewItem(fileId, file.name);
 
     if (fileExtension === "heic" || fileExtension === "heif") {
       const canDisplayHEIC = await this.canDisplayHEIC();
@@ -77,9 +77,9 @@ export default class extends Controller {
 
           this.updatePreview(
             wrapper,
+            fileId,
             URL.createObjectURL(convertedBlob),
             convertedFile.name,
-            fileId
           );
           this.addFileToList(convertedFile, fileId);
         } catch (error) {
@@ -87,11 +87,16 @@ export default class extends Controller {
           this.showErrorOnPreview(wrapper);
         }
       } else {
-        this.updatePreview(wrapper, URL.createObjectURL(file), file.name, fileId);
+        this.updatePreview(
+          wrapper,
+          fileId,
+          URL.createObjectURL(file),
+          file.name,
+        );
         this.addFileToList(file, fileId);
       }
     } else {
-      this.updatePreview(wrapper, URL.createObjectURL(file), file.name, fileId);
+      this.updatePreview(wrapper, fileId, URL.createObjectURL(file), file.name);
       this.addFileToList(file, fileId);
     }
   }
@@ -123,7 +128,7 @@ export default class extends Controller {
     });
   }
 
-  createPreviewItem(fileName, fileId) {
+  createPreviewItem(fileId, fileName) {
     const wrapper = document.createElement("div");
     wrapper.classList.add(
       "preview-item",
@@ -135,6 +140,29 @@ export default class extends Controller {
       "border-stone-300",
     );
 
+    const removeButton = this.createRemoveButton(fileId);
+    const spinner = this.createSpinner();
+    const fileNameText = this.createFileNameText(fileName);
+
+    wrapper.appendChild(removeButton);
+    wrapper.appendChild(spinner);
+    wrapper.appendChild(fileNameText);
+    wrapper.dataset.id = fileId;
+
+    this.previewTarget.appendChild(wrapper);
+    return wrapper;
+  }
+
+  createRemoveButton(fileId) {
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+    removeButton.classList.add("remove-button");
+    removeButton.addEventListener("click", () => this.removeFile(fileId));
+    return removeButton;
+  }
+
+  createSpinner() {
     const spinner = document.createElement("div");
     spinner.classList.add(
       "w-8",
@@ -145,7 +173,10 @@ export default class extends Controller {
       "rounded-full",
       "animate-spin",
     );
+    return spinner;
+  }
 
+  createFileNameText(fileName) {
     const fileNameText = document.createElement("p");
     fileNameText.textContent = fileName;
     fileNameText.classList.add(
@@ -154,39 +185,26 @@ export default class extends Controller {
       "text-sm",
       "text-stone-500",
     );
-
-    const button = document.createElement("button");
-    button.type = "button";
-    button.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
-    button.classList.add("remove-button");
-    button.addEventListener("click", () => this.removeFile(fileId));
-
-    wrapper.dataset.id = fileId
-    wrapper.appendChild(button);
-    wrapper.appendChild(spinner);
-    wrapper.appendChild(fileNameText);
-
-    this.previewTarget.appendChild(wrapper);
-    return wrapper;
+    return fileNameText;
   }
 
-  updatePreview(wrapper, imageSrc, fileName, fileId) {
+  updatePreview(wrapper, fileId, imageSrc, fileName) {
     wrapper.innerHTML = "";
 
     wrapper.classList.remove("border", "border-stone-300");
 
+    const removeButton = this.createRemoveButton(fileId);
+    const img = this.createImg(imageSrc, fileName);
+
+    wrapper.appendChild(removeButton);
+    wrapper.appendChild(img);
+  }
+
+  createImg(imageSrc, fileName) {
     const img = document.createElement("img");
     img.src = imageSrc;
     img.alt = fileName;
-
-    const button = document.createElement("button");
-    button.type = "button";
-    button.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
-    button.classList.add("remove-button");
-    button.addEventListener("click", () => this.removeFile(fileId));
-
-    wrapper.appendChild(button);
-    wrapper.appendChild(img);
+    return img;
   }
 
   showErrorOnPreview(wrapper) {
