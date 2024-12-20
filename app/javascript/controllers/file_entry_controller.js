@@ -38,6 +38,26 @@ export default class extends Controller {
   }
 
   async addFile(file) {
+    const fileId = crypto.randomUUID();
+
+    if (!this.validateFile(file)) {
+      alert(
+        `"${file.name}" は画像ではありません。画像ファイルのみアップロードできます。`,
+      );
+      return;
+    }
+
+    const wrapper = this.createPreviewItem(fileId, file.name);
+
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    if (fileExtension === "heic" || fileExtension === "heif") {
+      await this.processHEICFile(file, fileId, wrapper);
+    } else {
+      await this.updatePreviewAndAddFile(file, fileId, wrapper);
+    }
+  }
+
+  validateFile(file) {
     const allowedExtensions = [
       ".jpg",
       ".jpeg",
@@ -48,50 +68,38 @@ export default class extends Controller {
     ];
     const fileExtension = file.name.split(".").pop().toLowerCase();
 
-    if (
-      !file.type.startsWith("image/") &&
-      !allowedExtensions.includes(`.${fileExtension}`)
-    ) {
-      alert(
-        `"${file.name}" は画像ではありません。画像ファイルのみアップロードできます。`,
-      );
-      return;
-    }
+    return (
+      file.type.startsWith("image/") ||
+      allowedExtensions.includes(`.${fileExtension}`)
+    );
+  }
 
-    const wrapper = this.createPreviewItem(file.name);
+  async processHEICFile(file, fileId, wrapper) {
+    this.addFileToList(file, fileId);
 
-    if (fileExtension === "heic" || fileExtension === "heif") {
-      const canDisplayHEIC = await this.canDisplayHEIC();
-      if (!canDisplayHEIC) {
-        try {
-          const convertedBlob = await heic2any({
-            blob: file,
-            toType: "image/jpeg",
-          });
-          const convertedFile = new File(
-            [convertedBlob],
-            file.name.replace(/\.(heic|heif)$/i, ".jpg"),
-            { type: "image/jpeg" },
-          );
+    const canDisplayHEIC = await this.canDisplayHEIC();
+    if (!canDisplayHEIC) {
+      try {
+        const convertedBlob = await heic2any({
+          blob: file,
+          toType: "image/jpeg",
+        });
 
-          this.updatePreview(
-            wrapper,
-            URL.createObjectURL(convertedBlob),
-            convertedFile.name,
-          );
-          this.addFileToList(convertedFile);
-        } catch (error) {
-          console.error("HEIC変換エラー:", error);
-          this.showErrorOnPreview(wrapper);
-        }
-      } else {
-        this.updatePreview(wrapper, URL.createObjectURL(file), file.name);
-        this.addFileToList(file);
+        const fileURL = URL.createObjectURL(convertedBlob);
+        this.updatePreview(wrapper, fileId, fileURL, file.name);
+      } catch (error) {
+        console.error("HEIC変換エラー:", error);
+        this.showErrorOnPreview(wrapper);
       }
     } else {
-      this.updatePreview(wrapper, URL.createObjectURL(file), file.name);
-      this.addFileToList(file);
+      await this.updatePreviewAndAddFile(file, fileId, wrapper);
     }
+  }
+
+  async updatePreviewAndAddFile(file, fileId, wrapper) {
+    const fileURL = URL.createObjectURL(file);
+    this.updatePreview(wrapper, fileId, fileURL, file.name);
+    this.addFileToList(file, fileId);
   }
 
   async canDisplayHEIC() {
@@ -105,8 +113,8 @@ export default class extends Controller {
     });
   }
 
-  addFileToList(file) {
-    const fileWithId = { file: file, id: crypto.randomUUID() };
+  addFileToList(file, fileID) {
+    const fileWithId = { file: file, id: fileID };
     this.files.push(fileWithId);
   }
 
@@ -121,7 +129,7 @@ export default class extends Controller {
     });
   }
 
-  createPreviewItem(fileName) {
+  createPreviewItem(fileId, fileName) {
     const wrapper = document.createElement("div");
     wrapper.classList.add(
       "preview-item",
@@ -133,6 +141,29 @@ export default class extends Controller {
       "border-stone-300",
     );
 
+    const removeButton = this.createRemoveButton(fileId);
+    const spinner = this.createSpinner();
+    const fileNameText = this.createFileNameText(fileName);
+
+    wrapper.appendChild(removeButton);
+    wrapper.appendChild(spinner);
+    wrapper.appendChild(fileNameText);
+    wrapper.dataset.id = fileId;
+
+    this.previewTarget.appendChild(wrapper);
+    return wrapper;
+  }
+
+  createRemoveButton(fileId) {
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+    removeButton.classList.add("remove-button");
+    removeButton.addEventListener("click", () => this.removeFile(fileId));
+    return removeButton;
+  }
+
+  createSpinner() {
     const spinner = document.createElement("div");
     spinner.classList.add(
       "w-8",
@@ -143,7 +174,10 @@ export default class extends Controller {
       "rounded-full",
       "animate-spin",
     );
+    return spinner;
+  }
 
+  createFileNameText(fileName) {
     const fileNameText = document.createElement("p");
     fileNameText.textContent = fileName;
     fileNameText.classList.add(
@@ -152,32 +186,26 @@ export default class extends Controller {
       "text-sm",
       "text-stone-500",
     );
-
-    wrapper.appendChild(spinner);
-    wrapper.appendChild(fileNameText);
-
-    this.previewTarget.appendChild(wrapper);
-    return wrapper;
+    return fileNameText;
   }
 
-  updatePreview(wrapper, imageSrc, fileName) {
+  updatePreview(wrapper, fileId, imageSrc, fileName) {
     wrapper.innerHTML = "";
 
     wrapper.classList.remove("border", "border-stone-300");
 
+    const removeButton = this.createRemoveButton(fileId);
+    const img = this.createImg(imageSrc, fileName);
+
+    wrapper.appendChild(removeButton);
+    wrapper.appendChild(img);
+  }
+
+  createImg(imageSrc, fileName) {
     const img = document.createElement("img");
     img.src = imageSrc;
     img.alt = fileName;
-
-    const button = document.createElement("button");
-    button.type = "button";
-    button.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
-    button.classList.add("remove-button");
-    button.addEventListener("click", () => this.removeFile(wrapper.dataset.id));
-
-    wrapper.dataset.id = crypto.randomUUID();
-    wrapper.appendChild(img);
-    wrapper.appendChild(button);
+    return img;
   }
 
   showErrorOnPreview(wrapper) {
