@@ -1,28 +1,38 @@
 = turbo_frame_tag 'form'
-  .my-4.flex.justify-center
-    = form_with model: @contest, locale: true do |f|
-      .mb-4.flex.items-center
+.my-4.flex.justify-center
+  = form_with model: @contest, locale: true do |f|
+    .flex.flex-col.items-start
+      .flex.items-center
         = f.label :name, t('activerecord.attributes.contest.name'),
           class: 'text-base font-medium text-stone-700 text-right \
-                          pr-2 flex-shrink-0 w-32'
-        = f.text_field :name, class: 'block w-full border-stone-300 rounded-md \
+                          pr-2 flex-shrink-0 w-24'
+        = f.text_field :name, class: 'block border-stone-300 rounded-md \
                                       focus:ring-cyan-500 focus:border-cyan-500'
 
-      .mb-4.flex.items-center
+      p.text-xs.sm:text-sm.text-stone-600.text-left.ml-24 ※入力したコンテスト名は、
+      p.text-xs.sm:text-sm.text-stone-600.text-left.ml-24.pl-2.mb-4
+        span.block.sm:hidden
+          | Googleドライブに作成されるフォルダ名として
+          br
+          | 使用されます。
+        span.hidden.sm:block Googleドライブに作成されるフォルダ名として使用されます。
+
+      .flex.items-center.w-full.mb-4
         = f.label :deadline, t('activerecord.attributes.contest.deadline'),
           class: 'text-base font-medium text-stone-700 text-right \
-                          pr-2 flex-shrink-0 w-32'
+                          pr-2 flex-shrink-0 w-24'
         = f.date_field :deadline,
           class: 'block w-30 border-stone-300 rounded-md \
                                 focus:ring-cyan-500 focus:border-cyan-500'
         .ml-2 まで
 
-      .flex.justify-center
+      .flex.justify-center.items-center.flex-col.w-full.mt-2
         - if @contest.new_record?
           = f.submit t('helpers.submit.contest.create'),
             data: { turbo_frame: '_top' },
             class: 'bg-cyan-500 hover:bg-cyan-600 text-white \
                               font-bold py-2 px-4 rounded-full'
+          p.text-xs.sm:text-sm.text-stone-600 ※Googleドライブにフォルダを作成します。
         - else
           = f.submit '更新する',
             data: { turbo_frame: '_top' },
