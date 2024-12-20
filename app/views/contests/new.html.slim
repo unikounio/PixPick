@@ -1,26 +1,30 @@
-h1 = t('views.contests.new.title')
+.bg-stone-100.px-4.py-3.flex.justify-between.items-center.border-none
+  h1.text-xl.sm:text-2xl.font-bold.text-black = t('views.contests.new.title')
 
-- if @contests.any?
-  p = t('views.contests.new.description_with_contests')
-- else
-  p
-  = t('views.contests.new.welcome_message.title',
-    name: current_user.name)
-  br
-  = t('views.contests.new.welcome_message.welcome')
-  br
-  = t('views.contests.new.welcome_message.description')
-  br
-  = t('views.contests.new.welcome_message.no_contests',
-    name: current_user.name)
-  br
-  = t('views.contests.new.welcome_message.usage')
-  br
-  = t('views.contests.new.welcome_message.form_prompt')
-  br
-  = t('views.contests.new.welcome_message.encouragement',
-    name: current_user.name)
+  = link_to 'コンテスト一覧へ', user_contests_path(current_user),
+    class: 'bg-stone-300 text-stone-700 hover:bg-stone-400 hover:text-black \
+            p-2 text-center rounded text-lg font-semibold flex-shrink-0'
+.mx-6.sm:mx-20
+  - if @contests.any?
+    p.text-base.sm:text-xl.text-stone-800.my-6
+      = t('views.contests.new.description_with_contests')
+  - else
+    p.text-base.sm:text-xl.text-stone-800.my-6
+      = t('views.contests.new.welcome_message.title',
+          name: current_user.name)
+    p.text-base.sm:text-xl.text-stone-800.mb-6
+      = t('views.contests.new.welcome_message.welcome')
+    p.text-base.sm:text-xl.text-stone-800.mb-6
+      = t('views.contests.new.welcome_message.description')
+    p.text-base.sm:text-xl.text-stone-800.mb-6
+      = t('views.contests.new.welcome_message.no_contests',
+          name: current_user.name)
+      br
+      = t('views.contests.new.welcome_message.usage')
+    p.text-base.sm:text-xl.text-stone-800.mb-6
+      = t('views.contests.new.welcome_message.form_prompt')
+      br
+      = t('views.contests.new.welcome_message.encouragement',
+          name: current_user.name)
 
 = render 'form'
-
-= link_to 'コンテスト一覧へ', user_contests_path(current_user)

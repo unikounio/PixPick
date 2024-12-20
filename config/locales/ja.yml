@@ -231,7 +231,7 @@ ja:
         description_with_contests: フォームにコンテスト名と投票期日を入力して作成ボタンを押すことで、新しいコンテストを作成することができます。
         welcome_message:
           title: "%{name}さん"
-          welcome: ようこそPixPickへ
+          welcome: ようこそPixPickへ！
           description: PixPickは、Googleフォトから気になる写真をピックアップしてコンテストを開催し、参加者の投票によりベストショットを決めることができるサービスです。
           no_contests: "まだ、%{name}さんが参加しているコンテストはありません。"
           usage: このサービスは、自分でコンテストを開催するか、招待されたコンテストに参加することで、利用することができます。
