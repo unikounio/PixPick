@@ -58,7 +58,8 @@ export default class extends Controller {
       return;
     }
 
-    const wrapper = this.createPreviewItem(file.name);
+    const fileId = crypto.randomUUID();
+    const wrapper = this.createPreviewItem(file.name, fileId);
 
     if (fileExtension === "heic" || fileExtension === "heif") {
       const canDisplayHEIC = await this.canDisplayHEIC();
@@ -78,19 +79,20 @@ export default class extends Controller {
             wrapper,
             URL.createObjectURL(convertedBlob),
             convertedFile.name,
+            fileId
           );
-          this.addFileToList(convertedFile);
+          this.addFileToList(convertedFile, fileId);
         } catch (error) {
           console.error("HEIC変換エラー:", error);
           this.showErrorOnPreview(wrapper);
         }
       } else {
-        this.updatePreview(wrapper, URL.createObjectURL(file), file.name);
-        this.addFileToList(file);
+        this.updatePreview(wrapper, URL.createObjectURL(file), file.name, fileId);
+        this.addFileToList(file, fileId);
       }
     } else {
-      this.updatePreview(wrapper, URL.createObjectURL(file), file.name);
-      this.addFileToList(file);
+      this.updatePreview(wrapper, URL.createObjectURL(file), file.name, fileId);
+      this.addFileToList(file, fileId);
     }
   }
 
@@ -105,8 +107,8 @@ export default class extends Controller {
     });
   }
 
-  addFileToList(file) {
-    const fileWithId = { file: file, id: crypto.randomUUID() };
+  addFileToList(file, fileID) {
+    const fileWithId = { file: file, id: fileID };
     this.files.push(fileWithId);
   }
 
@@ -121,7 +123,7 @@ export default class extends Controller {
     });
   }
 
-  createPreviewItem(fileName) {
+  createPreviewItem(fileName, fileId) {
     const wrapper = document.createElement("div");
     wrapper.classList.add(
       "preview-item",
@@ -153,6 +155,14 @@ export default class extends Controller {
       "text-stone-500",
     );
 
+    const button = document.createElement("button");
+    button.type = "button";
+    button.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+    button.classList.add("remove-button");
+    button.addEventListener("click", () => this.removeFile(fileId));
+
+    wrapper.dataset.id = fileId
+    wrapper.appendChild(button);
     wrapper.appendChild(spinner);
     wrapper.appendChild(fileNameText);
 
@@ -160,7 +170,7 @@ export default class extends Controller {
     return wrapper;
   }
 
-  updatePreview(wrapper, imageSrc, fileName) {
+  updatePreview(wrapper, imageSrc, fileName, fileId) {
     wrapper.innerHTML = "";
 
     wrapper.classList.remove("border", "border-stone-300");
@@ -173,11 +183,10 @@ export default class extends Controller {
     button.type = "button";
     button.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
     button.classList.add("remove-button");
-    button.addEventListener("click", () => this.removeFile(wrapper.dataset.id));
+    button.addEventListener("click", () => this.removeFile(fileId));
 
-    wrapper.dataset.id = crypto.randomUUID();
-    wrapper.appendChild(img);
     wrapper.appendChild(button);
+    wrapper.appendChild(img);
   }
 
   showErrorOnPreview(wrapper) {
