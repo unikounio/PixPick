@@ -38,6 +38,26 @@ export default class extends Controller {
   }
 
   async addFile(file) {
+    const fileId = crypto.randomUUID();
+
+    if (!this.validateFile(file)) {
+      alert(
+        `"${file.name}" は画像ではありません。画像ファイルのみアップロードできます。`,
+      );
+      return;
+    }
+
+    const wrapper = this.createPreviewItem(fileId, file.name);
+
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    if (fileExtension === "heic" || fileExtension === "heif") {
+      await this.processHEICFile(file, fileId, wrapper);
+    } else {
+      await this.updatePreviewAndAddFile(file, fileId, wrapper);
+    }
+  }
+
+  validateFile(file) {
     const allowedExtensions = [
       ".jpg",
       ".jpeg",
@@ -48,57 +68,47 @@ export default class extends Controller {
     ];
     const fileExtension = file.name.split(".").pop().toLowerCase();
 
-    if (
-      !file.type.startsWith("image/") &&
-      !allowedExtensions.includes(`.${fileExtension}`)
-    ) {
-      alert(
-        `"${file.name}" は画像ではありません。画像ファイルのみアップロードできます。`,
-      );
-      return;
-    }
+    return (
+      file.type.startsWith("image/") ||
+      allowedExtensions.includes(`.${fileExtension}`)
+    );
+  }
 
-    const fileId = crypto.randomUUID();
-    const wrapper = this.createPreviewItem(fileId, file.name);
+  async processHEICFile(file, fileId, wrapper) {
+    const canDisplayHEIC = await this.canDisplayHEIC();
 
-    if (fileExtension === "heic" || fileExtension === "heif") {
-      const canDisplayHEIC = await this.canDisplayHEIC();
-      if (!canDisplayHEIC) {
-        try {
-          const convertedBlob = await heic2any({
-            blob: file,
-            toType: "image/jpeg",
-          });
-          const convertedFile = new File(
-            [convertedBlob],
-            file.name.replace(/\.(heic|heif)$/i, ".jpg"),
-            { type: "image/jpeg" },
-          );
+    if (!canDisplayHEIC) {
+      try {
+        const convertedBlob = await heic2any({
+          blob: file,
+          toType: "image/jpeg",
+        });
 
-          this.updatePreview(
-            wrapper,
-            fileId,
-            URL.createObjectURL(convertedBlob),
-            convertedFile.name,
-          );
-          this.addFileToList(convertedFile, fileId);
-        } catch (error) {
-          console.error("HEIC変換エラー:", error);
-          this.showErrorOnPreview(wrapper);
-        }
-      } else {
-        this.updatePreview(
-          wrapper,
-          fileId,
-          URL.createObjectURL(file),
-          file.name,
+        const convertedFile = new File(
+          [convertedBlob],
+          file.name.replace(/\.(heic|heif)$/i, ".jpg"),
+          { type: "image/jpeg" },
         );
-        this.addFileToList(file, fileId);
+
+        await this.updatePreviewAndAddFile(
+          convertedFile,
+          fileId,
+          wrapper,
+          convertedBlob,
+        );
+      } catch (error) {
+        console.error("HEIC変換エラー:", error);
+        this.showErrorOnPreview(wrapper);
       }
     } else {
-      this.updatePreview(wrapper, fileId, URL.createObjectURL(file), file.name);
-      this.addFileToList(file, fileId);
+      await this.updatePreviewAndAddFile(file, fileId, wrapper);
     }
+  }
+
+  async updatePreviewAndAddFile(file, fileId, wrapper, FileOrBlob = file) {
+    const fileURL = URL.createObjectURL(FileOrBlob);
+    this.updatePreview(wrapper, fileId, fileURL, file.name);
+    this.addFileToList(file, fileId);
   }
 
   async canDisplayHEIC() {
