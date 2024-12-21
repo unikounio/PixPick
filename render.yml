@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: pixpick-web
+    env: ruby
+    buildCommand: ./setup.sh
+    startCommand: bundle exec puma -C config/puma.rb
+    envVars:
+      - key: REDIS_URL
+        value: redis://red-ctilm4ogph6c73895us0:6379
+
+  - type: worker
+    name: pixpick-sidekiq
+    env: ruby
+    buildCommand: ./setup.sh
+    startCommand: bundle exec sidekiq
+    envVars:
+      - key: REDIS_URL
+        value: redis://red-ctilm4ogph6c73895us0:6379

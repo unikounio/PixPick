@@ -56,17 +56,12 @@ class ContestsController < ApplicationController
   def create
     @contest = current_user.contests.new(contest_params)
 
-    if @contest.valid?
-      folder_id, permission_id = setup_drive_folder
-
-      if folder_id.present? && @contest.save_contest_and_create_participant(folder_id, permission_id, current_user.id)
-        redirect_to new_contest_entry_path(@contest),
-                    notice: t('activerecord.notices.messages.create', model: t('activerecord.models.contest'))
-      else
-        render_error_toast
-      end
+    if @contest.save_with_participant(current_user.id)
+      ContestSetupJob.perform_later(@contest.id, session[:access_token])
+      redirect_to new_contest_entry_path(@contest),
+                  notice: t('activerecord.notices.messages.create', model: t('activerecord.models.contest'))
     else
-      render_error_toast
+      log_and_render_toast
     end
   end
 
@@ -83,7 +78,7 @@ class ContestsController < ApplicationController
 
       render turbo_stream: append_turbo_toast(:success, "#{updated_message}を更新しました")
     else
-      render_error_toast
+      log_and_render_toast
     end
   end
 
@@ -102,7 +97,9 @@ class ContestsController < ApplicationController
     params.require(:contest).permit(:name, :deadline)
   end
 
-  def render_error_toast
+  def log_and_render_toast
+    Rails.logger.error "コンテストの保存に失敗: #{@contest.errors.full_messages.join(', ')}"
+
     turbo_streams = @contest.errors.full_messages.map do |message|
       append_turbo_toast(:error, message)
     end
