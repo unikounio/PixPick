@@ -18,9 +18,9 @@ class Entry < ApplicationRecord
 
   ALLOWED_MIME_TYPES = %w[image/jpeg image/jpg image/png image/webp image/heic image/heif].freeze
 
-  def self.upload_and_create_entries!(files, current_user, contest, drive_service)
-    files.each do |file|
-      drive_file_id, permission_id = upload_to_google_drive(file, contest, drive_service)
+  def self.upload_and_create_entries!(file_info, current_user, contest, drive_service)
+    ActiveRecord::Base.transaction do
+      drive_file_id, permission_id = upload_to_google_drive(file_info, contest.drive_file_id, drive_service)
 
       create!(
         user: current_user,
@@ -31,12 +31,16 @@ class Entry < ApplicationRecord
     end
   end
 
-  def self.upload_to_google_drive(file, contest, drive_service)
-    drive_file_id = drive_service.upload_file(file, contest.drive_file_id)
+  def self.upload_to_google_drive(file_info, drive_folder_id, drive_service)
+    file = File.open(file_info[:path])
+    drive_file_id = drive_service.upload_file(file, drive_folder_id, file_info[:name], file_info[:content_type])
     raise 'Google Driveへのアップロードに失敗' if drive_file_id.nil?
 
     permission_id = drive_service.share_file(drive_file_id)
     raise 'Google Drive共有設定に失敗' if permission_id.nil?
+
+    file.close
+    File.delete(file_info[:path])
 
     [drive_file_id, permission_id]
   end

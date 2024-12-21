@@ -5,7 +5,7 @@ class EntriesController < ApplicationController
 
   before_action :ensure_valid_access_token!, only: %i[image_proxy create destroy]
   before_action :set_entry, only: %i[thumbnail_proxy show image_proxy destroy]
-  before_action :set_drive_service, only: %i[thumbnail_proxy image_proxy create destroy]
+  before_action :set_drive_service, only: %i[thumbnail_proxy image_proxy destroy]
 
   def thumbnail_proxy
     cache_key = "entry_thumbnail_#{@entry.id}"
@@ -58,27 +58,16 @@ class EntriesController < ApplicationController
   def create
     files = files_params[:files]
 
-    error_message =
-      if files.blank?
-        'ファイルが見つかりません'
-      else
-        Entry.validate_mime_type(files)
-      end
-
+    error_message = validate_files(files)
     if error_message.present?
       render json: { error: error_message }, status: :unprocessable_entity
       return
     end
 
-    begin
-      ActiveRecord::Base.transaction do
-        Entry.upload_and_create_entries!(files, current_user, @contest, @drive_service)
-      end
-      render json: { redirect_url: contest_path(@contest) }, status: :ok
-    rescue StandardError => e
-      Rails.logger.error("ファイルの処理中に次のエラーが発生: #{e.message}")
-      render json: { error: 'ファイルの処理中にエラーが発生しました' }, status: :unprocessable_entity
-    end
+    file_data = prepare_file_data(files)
+    EntryUploadJob.perform_later(file_data, current_user.id, @contest.id, session[:access_token])
+
+    render json: { redirect_url: contest_path(@contest) }
   end
 
   def destroy
@@ -104,6 +93,20 @@ class EntriesController < ApplicationController
 
   def set_entry
     @entry = Entry.find(params[:id])
+  end
+
+  def validate_files(files)
+    return 'ファイルが見つかりません' if files.blank?
+
+    Entry.validate_mime_type(files)
+  end
+
+  def prepare_file_data(files)
+    files.map do |file|
+      temp_path = Rails.root.join('tmp', file.original_filename)
+      File.binwrite(temp_path, file.read)
+      { path: temp_path.to_s, name: file.original_filename, content_type: file.content_type }
+    end
   end
 
   def authorize_user!

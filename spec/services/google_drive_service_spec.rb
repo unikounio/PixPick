@@ -58,42 +58,50 @@ RSpec.describe GoogleDriveService do
   describe '#upload_file' do
     let(:file) do
       instance_double(
-        ActionDispatch::Http::UploadedFile,
-        original_filename: 'test_image.jpg',
-        path: '/path/to/mock/file',
-        content_type: 'image/jpeg'
+        File,
+        path: '/path/to/mock/file'
       )
     end
 
     context 'when the file upload is successful' do
       let(:mock_response) { instance_double(Google::Apis::DriveV3::File, id: 'mock_drive_file_id') }
 
+      file_path = '/path/to/mock/file'
+      filename = 'test_image.jpg'
+      content_type = 'image/jpeg'
+      folder_id = 'mock_folder_id'
+
       before do
         allow(client).to receive(:create_file).with(
-          { name: file.original_filename, parents: [file_id] },
-          upload_source: file.path,
-          content_type: file.content_type
+          { name: filename, parents: [folder_id] },
+          upload_source: file_path,
+          content_type: content_type
         ).and_return(mock_response)
       end
 
       it 'returns the drive file ID' do
-        result = drive_service.upload_file(file, file_id)
+        result = drive_service.upload_file(file, folder_id, filename, content_type)
         expect(result).to eq('mock_drive_file_id')
       end
     end
 
     context 'when the file upload fails' do
+      file_path = '/path/to/mock/file'
+      filename = 'test_image.jpg'
+      content_type = 'image/jpeg'
+      folder_id = 'mock_folder_id'
+
       before do
         allow(client).to receive(:create_file).with(
-          { name: file.original_filename, parents: [file_id] },
-          upload_source: file.path,
-          content_type: file.content_type
+          { name: filename, parents: [folder_id] },
+          upload_source: file_path,
+          content_type: content_type
         ).and_raise(Google::Apis::Error.new('Upload failed'))
       end
 
       it 'logs an error and returns nil' do
         allow(Rails.logger).to receive(:error)
-        result = drive_service.upload_file(file, file_id)
+        result = drive_service.upload_file(file, folder_id, filename, content_type)
 
         expect(result).to be_nil
         expect(Rails.logger).to have_received(:error).with('Google Driveアップロードに失敗しました: Upload failed')
