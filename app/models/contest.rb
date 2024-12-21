@@ -20,12 +20,25 @@ class Contest < ApplicationRecord
     participant.save
   end
 
-  def save_contest_and_create_participant(folder_id, permission_id, user_id)
+  def save_with_participant(user_id)
+    transaction do
+      if save!
+        participants.create!(user_id:)
+        true
+      else
+        false
+      end
+    end
+  rescue ActiveRecord::RecordInvalid => e
+    Rails.logger.error "参加者の作成に失敗: #{e.message}"
+    false
+  end
+
+  def save_drive_ids(folder_id, permission_id)
     ActiveRecord::Base.transaction do
       self.drive_file_id = folder_id
       self.drive_permission_id = permission_id
       save!
-      participants.create!(user_id:)
     end
   rescue ActiveRecord::RecordInvalid
     false
