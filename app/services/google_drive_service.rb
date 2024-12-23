@@ -36,16 +36,16 @@ class GoogleDriveService
     end
   end
 
-  def upload_file(file, folder_id)
+  def upload_file(file, folder_id, filename, content_type)
     file_object = {
-      name: file.original_filename,
+      name: filename,
       parents: [folder_id]
     }
 
     uploaded_file = @service.create_file(
       file_object,
       upload_source: file.path,
-      content_type: file.content_type
+      content_type:
     )
 
     uploaded_file.id

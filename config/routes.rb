@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     member do
       get 'ranking'
       get 'invite'
+      get :upload_status, to: 'entries#status'
     end
 
     resources :entries, except: %i[index edit] do

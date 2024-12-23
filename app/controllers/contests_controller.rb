@@ -4,18 +4,15 @@ class ContestsController < ApplicationController
   include GoogleApiActions
 
   before_action :ensure_valid_access_token!, only: %i[show ranking create update]
-  before_action :set_drive_service, only: %i[show ranking create update]
+  before_action :set_drive_service, only: %i[show ranking update]
 
   def index
     @contests = current_user.contests
   end
 
   def show
-    entries = @contest.entries.order(created_at: :desc)
-    @entry_scores = entries.map do |entry|
-      score = current_user.votes.find_by(entry_id: entry.id)&.score
-      [entry.id, score]
-    end
+    @entry_scores = @contest.entry_scores_for(current_user)
+    @uploading_entry_counts = @contest.uploading_entry_counts(session)
   end
 
   def ranking

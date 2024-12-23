@@ -1,12 +1,19 @@
-- if @entry_scores.any?
+- if display_entries?(@entry_scores, @uploading_entry_counts)
   .w-full.px-4
     .grid.grid-cols-2.sm:grid-cols-4.mx-auto.mt-4 data-controller="modal"
+      - if @uploading_entry_counts.present?
+        - @uploading_entry_counts.times do
+          .flex.justify-center.items-center
+            .relative
+              .animate-pulse.p-2.rounded.bg-stone-200.hover:shadow-md.size-44(
+                data-controller="upload-status"
+                data-upload-status-contest-id-value=@contest.id
+              )
       dialog(
         data-modal-target="dialog"
         class="px-4 py-8 rounded-lg backdrop:bg-black/80"
       )
         .modal-content data-modal-target="content"
-
       - @entry_scores.each do |entry_id, score|
         = turbo_frame_tag "entry_#{entry_id}",
           class: 'flex justify-center items-center'
