@@ -72,6 +72,13 @@ class Contest < ApplicationRecord
     deadline.end_of_day.past?
   end
 
+  def destroy_with_drive_folder(drive_service)
+    transaction do
+      drive_service.delete_file(drive_file_id)
+      destroy!
+    end
+  end
+
   private
 
   def deadline_cannot_be_in_the_past

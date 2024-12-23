@@ -4,7 +4,7 @@ class ContestsController < ApplicationController
   include GoogleApiActions
 
   before_action :ensure_valid_access_token!, only: %i[show ranking create update]
-  before_action :set_drive_service, only: %i[show ranking update]
+  before_action :set_drive_service, only: %i[show ranking update destroy]
 
   def index
     @contests = current_user.contests
@@ -84,7 +84,8 @@ class ContestsController < ApplicationController
   end
 
   def destroy
-    @contest.destroy
+    @contest.destroy_with_drive_folder(@drive_service)
+
     redirect_to user_contests_path(current_user), notice: 'コンテストが削除されました。'
   end
 
