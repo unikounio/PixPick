@@ -16,6 +16,21 @@ class ContestsController < ApplicationController
       score = current_user.votes.find_by(entry_id: entry.id)&.score
       [entry.id, score]
     end
+    redis = Redis.new
+    status_key = "uploading_#{params[:id]}"
+    status = redis.get(status_key)
+
+    @uploading_entry_counts =
+      if status == 'completed'
+        Thread.new do
+          sleep(2)
+          redis.del(status_key)
+        end
+        session.delete(:"contest_#{@contest.id}_uploading_entry_counts")
+        nil
+      else
+        session[:"contest_#{@contest.id}_uploading_entry_counts"]
+      end
   end
 
   def ranking

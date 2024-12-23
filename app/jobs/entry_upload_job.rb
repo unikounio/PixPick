@@ -11,8 +11,14 @@ class EntryUploadJob < ApplicationJob
     current_user = User.find(user_id)
     contest = Contest.find(contest_id)
     drive_service = GoogleDriveService.new(access_token)
+
+    redis = Redis.new
+    redis.set("uploading_#{contest.id}", 'processing')
+
     file_data.each do |file_info|
       Entry.upload_and_create_entries!(file_info, current_user, contest, drive_service)
     end
+
+    redis.set("uploading_#{contest.id}", 'completed')
   end
 end
