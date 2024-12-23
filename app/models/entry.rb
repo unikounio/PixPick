@@ -19,7 +19,7 @@ class Entry < ApplicationRecord
   ALLOWED_MIME_TYPES = %w[image/jpeg image/jpg image/png image/webp image/heic image/heif].freeze
 
   def self.upload_and_create_entries!(file_info, current_user, contest, drive_service)
-    ActiveRecord::Base.transaction do
+    transaction do
       drive_file_id, permission_id = upload_to_google_drive(file_info, contest.drive_file_id, drive_service)
 
       create!(

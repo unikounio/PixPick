@@ -59,7 +59,7 @@ class Contest < ApplicationRecord
   end
 
   def save_drive_ids(folder_id, permission_id)
-    ActiveRecord::Base.transaction do
+    transaction do
       self.drive_file_id = folder_id
       self.drive_permission_id = permission_id
       save!
@@ -70,6 +70,13 @@ class Contest < ApplicationRecord
 
   def deadline_passed?
     deadline.end_of_day.past?
+  end
+
+  def destroy_with_drive_folder(drive_service)
+    transaction do
+      drive_service.delete_file(drive_file_id)
+      destroy!
+    end
   end
 
   private
