@@ -59,7 +59,7 @@ class Contest < ApplicationRecord
   end
 
   def save_drive_ids(folder_id, permission_id)
-    ActiveRecord::Base.transaction do
+    transaction do
       self.drive_file_id = folder_id
       self.drive_permission_id = permission_id
       save!
