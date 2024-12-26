@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
 class ContestsController < ApplicationController
-  include GoogleApiActions
-
-  before_action :ensure_valid_access_token!, only: %i[show ranking create update]
-  before_action :set_drive_service, only: %i[show ranking update destroy]
-
   def index
     @contests = current_user.contests
   end

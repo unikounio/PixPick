@@ -19,37 +19,7 @@ class User < ApplicationRecord
     user
   end
 
-  def token_expired?(token_expires_at)
-    return true if token_expires_at.nil?
-
-    token_expires_at < Time.current
-  end
-
-  def request_token_refresh(refresh_token)
-    response = post_token_request(refresh_token)
-
-    if response.success?
-      JSON.parse(response.body)
-    else
-      logger.error "アクセストークン更新失敗: #{response.body}"
-      nil
-    end
-  end
-
   def participant_for(contest)
     participants.find { |p| p.contest_id == contest.id }
-  end
-
-  private
-
-  def post_token_request(refresh_token)
-    Faraday.post('https://oauth2.googleapis.com/token') do |req|
-      req.body = {
-        client_id: ENV.fetch('GOOGLE_CLIENT_ID', nil),
-        client_secret: ENV.fetch('GOOGLE_CLIENT_SECRET', nil),
-        refresh_token:,
-        grant_type: 'refresh_token'
-      }
-    end
   end
 end
