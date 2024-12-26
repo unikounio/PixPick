@@ -76,9 +76,11 @@ class ContestsController < ApplicationController
   end
 
   def destroy
-    @contest.destroy_with_drive_folder(@drive_service)
-
-    redirect_to user_contests_path(current_user), notice: 'コンテストが削除されました。'
+    if @contest.destroy
+      redirect_to user_contests_path(current_user), notice: 'コンテストが削除されました。'
+    else
+      log_and_render_toast
+    end
   end
 
   private
