@@ -65,8 +65,6 @@ class ContestsController < ApplicationController
 
     if @contest.update(contest_params)
       updated_message = determine_updated_message
-      @drive_service.update_file_name(@contest.drive_file_id, @contest.name)
-
       render turbo_stream: append_turbo_toast(:success, "#{updated_message}を更新しました")
     else
       log_and_render_toast
