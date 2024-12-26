@@ -25,6 +25,11 @@ RSpec/MultipleExpectations:
 
 Metrics/AbcSize:
   Max: 20
+  Exclude:
+    - 'db/migrate/20241226023120_create_active_storage_tables.active_storage.rb'
+
 
 Metrics/MethodLength:
   Max: 20
+  Exclude:
+    - 'db/migrate/20241226023120_create_active_storage_tables.active_storage.rb'
