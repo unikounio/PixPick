@@ -10,25 +10,6 @@ RSpec.describe 'Contests' do
   end
 
   describe 'Contest creation' do
-    let(:drive_service) { GoogleDriveService.new('mock_access_token') }
-    let(:client) { instance_double(GooglePhotosPickerApiClient) }
-    let(:mock_picking_session) do
-      {
-        'id' => 'mock_session_id',
-        'mediaItemsSet' => false,
-        'pickerUri' => 'https://mockpickeruri.com'
-      }
-    end
-
-    before do
-      drive_service_mock = instance_double(GoogleDriveService)
-      allow(GoogleDriveService).to receive(:new).and_return(drive_service_mock)
-
-      folder_id = '1'
-      permission_id = '1'
-      allow(drive_service_mock).to receive_messages(create_folder: folder_id, share_file: permission_id)
-    end
-
     it 'creates a new contest successfully' do
       visit new_contest_path
 

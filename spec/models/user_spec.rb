@@ -43,36 +43,4 @@ RSpec.describe User do
       end
     end
   end
-
-  describe '#token_expired?' do
-    it 'returns true if the token has expired' do
-      expired_time = Time.zone.at(1.hour.ago.to_i)
-      expect(user.token_expired?(expired_time)).to be true
-    end
-
-    it 'returns false if the token is still valid' do
-      valid_time = Time.zone.at(1.hour.from_now.to_i)
-      expect(user.token_expired?(valid_time)).to be false
-    end
-  end
-
-  describe '#request_token_refresh' do
-    let(:success_response) do
-      instance_double(Faraday::Response, body: { 'access_token' => 'new_token', 'expires_in' => 3600 }.to_json,
-                                         success?: true)
-    end
-    let(:failure_response) { instance_double(Faraday::Response, body: 'Error', success?: false) }
-
-    it 'returns a new token if refresh is successful' do
-      allow(user).to receive(:post_token_request).and_return(success_response)
-      result = user.request_token_refresh('valid_refresh_token')
-      expect(result['access_token']).to eq('new_token')
-    end
-
-    it 'returns nil if the refresh fails' do
-      allow(user).to receive(:post_token_request).and_return(failure_response)
-      result = user.request_token_refresh('invalid_refresh_token')
-      expect(result).to be_nil
-    end
-  end
 end
