@@ -7,7 +7,7 @@ module Users
       @user = User.from_omniauth(auth)
 
       if @user.persisted?
-        process_successful_authentication(auth)
+        process_successful_authentication
       else
         set_flash_message(:alert, :failure, kind: 'Google') if is_navigational_format?
         redirect_to root_path
@@ -24,19 +24,12 @@ module Users
 
     private
 
-    def process_successful_authentication(auth)
+    def process_successful_authentication
       request.env['devise.mapping'] = Devise.mappings[:user]
-      store_tokens(auth.credentials)
       participation_result =
         (participate_contest(@user) if session[:contest_id].present?)
       set_flash_message(:notice, :success, kind: 'Google') if is_navigational_format?
       sign_in_and_redirect @user, participation_result
-    end
-
-    def store_tokens(credentials)
-      session[:access_token] = credentials.token
-      session[:refresh_token] = credentials.refresh_token
-      session[:token_expires_at] = Time.zone.at(credentials.expires_at)
     end
 
     def participate_contest(user)

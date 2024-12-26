@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
 class EntriesController < ApplicationController
-  include GoogleApiActions
-
-  before_action :ensure_valid_access_token!, only: %i[image_proxy create destroy]
   before_action :set_entry, only: %i[thumbnail_proxy show image_proxy destroy]
-  before_action :set_drive_service, only: %i[thumbnail_proxy image_proxy destroy]
 
   def thumbnail_proxy
     cache_key = "entry_thumbnail_#{@entry.id}"

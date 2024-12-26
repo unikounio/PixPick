@@ -7,7 +7,6 @@ class Contest < ApplicationRecord
 
   validates :name, presence: true
   validates :deadline, presence: true
-  validates :drive_permission_id, uniqueness: { scope: :drive_file_id }
   validates :invitation_token, uniqueness: true, length: { maximum: 64 }
   validate :deadline_cannot_be_in_the_past
 
@@ -46,25 +45,11 @@ class Contest < ApplicationRecord
 
   def save_with_participant(user_id)
     transaction do
-      if save!
-        participants.create!(user_id:)
-        true
-      else
-        false
-      end
+      save!
+      participants.create!(user_id:)
     end
   rescue ActiveRecord::RecordInvalid => e
     Rails.logger.error "参加者の作成に失敗: #{e.message}"
-    false
-  end
-
-  def save_drive_ids(folder_id, permission_id)
-    transaction do
-      self.drive_file_id = folder_id
-      self.drive_permission_id = permission_id
-      save!
-    end
-  rescue ActiveRecord::RecordInvalid
     false
   end
 

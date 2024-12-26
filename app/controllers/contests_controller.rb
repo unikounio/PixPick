@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
 class ContestsController < ApplicationController
-  include GoogleApiActions
-
-  before_action :ensure_valid_access_token!, only: %i[show ranking create update]
-  before_action :set_drive_service, only: %i[show ranking update destroy]
-
   def index
     @contests = current_user.contests
   end
@@ -54,7 +49,6 @@ class ContestsController < ApplicationController
     @contest = current_user.contests.new(contest_params)
 
     if @contest.save_with_participant(current_user.id)
-      ContestSetupJob.perform_later(@contest.id, session[:access_token])
       redirect_to new_contest_entry_path(@contest),
                   notice: t('activerecord.notices.messages.create', model: t('activerecord.models.contest'))
     else
