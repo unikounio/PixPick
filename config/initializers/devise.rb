@@ -274,7 +274,7 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   config.omniauth :google_oauth2, ENV.fetch('GOOGLE_CLIENT_ID', nil), ENV.fetch('GOOGLE_CLIENT_SECRET', nil),
-                  scope: 'profile, drive.file',
+                  scope: 'profile',
                   access_type: 'offline',
                   prompt: 'consent'
 
