@@ -52,7 +52,7 @@ class ContestsController < ApplicationController
       redirect_to new_contest_entry_path(@contest),
                   notice: t('activerecord.notices.messages.create', model: t('activerecord.models.contest'))
     else
-      log_and_render_toast
+      log_and_render_toast('保存')
     end
   end
 
@@ -67,7 +67,7 @@ class ContestsController < ApplicationController
       updated_message = determine_updated_message
       render turbo_stream: append_turbo_toast(:success, "#{updated_message}を更新しました")
     else
-      log_and_render_toast
+      log_and_render_toast('更新')
     end
   end
 
@@ -79,7 +79,7 @@ class ContestsController < ApplicationController
     if @contest.destroy
       redirect_to user_contests_path(current_user), notice: 'コンテストが削除されました。'
     else
-      log_and_render_toast
+      log_and_render_toast('削除')
     end
   end
 
@@ -89,14 +89,12 @@ class ContestsController < ApplicationController
     params.require(:contest).permit(:name, :deadline)
   end
 
-  def log_and_render_toast
-    Rails.logger.error "コンテストの保存に失敗: #{@contest.errors.full_messages.join(', ')}"
+  def log_and_render_toast(action_name)
+    error_messages = @contest.errors.full_messages
 
-    turbo_streams = @contest.errors.full_messages.map do |message|
-      append_turbo_toast(:error, message)
-    end
+    Rails.logger.error "コンテストの#{action_name}に失敗: #{error_messages.join(', ')}"
 
-    render turbo_stream: turbo_streams
+    render turbo_stream: error_messages.map { |message| append_turbo_toast(:error, message) }
   end
 
   def no_changes_to_update?
