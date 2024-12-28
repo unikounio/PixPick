@@ -6,12 +6,13 @@ class ContestsController < ApplicationController
   end
 
   def show
-    @entry_scores = @contest.entry_scores_for(current_user)
+    @entries_with_score = @contest.entries_with_score_for(current_user)
     @uploading_entry_counts = @contest.uploading_entry_counts(session)
   end
 
   def ranking
     entries_with_scores = @contest.entries
+                                  .includes(:image_attachment)
                                   .with_total_scores
                                   .order(total_score: :desc, id: :asc)
 
@@ -27,7 +28,7 @@ class ContestsController < ApplicationController
 
       @ranked_entries << {
         rank: current_rank,
-        entry_id: entry.id,
+        entry:,
         total_score: entry.total_score
       }
     end

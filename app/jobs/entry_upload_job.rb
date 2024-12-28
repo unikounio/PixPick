@@ -7,16 +7,15 @@ class EntryUploadJob < ApplicationJob
     Rails.logger.error "エントリーのアップロード処理中に次のエラーが発生: #{error.message}"
   end
 
-  def perform(file_data, user_id, contest_id, access_token)
+  def perform(file_data, user_id, contest_id)
     current_user = User.find(user_id)
     contest = Contest.find(contest_id)
-    drive_service = GoogleDriveService.new(access_token)
 
     redis = Redis.new
     redis.set("uploading_#{contest.id}", 'processing')
 
     file_data.each do |file_info|
-      Entry.upload_and_create_entries!(file_info, current_user, contest, drive_service)
+      Entry.upload_and_create_entries!(file_info, current_user, contest)
     end
 
     redis.set("uploading_#{contest.id}", 'completed')

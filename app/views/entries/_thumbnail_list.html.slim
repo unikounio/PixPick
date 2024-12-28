@@ -1,4 +1,4 @@
-- if display_entries?(@entry_scores, @uploading_entry_counts)
+- if display_entries?(@entries_with_score, @uploading_entry_counts)
   .w-full.px-4
     .grid.grid-cols-2.sm:grid-cols-4.mx-auto.mt-4 data-controller="modal"
       - if @uploading_entry_counts.present?
@@ -14,19 +14,19 @@
         class="px-4 py-8 rounded-lg backdrop:bg-black/80"
       )
         .modal-content data-modal-target="content"
-      - @entry_scores.each do |entry_id, score|
-        = turbo_frame_tag "entry_#{entry_id}",
+      - @entries_with_score.each do |entry, score|
+        = turbo_frame_tag "entry_#{entry.id}",
           class: 'flex justify-center items-center'
           .relative
-            - entries_show_url = contest_entry_path(@contest.id, entry_id)
+            - entries_show_url = contest_entry_path(@contest.id, entry.id)
             = button_tag type: 'button',
               data: { action: 'click->modal#open',
                 modal_entries_show_url_value: entries_show_url },
               class: 'p-2 rounded hover:shadow-md'
-              = image_tag thumbnail_contest_entry_path(@contest, entry_id),
+              = image_tag entry.image.variant(:thumb),
                 alt: t('views.entries.alt_text'),
                 class: 'w-full h-auto'
 
-            = render 'entries/score', entry_id: entry_id, score: score
+            = render 'entries/score', entry_id: entry.id, score: score
 - else
   p.mt-8.text-center.text-stone-600 エントリーがありません。

@@ -6,7 +6,7 @@
           .loading-spinner
             = render 'shared/spinner'
 
-          = image_tag photo_contest_entry_path(@contest, @entry),
+          = image_tag @entry.image,
             alt: t('views.entries.alt_text'),
             class: 'entry-img h-72 sm:h-auto',
             data: { action: 'load->image-status#finish' }
