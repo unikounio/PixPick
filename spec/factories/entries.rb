@@ -2,9 +2,15 @@
 
 FactoryBot.define do
   factory :entry do
-    sequence(:drive_file_id, &:to_s)
-    sequence(:drive_permission_id, &:to_s)
     contest
     user
+
+    after(:build) do |entry|
+      entry.image.attach(
+        io: StringIO.new('This is a dummy image file'),
+        filename: 'dummy.jpg',
+        content_type: 'image/jpeg'
+      )
+    end
   end
 end
