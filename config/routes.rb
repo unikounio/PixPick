@@ -16,8 +16,6 @@ Rails.application.routes.draw do
     end
 
     resources :entries, except: %i[index edit] do
-      get 'photo', to: 'entries#image_proxy', on: :member
-      get 'thumbnail', to: 'entries#thumbnail_proxy', on: :member
       resources :votes, only: :create
     end
 

@@ -19,10 +19,10 @@ class Contest < ApplicationRecord
     participant.save
   end
 
-  def entry_scores_for(user)
-    entries.order(created_at: :desc).map do |entry|
+  def entries_with_score_for(user)
+    entries.includes(:image_attachment).order(created_at: :desc).map do |entry|
       score = user.votes.find_by(entry_id: entry.id)&.score
-      [entry.id, score]
+      [entry, score]
     end
   end
 

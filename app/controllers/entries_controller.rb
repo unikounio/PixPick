@@ -1,27 +1,7 @@
 # frozen_string_literal: true
 
 class EntriesController < ApplicationController
-  before_action :set_entry, only: %i[thumbnail_proxy show image_proxy destroy]
-
-  def thumbnail_proxy
-    cache_key = "entry_thumbnail_#{@entry.id}"
-
-    image_data, mime_type = Rails.cache.fetch(cache_key, expires_in: 1.hour) do
-      thumbnail_link = @drive_service.get_thumbnail_link(@entry.drive_file_id)
-
-      if thumbnail_link.present?
-        @drive_service.fetch_thumbnail(thumbnail_link)
-      else
-        [nil, nil]
-      end
-    end
-
-    if image_data
-      send_data image_data, type: mime_type, disposition: 'inline', cache_control: 'public, max-age=3600'
-    else
-      head :not_found
-    end
-  end
+  before_action :set_entry, only: %i[show destroy]
 
   def show
     @previous_entry = @entry.contest.entries.where('id > ?', @entry.id).order(id: :asc).first
@@ -29,27 +9,7 @@ class EntriesController < ApplicationController
     render partial: 'entries/show', formats: [:html]
   end
 
-  def image_proxy
-    cache_key = "entry_image_#{@entry.id}"
-
-    image_data, mime_type = Rails.cache.fetch(cache_key, expires_in: 1.hour) do
-      original_data, mime_type = @drive_service.download_file(@entry.drive_file_id)
-
-      resized_data = EntryResizer.resize_and_convert_image(original_data, mime_type, 400, 400)
-      [resized_data, mime_type]
-    end
-
-    if image_data
-      send_data image_data, type: mime_type, disposition: 'inline', cache_control: 'public, max-age=3600'
-    else
-      head :not_found
-    end
-  end
-
-  def new
-    @folder_id = @contest.drive_file_id
-    @access_token = session[:access_token]
-  end
+  def new; end
 
   def create
     files = files_params[:files]
@@ -60,10 +20,10 @@ class EntriesController < ApplicationController
       return
     end
 
-    file_data = prepare_file_data(files)
-    session[:"contest_#{@contest.id}_uploading_entry_counts"] = file_data.count
+    image_data = prepare_image_data(files)
+    session[:"contest_#{@contest.id}_uploading_entry_counts"] = image_data.count
 
-    EntryUploadJob.perform_later(file_data, current_user.id, @contest.id, session[:access_token])
+    EntryUploadJob.perform_later(image_data, current_user.id, @contest.id)
 
     render json: { redirect_url: contest_path(@contest) }
   end
@@ -78,7 +38,7 @@ class EntriesController < ApplicationController
   def destroy
     authorize_user!
 
-    if @drive_service.delete_file(@entry.drive_file_id) && @entry.destroy
+    if @entry.destroy
       render turbo_stream: [
         turbo_stream.remove("entry_#{params[:id]}"),
         append_turbo_toast(:success, t('activerecord.notices.messages.delete', model: t('activerecord.models.entry')))
@@ -106,7 +66,7 @@ class EntriesController < ApplicationController
     Entry.validate_mime_type(files)
   end
 
-  def prepare_file_data(files)
+  def prepare_image_data(files)
     files.map do |file|
       temp_path = Rails.root.join('tmp', file.original_filename)
       File.binwrite(temp_path, file.read)

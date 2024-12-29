@@ -7,7 +7,6 @@ gem 'bootsnap', require: false
 gem 'devise'
 gem 'devise-i18n'
 gem 'faraday'
-gem 'google-apis-drive_v3'
 gem 'image_processing'
 gem 'importmap-rails'
 gem 'mini_magick'

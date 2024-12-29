@@ -2,15 +2,20 @@
 
 class EntryResizer
   def self.resize_and_convert_image(image_data, mime_type, width, height)
-    format = mime_type_to_format(mime_type) || 'jpg'
+    format = 'webp'
     tempfile = create_tempfile(image_data, format)
 
     begin
-      resized_image = ImageProcessing::MiniMagick
-                      .source(tempfile.path)
-                      .resize_to_fit(width, height)
-                      .convert(format)
-                      .call
+      image_processor = ImageProcessing::MiniMagick
+                        .source(tempfile.path)
+                        .strip
+                        .resize_to_fit(width, height)
+                        .convert(format)
+
+      image_processor = image_processor.quality(95) unless ['image/heic', 'image/heif',
+                                                            'application/octet-stream'].include?(mime_type)
+
+      resized_image = image_processor.call
 
       File.binread(resized_image.path)
     ensure

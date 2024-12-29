@@ -5,9 +5,11 @@ class Entry < ApplicationRecord
   belongs_to :user
   has_many :votes, dependent: :destroy
 
-  validates :drive_file_id, presence: true,
-                            uniqueness: { scope: :contest_id, message: :entered }
-  validates :drive_permission_id, uniqueness: { scope: :drive_file_id }
+  has_one_attached :image do |attachable|
+    attachable.variant :thumb, resize_to_limit: [200, 200], preprocessed: true
+  end
+
+  validate :validate_image_format
 
   scope :with_total_scores, lambda {
     left_joins(:votes)
@@ -18,31 +20,22 @@ class Entry < ApplicationRecord
 
   ALLOWED_MIME_TYPES = %w[image/jpeg image/jpg image/png image/webp image/heic image/heif].freeze
 
-  def self.upload_and_create_entries!(file_info, current_user, contest, drive_service)
+  def self.upload_and_create_entries!(file_info, current_user, contest)
     transaction do
-      drive_file_id, permission_id = upload_to_google_drive(file_info, contest.drive_file_id, drive_service)
+      entry = create!(user: current_user, contest: contest)
 
-      create!(
-        user: current_user,
-        contest: contest,
-        drive_file_id: drive_file_id,
-        drive_permission_id: permission_id
+      resized_image_data = EntryResizer.resize_and_convert_image(
+        File.open(file_info[:path]),
+        file_info[:content_type],
+        400, 400
+      )
+
+      entry.image.attach(
+        io: StringIO.new(resized_image_data),
+        filename: file_info[:name].sub(/\.\w+$/, '.webp'),
+        content_type: 'image/webp'
       )
     end
-  end
-
-  def self.upload_to_google_drive(file_info, drive_folder_id, drive_service)
-    file = File.open(file_info[:path])
-    drive_file_id = drive_service.upload_file(file, drive_folder_id, file_info[:name], file_info[:content_type])
-    raise 'Google Driveへのアップロードに失敗' if drive_file_id.nil?
-
-    permission_id = drive_service.share_file(drive_file_id)
-    raise 'Google Drive共有設定に失敗' if permission_id.nil?
-
-    file.close
-    File.delete(file_info[:path])
-
-    [drive_file_id, permission_id]
   end
 
   def self.validate_mime_type(files)
@@ -75,5 +68,15 @@ class Entry < ApplicationRecord
     else
       file.content_type
     end
+  end
+
+  private
+
+  def validate_image_format
+    return unless image.attached?
+
+    return if ALLOWED_MIME_TYPES.include?(image.content_type)
+
+    errors.add(:image, '対応していない形式のファイルです')
   end
 end
