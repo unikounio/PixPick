@@ -35,6 +35,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'dockerfile-rails', '>= 1.6'
   gem 'prettier', require: false
   gem 'rubocop', require: false
   gem 'rubocop-capybara', require: false
