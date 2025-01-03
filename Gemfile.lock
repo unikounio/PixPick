@@ -308,8 +308,6 @@ GEM
       logger
     rdoc (6.7.0)
       psych (>= 4.0.0)
-    redis (5.3.0)
-      redis-client (>= 0.22.0)
     redis-client (0.23.0)
       connection_pool
     regexp_parser (2.9.2)
@@ -489,7 +487,6 @@ DEPENDENCIES
   puma
   rails (~> 7.2.1)
   rails-i18n
-  redis
   rspec-rails
   rubocop
   rubocop-capybara

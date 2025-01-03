@@ -20,19 +20,11 @@ class EntriesController < ApplicationController
       return
     end
 
-    image_data = prepare_image_data(files)
-    session[:"contest_#{@contest.id}_uploading_entry_counts"] = image_data.count
-
-    EntryUploadJob.perform_later(image_data, current_user.id, @contest.id)
+    files.each do |file|
+      Entry.upload_and_create_entries!(file, current_user, @contest)
+    end
 
     render json: { redirect_url: contest_path(@contest) }
-  end
-
-  def status
-    redis = Redis.new
-    status = redis.get("uploading_#{params[:id]}")
-
-    render plain: status
   end
 
   def destroy

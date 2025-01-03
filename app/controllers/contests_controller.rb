@@ -7,7 +7,6 @@ class ContestsController < ApplicationController
 
   def show
     @entries_with_score = @contest.entries_with_score_for(current_user)
-    @uploading_entry_counts = @contest.uploading_entry_counts(session)
   end
 
   def ranking

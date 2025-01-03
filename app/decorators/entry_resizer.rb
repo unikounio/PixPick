@@ -10,10 +10,10 @@ class EntryResizer
                         .source(tempfile.path)
                         .strip
                         .resize_to_fit(width, height)
-                        .convert(format)
 
-      image_processor = image_processor.quality(95) unless ['image/heic', 'image/heif',
-                                                            'application/octet-stream'].include?(mime_type)
+      unless %w[image/heic image/heif application/octet-stream].include?(mime_type)
+        image_processor = image_processor.convert(format).quality(95)
+      end
 
       resized_image = image_processor.call
 

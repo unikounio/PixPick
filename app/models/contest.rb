@@ -26,23 +26,6 @@ class Contest < ApplicationRecord
     end
   end
 
-  def uploading_entry_counts(session)
-    redis = Redis.new
-    status_key = "uploading_#{id}"
-    status = redis.get(status_key)
-
-    if status == 'completed'
-      Thread.new do
-        sleep(2)
-        redis.del(status_key)
-      end
-      session.delete(:"contest_#{id}_uploading_entry_counts")
-      nil
-    else
-      session[:"contest_#{id}_uploading_entry_counts"]
-    end
-  end
-
   def save_with_participant(user_id)
     transaction do
       save!
