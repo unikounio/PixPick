@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import heic2any from "heic2any";
 
 export default class extends Controller {
-  static targets = ["fileInput", "preview"];
+  static targets = ["fileInput", "preview", "uploadButton"];
   static values = { entriesCreatePath: String };
 
   connect() {
@@ -216,8 +216,16 @@ export default class extends Controller {
   async upload(event) {
     event.preventDefault();
 
+    document.body.classList.add("loading");
+    this.uploadButtonTarget.disabled = true;
+    const originalButtonText = this.uploadButtonTarget.innerHTML;
+    this.uploadButtonTarget.innerHTML = "アップロード中...";
+
     if (this.files.length === 0) {
       alert("アップロードするファイルを選択してください。");
+      this.uploadButtonTarget.disabled = false;
+      this.uploadButtonTarget.innerHTML = originalButtonText;
+      document.body.classList.remove("loading");
       return;
     }
 

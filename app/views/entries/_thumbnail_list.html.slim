@@ -1,14 +1,6 @@
-- if display_entries?(@entries_with_score, @uploading_entry_counts)
+- if @entries_with_score.any?
   .w-full.px-4
     .grid.grid-cols-2.sm:grid-cols-4.mx-auto.mt-4 data-controller="modal"
-      - if @uploading_entry_counts.present?
-        - @uploading_entry_counts.times do
-          .flex.justify-center.items-center
-            .relative
-              .animate-pulse.p-2.rounded.bg-stone-200.hover:shadow-md.size-44(
-                data-controller="upload-status"
-                data-upload-status-contest-id-value=@contest.id
-              )
       dialog(
         data-modal-target="dialog"
         class="px-4 py-8 rounded-lg backdrop:bg-black/80"
@@ -23,7 +15,7 @@
               data: { action: 'click->modal#open',
                 modal_entries_show_url_value: entries_show_url },
               class: 'p-2 rounded hover:shadow-md'
-              = image_tag entry.image.variant(:thumb),
+              = image_tag url_for(entry.image.variant(:thumb)),
                 alt: t('views.entries.alt_text'),
                 class: 'w-full h-auto'
 

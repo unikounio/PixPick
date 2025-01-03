@@ -20,19 +20,19 @@ class Entry < ApplicationRecord
 
   ALLOWED_MIME_TYPES = %w[image/jpeg image/jpg image/png image/webp image/heic image/heif].freeze
 
-  def self.upload_and_create_entries!(file_info, current_user, contest)
+  def self.upload_and_create_entries!(file, current_user, contest)
     transaction do
       entry = create!(user: current_user, contest: contest)
 
       resized_image_data = EntryResizer.resize_and_convert_image(
-        File.open(file_info[:path]),
-        file_info[:content_type],
+        file,
+        file.content_type,
         400, 400
       )
 
       entry.image.attach(
         io: StringIO.new(resized_image_data),
-        filename: file_info[:name].sub(/\.\w+$/, '.webp'),
+        filename: file.original_filename.sub(/\.\w+$/, '.webp'),
         content_type: 'image/webp'
       )
     end

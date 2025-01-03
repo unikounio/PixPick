@@ -111,3 +111,7 @@ button {
 [aria-busy="true"] .entry-img {
     display: none;
 }
+
+body.loading {
+    cursor: progress;
+}

@@ -11,7 +11,7 @@
           tr
             td.p-2.text-lg.font-bold.text-right = "#{ranked_entry[:rank]}位"
             td.p-2.flex.justify-center.items-center
-              = image_tag ranked_entry[:entry].image.variant(:thumb),
+              = image_tag url_for(ranked_entry[:entry].image.variant(:thumb)),
                 class: 'w-48 max-h-48 object-contain'
             td.p-2.text-lg.text-left = "#{ranked_entry[:total_score]}点"
   - else

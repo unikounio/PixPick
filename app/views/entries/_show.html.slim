@@ -6,7 +6,7 @@
           .loading-spinner
             = render 'shared/spinner'
 
-          = image_tag @entry.image,
+          = image_tag url_for(@entry.image),
             alt: t('views.entries.alt_text'),
             class: 'entry-img h-72 sm:h-auto',
             data: { action: 'load->image-status#finish' }

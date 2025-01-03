@@ -47,7 +47,14 @@ secrets = ["REDIS_URL"]
       X-Forwarded-Proto = 'https'
 
 [[vm]]
-  size = 'shared-cpu-1x'
+  processes = ["app"]
+  size = "shared-cpu-1x"
+  memory = 512
+
+[[vm]]
+  processes = ["sidekiq"]
+  size = "shared-cpu-1x"
+  memory = 256
 
 [[statics]]
   guest_path = '/rails/public'
