@@ -227,7 +227,7 @@ ja:
         leave: 退会
     contests:
       new:
-        title: コンテストを作成
+        title: コンテストを作成する
         description_with_contests: フォームにコンテスト名と投票期日を入力して作成ボタンを押すことで、新しいコンテストを作成することができます。
         welcome_message:
           title: "%{name}さん"
