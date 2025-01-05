@@ -276,7 +276,7 @@ Devise.setup do |config|
   config.omniauth :google_oauth2, ENV.fetch('GOOGLE_CLIENT_ID', nil), ENV.fetch('GOOGLE_CLIENT_SECRET', nil),
                   scope: 'profile',
                   access_type: 'offline',
-                  prompt: 'consent'
+                  prompt: 'select_account'
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
