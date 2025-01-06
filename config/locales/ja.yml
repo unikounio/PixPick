@@ -242,15 +242,15 @@ ja:
         no_contests: まだコンテストはありません。
     entries:
       new:
-        entry_photos: コンテストに画像をエントリーする
+        entry_photos: コンテストに写真をエントリーする
         to_contest_page: コンテストへ
-        drag_and_drop_to_add: 画像をドラッグ＆ドロップして追加してください
-        enter: 画像をエントリーする
+        drag_and_drop_to_add: 写真をドラッグ＆ドロップして追加してください
+        enter: 写真をエントリーする
       show:
         delete_photo: この写真を削除する
         confirm_delete_photo: 選択した写真をコンテストから削除します。よろしいですか？
         prev: 前へ
         next: 次へ
         delete_photo_hint: 自分が登録した写真は、コンテストから削除することができます。
-      alt_text: エントリー画像
+      alt_text: エントリー写真
 
