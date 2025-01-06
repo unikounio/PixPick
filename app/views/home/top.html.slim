@@ -17,19 +17,25 @@
   .mt-10.flex.justify-center.items-center.flex-col
     ul.list-none.list-inside.mt-4
       li.text-stone-700
-        span.font-semibold 📌 コンテストごとに写真を共有
+        span.font-semibold
+          = image_tag 'pin.png', alt: 'Pin image', class: 'h-6 w-8 inline'
+          | コンテストごとに写真を共有
         p.text-stone-600.text-sm
           | コンテストごとに、評価したい写真をお使いのデバイスから登録できます。
           br
           | 写真を登録したコンテストを家族や友人に共有しましょう。
       li.text-stone-700.mt-4
-        span.font-semibold 📌 写真を採点
+        span.font-semibold
+          = image_tag 'pin.png', alt: 'Pin image', class: 'h-6 w-8 inline'
+          | 写真を採点
         p.text-stone-600.text-sm
           | 参加者が各自で写真に点数をつけることで、みんなの意見を反映します。
           br
           | 参加者同士で話し合う必要はありません。
       li.text-stone-700.mt-4
-        span.font-semibold 📌 ベストショットを選出
+        span.font-semibold
+          = image_tag 'pin.png', alt: 'Pin image', class: 'h-6 w-8 inline'
+          | ベストショットを選出
         p.text-stone-600.text-sm
           | 投票期間内におけるみんなの評価を集計して、ランキング形式で表示します。
           br
