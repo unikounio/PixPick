@@ -1,7 +1,6 @@
 - set_meta_tags title: 'コンテストに参加する'
 - set_meta_tags description: 'PixPickで開催されている写真コンテストに参加するためのページです。'
 
-
 .bg-stone-100.px-4.py-3.flex.justify-between.items-center.border-none
   h1.text-xl.sm:text-2xl.font-bold.text-black
     - if user_signed_in?
@@ -9,7 +8,8 @@
     - else
       | ようこそPixPickへ！
 
-  p.text-lg.text-stone-700.leading-relaxed
+.mx-6.sm:mx-20
+  p.text-base.sm:text-xl.text-stone-800.my-6
     | あなたは以下のコンテストに招待されています。
     br
     | コンテスト名と投票期日をご確認の上、
@@ -22,24 +22,25 @@
 
       | コンテストにご参加いただけます。
 
-  .mt-6.text-center
-    p.font-bold.text-lg.text-stone-900.mb-2
-      span.text-stone-500 = 'コンテスト名 '
-      = @contest.name
+  .flex.justify-center.items-center
+    .container.w-auto
+      p.font-bold.text-lg.text-stone-900.mb-2
+        span.text-stone-500 = 'コンテスト名 '
+        = @contest.name
 
-    p.font-bold.text-lg.text-stone-900
-      span.text-stone-500 = '投票期日 '
-      = "#{@contest.deadline.strftime('%Y/%m/%d')} まで"
+      p.font-bold.text-lg.text-stone-900
+        span.text-stone-500.mr-3 = '投票期日 '
+        = "#{@contest.deadline.strftime('%Y/%m/%d')} まで"
 
-  .mt-8.flex.justify-center.items-center.flex-col
-    - if user_signed_in?
-      = button_to 'コンテストに参加する',
-        contest_participants_path(@contest),
-        class: 'bg-cyan-500 text-white font-bold \
-                py-3 px-6 rounded-full hover:bg-cyan-600'
-    - else
-      = render 'shared/login_button'
+.mt-8.flex.justify-center.items-center.flex-col
+  - if user_signed_in?
+    = button_to 'コンテストに参加する',
+      contest_participants_path(@contest),
+      class: 'bg-cyan-500 text-white font-bold \
+              py-3 px-6 rounded-full hover:bg-cyan-600'
+  - else
+    = render 'shared/login_button'
 
-  .mt-6.text-center
-    = link_to 'トップページへ', root_path,
-      class: 'text-stone-700 hover:underline hover:underline-offset-4'
+.mt-6.text-center
+  = link_to 'トップページへ', root_path,
+    class: 'text-stone-700 hover:underline hover:underline-offset-4'
