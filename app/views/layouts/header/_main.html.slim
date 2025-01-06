@@ -1,12 +1,12 @@
 .flex.justify-between.items-center.p-4.bg-white.border-b.border-stone-200
   - if user_signed_in?
-    = link_to image_tag('wordmark.png',
-                        alt: 'PixPickのワードマーク',
+    = link_to image_tag('logo.png',
+                        alt: 'PixPickのロゴ',
                         class: 'mb-2 w-28 sm:w-48'),
               current_contest_or_contests_index_path(@contest, current_user)
   - else
-    = link_to image_tag('wordmark.png',
-                        alt: 'PixPickのワードマーク',
+    = link_to image_tag('logo.png',
+                        alt: 'PixPickのロゴ',
                         class: 'mb-2 w-28 sm:w-48'),
               root_path
 
