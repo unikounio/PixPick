@@ -1,8 +1,9 @@
 - set_meta_tags title: 'コンテストに参加する'
 - set_meta_tags description: 'PixPickで開催されている写真コンテストに参加するためのページです。'
 
-.container.mx-auto.max-w-lg.p-6
-  p.text-2xl.font-bold.text-stone-800.mb-6.text-center
+
+.bg-stone-100.px-4.py-3.flex.justify-between.items-center.border-none
+  h1.text-xl.sm:text-2xl.font-bold.text-black
     - if user_signed_in?
       | コンテストに参加する
     - else
