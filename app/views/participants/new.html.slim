@@ -22,15 +22,15 @@
 
       | コンテストにご参加いただけます。
 
-  .flex.justify-center.items-center
-    .container.w-auto
-      p.font-bold.text-lg.text-stone-900.mb-2
-        span.text-stone-500 = 'コンテスト名 '
-        = @contest.name
+  .flex.flex-col.justify-center.items-start.w-fit
+    .flex.items-center.mb-2.overflow-hidden.text-xl
+      .font-medium.text-stone-500.text-right.pr-2.flex-shrink-0.w-32 = 'コンテスト名 '
+      .font-bold.text-stone-900.ml-2.truncate = @contest.name
 
-      p.font-bold.text-lg.text-stone-900
-        span.text-stone-500.mr-3 = '投票期日 '
-        = "#{@contest.deadline.strftime('%Y/%m/%d')} まで"
+    .flex.justify-center.items-center.mb-4.text-xl
+        .font-medium.text-stone-500.text-right.pr-2.flex-shrink-0.w-32 = '投票期日 '
+        .font-bold.text-stone-900.ml-2
+          = "#{@contest.deadline.strftime('%Y/%m/%d')} まで"
 
 .mt-8.flex.justify-center.items-center.flex-col
   - if user_signed_in?
