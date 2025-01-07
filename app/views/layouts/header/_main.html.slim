@@ -14,4 +14,4 @@
     .ml-auto.flex.justify-end.items-center
       - if current_user.contests.any? && !@is_editing_contest
         = render 'layouts/header/contest_selection'
-      .z-50 = render 'layouts/header/menu'
+      .z-40 = render 'layouts/header/menu'
