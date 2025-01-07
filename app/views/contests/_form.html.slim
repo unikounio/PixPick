@@ -5,14 +5,14 @@
       .flex.items-center.mb-4
         = f.label :name, t('activerecord.attributes.contest.name'),
           class: 'text-base font-medium text-stone-700 text-right \
-                  pr-2 flex-shrink-0 w-24'
+                  pr-2 flex-shrink-0 w-28'
         = f.text_field :name, class: 'block border-stone-300 rounded-md \
                                       focus:ring-cyan-500 focus:border-cyan-500'
 
       .flex.items-center.w-full.mb-4
         = f.label :deadline, t('activerecord.attributes.contest.deadline'),
           class: 'text-base font-medium text-stone-700 text-right \
-                          pr-2 flex-shrink-0 w-24'
+                          pr-2 flex-shrink-0 w-28'
         = f.date_field :deadline,
           class: 'block w-30 border-stone-300 rounded-md \
                                 focus:ring-cyan-500 focus:border-cyan-500'
