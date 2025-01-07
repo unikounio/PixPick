@@ -11,10 +11,6 @@
             class: 'entry-img h-72 sm:h-auto',
             data: { action: 'load->image-status#finish' }
 
-    button.absolute.-top-7.-right-1.text-4xl.font-bold
-      .text-stone-600 data-action='click->modal#close'
-        |✕
-
     .flex.justify-center.mt-6.space-x-8
       - [1, 2, 3].each do |score|
         = button_to score.to_s,
@@ -41,6 +37,10 @@
           data: { turbo_frame: 'entry_content' },
           class: 'flex items-center px-6 py-2 bg-white \
                   rounded-full shadow hover:bg-stone-200 ml-auto'
+
+    button.absolute.-top-7.-right-1.text-4xl.font-bold
+      .text-stone-600 data-action='click->modal#close'
+        |✕
 
     - if @entry.user_id == current_user.id
       .mt-6.text-center

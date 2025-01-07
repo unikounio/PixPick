@@ -2,7 +2,7 @@
 - set_meta_tags description: '参加しているコンテストに写真をエントリーすることができます。'
 
 .bg-stone-100.px-4.py-3.flex.justify-between.items-center.border-none
-  h1.text-xl.sm:text-2xl.font-bold.text-black
+  h1.text-base.sm:text-2xl.font-bold.text-black
     = t('views.entries.new.entry_photos')
 
   = link_to t('views.entries.new.to_contest_page'), contest_path(@contest),
@@ -40,6 +40,7 @@
       input#mobile-file-input.hidden(
         type='file'
         accept="image/*"
+        multiple
         data-file-entry-target='fileInput'
         data-action='change->file-entry#addFiles'
       )
