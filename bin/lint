@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -e
+bundle exec rubocop -a
+bundle exec slim-lint app/views
+npm run -s lint
