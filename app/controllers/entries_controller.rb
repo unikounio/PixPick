@@ -28,18 +28,13 @@ class EntriesController < ApplicationController
   end
 
   def destroy
-    authorize_user!
+    return unless authorize_user!
 
-    if @entry.destroy
-      render turbo_stream: [
-        turbo_stream.remove("entry_#{params[:id]}"),
-        append_turbo_toast(:success, t('activerecord.notices.messages.delete', model: t('activerecord.models.entry')))
-      ]
-    else
-      render turbo_stream: append_turbo_toast(:error,
-                                              t('activerecord.errors.messages.delete',
-                                                model: t('activerecord.models.entry')))
-    end
+    @entry.destroy!
+    render turbo_stream: [
+      turbo_stream.remove("entry_#{params[:id]}"),
+      append_turbo_toast(:success, t('activerecord.notices.messages.delete', model: t('activerecord.models.entry')))
+    ]
   end
 
   private
@@ -58,19 +53,12 @@ class EntriesController < ApplicationController
     Entry.validate_mime_type(files)
   end
 
-  def prepare_image_data(files)
-    files.map do |file|
-      temp_path = Rails.root.join('tmp', file.original_filename)
-      File.binwrite(temp_path, file.read)
-      { path: temp_path.to_s, name: file.original_filename, content_type: file.content_type }
-    end
-  end
-
   def authorize_user!
-    return if @entry.user == current_user
+    return true if @entry.user == current_user
 
     render turbo_stream: append_turbo_toast(:error,
                                             t('activerecord.errors.messages.unauthorized',
                                               model: t('activerecord.models.entry')))
+    false
   end
 end

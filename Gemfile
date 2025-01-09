@@ -50,7 +50,7 @@ group :development do
 end
 
 group :test do
-  gem 'capybara', require: false
-  gem 'selenium-webdriver', require: false
+  gem 'capybara'
+  gem 'selenium-webdriver'
   gem 'simplecov', require: false
 end

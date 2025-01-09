@@ -7,8 +7,8 @@ FactoryBot.define do
 
     after(:build) do |entry|
       entry.image.attach(
-        io: StringIO.new('This is a dummy image file'),
-        filename: 'dummy.jpg',
+        io: Rails.root.join('spec/files/sample.jpg').open,
+        filename: 'sample.jpg',
         content_type: 'image/jpeg'
       )
     end
