@@ -58,14 +58,6 @@ class EntriesController < ApplicationController
     Entry.validate_mime_type(files)
   end
 
-  def prepare_image_data(files)
-    files.map do |file|
-      temp_path = Rails.root.join('tmp', file.original_filename)
-      File.binwrite(temp_path, file.read)
-      { path: temp_path.to_s, name: file.original_filename, content_type: file.content_type }
-    end
-  end
-
   def authorize_user!
     return if @entry.user == current_user
 
