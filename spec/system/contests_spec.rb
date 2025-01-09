@@ -24,6 +24,18 @@ RSpec.describe 'Contests' do
     end
   end
 
+  describe 'Contest show' do
+    it 'displays contest details' do
+      contest = create(:contest)
+      create(:participant, contest:, user:)
+
+      visit contest_path(contest)
+
+      expect(page).to have_content(contest.name)
+      expect(page).to have_content(I18n.t('activerecord.attributes.contest.deadline'))
+    end
+  end
+
   describe 'Contest creation' do
     it 'creates a new contest successfully' do
       visit new_contest_path
