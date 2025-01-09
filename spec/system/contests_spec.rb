@@ -9,6 +9,21 @@ RSpec.describe 'Contests' do
     sign_in user
   end
 
+  describe 'Contest index' do
+    it 'displays a list of contests' do
+      contests =
+        create_list(:contest, 2).each do |contest|
+          create(:participant, contest:, user:)
+        end
+
+      visit user_contests_path(user)
+
+      contests.each do |contest|
+        expect(page).to have_content(contest.name)
+      end
+    end
+  end
+
   describe 'Contest creation' do
     it 'creates a new contest successfully' do
       visit new_contest_path
