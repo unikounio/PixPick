@@ -64,7 +64,7 @@ class ContestsController < ApplicationController
     end
 
     if @contest.update(contest_params)
-      updated_message = determine_updated_message
+      updated_message = @contest.determine_updated_message
       render turbo_stream: append_turbo_toast(:success, "#{updated_message}を更新しました")
     else
       log_and_render_toast('更新')
@@ -76,11 +76,8 @@ class ContestsController < ApplicationController
   end
 
   def destroy
-    if @contest.destroy
-      redirect_to user_contests_path(current_user), notice: 'コンテストが削除されました。'
-    else
-      log_and_render_toast('削除')
-    end
+    @contest.destroy!
+    redirect_to user_contests_path(current_user), notice: 'コンテストが削除されました。'
   end
 
   private
@@ -99,15 +96,5 @@ class ContestsController < ApplicationController
 
   def no_changes_to_update?
     @contest.name == contest_params[:name] && @contest.deadline == Time.zone.parse(contest_params[:deadline])
-  end
-
-  def determine_updated_message
-    if @contest.saved_change_to_name? && @contest.saved_change_to_deadline?
-      'コンテスト名と投票期日'
-    elsif @contest.saved_change_to_name?
-      'コンテスト名'
-    elsif @contest.saved_change_to_deadline?
-      '投票期日'
-    end
   end
 end
