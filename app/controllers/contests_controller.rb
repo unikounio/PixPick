@@ -76,11 +76,8 @@ class ContestsController < ApplicationController
   end
 
   def destroy
-    if @contest.destroy
-      redirect_to user_contests_path(current_user), notice: 'コンテストが削除されました。'
-    else
-      log_and_render_toast('削除')
-    end
+    @contest.destroy!
+    redirect_to user_contests_path(current_user), notice: 'コンテストが削除されました。'
   end
 
   private
