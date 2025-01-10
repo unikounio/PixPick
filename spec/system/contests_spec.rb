@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Contests' do
   let(:user) { create(:user) }
+  let(:contest) { create(:contest) }
 
   before do
     sign_in user
@@ -26,9 +27,6 @@ RSpec.describe 'Contests' do
 
   describe 'Contest show' do
     it 'displays contest details' do
-      contest = create(:contest)
-      create(:participant, contest:, user:)
-
       visit contest_path(contest)
 
       expect(page).to have_content(contest.name)
@@ -66,9 +64,6 @@ RSpec.describe 'Contests' do
 
   describe 'Contest editing' do
     it 'displays the edit form with initial values' do
-      contest = create(:contest)
-      create(:participant, contest:, user:)
-
       visit edit_contest_path(contest)
 
       expect(find_field('contest_name').value).to eq(contest.name)
@@ -76,9 +71,6 @@ RSpec.describe 'Contests' do
     end
 
     it 'updates a contest successfully' do
-      contest = create(:contest)
-      create(:participant, contest:, user:)
-
       visit edit_contest_path(contest)
 
       fill_in 'contest_name', with: 'Updated Contest Name'
@@ -89,9 +81,6 @@ RSpec.describe 'Contests' do
     end
 
     it 'fails to update with invalid data' do
-      contest = create(:contest)
-      create(:participant, contest:, user:)
-
       visit edit_contest_path(contest)
 
       fill_in 'contest_name', with: ''
@@ -103,9 +92,6 @@ RSpec.describe 'Contests' do
 
   describe 'Contest destroy' do
     it 'deletes a contest successfully' do
-      contest = create(:contest)
-      create(:participant, contest:, user:)
-
       visit edit_contest_path(contest)
 
       initial_count = Contest.count
