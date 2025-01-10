@@ -24,19 +24,6 @@ class EntryResizer
     end
   end
 
-  def self.mime_type_to_format(mime_type)
-    case mime_type
-    when 'image/jpeg', 'image/jpg', 'image/heic', 'image/heif' then 'jpg'
-    when 'image/png'                                           then 'png'
-    when 'image/webp'                                          then 'webp'
-    else
-      Rails.logger.warn "対応していないMIMEタイプです: #{mime_type}"
-      nil
-    end
-  end
-
-  private_class_method :mime_type_to_format
-
   def self.create_tempfile(image_data, format)
     tempfile = Tempfile.new(['image', ".#{format}"])
     tempfile.binmode
