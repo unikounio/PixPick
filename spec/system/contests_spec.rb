@@ -64,7 +64,7 @@ RSpec.describe 'Contests' do
     end
   end
 
-  describe 'Contest edit' do
+  describe 'Contest editing' do
     it 'displays the edit form with initial values' do
       contest = create(:contest)
       create(:participant, contest:, user:)
@@ -73,6 +73,31 @@ RSpec.describe 'Contests' do
 
       expect(find_field('contest_name').value).to eq(contest.name)
       expect(Time.zone.parse(find_field('contest_deadline').value)).to eq(contest.deadline)
+    end
+
+    it 'updates a contest successfully' do
+      contest = create(:contest)
+      create(:participant, contest:, user:)
+
+      visit edit_contest_path(contest)
+
+      fill_in 'contest_name', with: 'Updated Contest Name'
+      click_on '更新する'
+
+      expect(page).to have_content('コンテスト名を更新しました')
+      expect(find_field('contest_name').value).to have_content('Updated Contest Name')
+    end
+
+    it 'fails to update with invalid data' do
+      contest = create(:contest)
+      create(:participant, contest:, user:)
+
+      visit edit_contest_path(contest)
+
+      fill_in 'contest_name', with: ''
+      click_on '更新する'
+
+      expect(page).to have_content(I18n.t('errors.messages.blank'))
     end
   end
 end
