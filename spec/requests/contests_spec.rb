@@ -71,4 +71,16 @@ RSpec.describe 'Contests' do
       )
     end
   end
+
+  describe 'DELETE /contests/:id' do
+    it 'deletes the contest and redirects with a success message' do
+      contest
+      expect do
+        delete contest_path(contest)
+      end.to change(Contest, :count).by(-1)
+      expect(response).to redirect_to(user_contests_path(user))
+      follow_redirect!
+      expect(response.body).to include('コンテストが削除されました。')
+    end
+  end
 end
