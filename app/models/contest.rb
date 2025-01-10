@@ -40,6 +40,16 @@ class Contest < ApplicationRecord
     deadline.end_of_day.past?
   end
 
+  def determine_updated_message
+    if saved_change_to_name? && saved_change_to_deadline?
+      'コンテスト名と投票期日'
+    elsif saved_change_to_name?
+      'コンテスト名'
+    elsif saved_change_to_deadline?
+      '投票期日'
+    end
+  end
+
   private
 
   def deadline_cannot_be_in_the_past
