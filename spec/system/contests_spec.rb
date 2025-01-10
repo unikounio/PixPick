@@ -25,12 +25,40 @@ RSpec.describe 'Contests' do
     end
   end
 
-  describe 'Contest show' do
+  describe 'Contest details and ranking' do
     it 'displays contest details' do
       visit contest_path(contest)
 
       expect(page).to have_content(contest.name)
       expect(page).to have_content(I18n.t('activerecord.attributes.contest.deadline'))
+    end
+
+    it 'displays the ranking correctly' do
+      [3, 2, 2].each do |score|
+        entry = create(:entry, contest:)
+        create(:vote, entry:, score:)
+      end
+
+      visit ranking_contest_path(contest)
+
+      within('table') do
+        rows = page.all('tr')
+
+        within(rows[1]) do
+          expect(page).to have_content('1位')
+          expect(page).to have_content('3')
+        end
+
+        within(rows[2]) do
+          expect(page).to have_content('2位')
+          expect(page).to have_content('2')
+        end
+
+        within(rows[3]) do
+          expect(page).to have_content('2位')
+          expect(page).to have_content('2')
+        end
+      end
     end
   end
 
