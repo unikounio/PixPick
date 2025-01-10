@@ -63,4 +63,16 @@ RSpec.describe 'Contests' do
                                           attribute: I18n.t('activerecord.attributes.contest.deadline'))
     end
   end
+
+  describe 'Contest edit' do
+    it 'displays the edit form with initial values' do
+      contest = create(:contest)
+      create(:participant, contest:, user:)
+
+      visit edit_contest_path(contest)
+
+      expect(find_field('contest_name').value).to eq(contest.name)
+      expect(Time.zone.parse(find_field('contest_deadline').value)).to eq(contest.deadline)
+    end
+  end
 end
