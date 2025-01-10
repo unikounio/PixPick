@@ -100,4 +100,23 @@ RSpec.describe 'Contests' do
       expect(page).to have_content(I18n.t('errors.messages.blank'))
     end
   end
+
+  describe 'Contest destroy' do
+    it 'deletes a contest successfully' do
+      contest = create(:contest)
+      create(:participant, contest:, user:)
+
+      visit edit_contest_path(contest)
+
+      initial_count = Contest.count
+
+      accept_confirm do
+        click_on 'コンテストを削除する'
+      end
+
+      expect(page).to have_current_path(user_contests_path(user))
+      expect(Contest.count).to eq(initial_count - 1)
+      expect(page).to have_content('コンテストが削除されました。')
+    end
+  end
 end
