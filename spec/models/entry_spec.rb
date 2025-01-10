@@ -26,6 +26,32 @@ RSpec.describe Entry do
     end
   end
 
+  describe '.validate_mime_type' do
+    let(:allowed_file) { Struct.new(:content_type, :original_filename).new('image/jpeg', 'image.jpg') }
+
+    context 'when all files have allowed MIME types' do
+      it 'returns nil' do
+        files = [allowed_file]
+        expect(described_class.validate_mime_type(files)).to be_nil
+      end
+    end
+
+    context 'when some files have disallowed MIME types' do
+      it 'returns an error message' do
+        disallowed_file = Struct.new(:content_type, :original_filename).new('text/plain', 'file.txt')
+        files = [allowed_file, disallowed_file]
+        expect(described_class.validate_mime_type(files)).to eq('対応していない形式のファイルが含まれています。画面を更新してやり直してください。')
+      end
+    end
+
+    context 'when files array is empty' do
+      it 'returns nil' do
+        files = []
+        expect(described_class.validate_mime_type(files)).to be_nil
+      end
+    end
+  end
+
   describe '.determine_mime_type' do
     context 'when content_type is application/octet-stream' do
       it 'returns image/jpeg for .jpg' do
