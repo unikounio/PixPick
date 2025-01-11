@@ -24,7 +24,7 @@ class Entry < ApplicationRecord
     transaction do
       entry = create!(user: current_user, contest: contest)
 
-      resized_image_data = EntryResizer.resize_and_convert_image(
+      resized_image_data, format, content_type = EntryResizer.resize_and_convert_image(
         file,
         file.content_type,
         400, 400
@@ -32,8 +32,8 @@ class Entry < ApplicationRecord
 
       entry.image.attach(
         io: StringIO.new(resized_image_data),
-        filename: file.original_filename.sub(/\.\w+$/, '.webp'),
-        content_type: 'image/webp'
+        filename: file.original_filename.sub(/\.\w+$/, ".#{format}"),
+        content_type:
       )
     end
   end
