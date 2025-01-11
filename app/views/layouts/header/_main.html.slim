@@ -4,14 +4,15 @@
                         alt: 'PixPickのロゴ',
                         class: 'mb-2 w-28 sm:w-48'),
               current_contest_or_contests_index_path(@contest, current_user)
+
+    .ml-auto.flex.justify-end.items-center
+      - if current_user.contests.any? && !@is_editing_contest
+        = render 'layouts/header/contest_selection'
+
+      .z-40 = render 'layouts/header/menu'
+
   - else
     = link_to image_tag('logo.png',
                         alt: 'PixPickのロゴ',
                         class: 'mb-2 w-28 sm:w-48'),
               root_path
-
-  - if current_user.present?
-    .ml-auto.flex.justify-end.items-center
-      - if current_user.contests.any? && !@is_editing_contest
-        = render 'layouts/header/contest_selection'
-      .z-40 = render 'layouts/header/menu'

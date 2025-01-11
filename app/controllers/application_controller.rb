@@ -17,11 +17,9 @@ class ApplicationController < ActionController::Base
   end
 
   def set_recent_contests
-    @recent_contests = if user_signed_in?
-                         current_user.contests.recently_updated(4)
-                       else
-                         []
-                       end
+    return unless user_signed_in?
+
+    @recent_contests = current_user.contests.recently_updated(4)
   end
 
   def append_turbo_toast(type, message)
