@@ -6,13 +6,13 @@ class EntryResizer
     tempfile = create_tempfile(image_data, format)
 
     begin
-      image_processor = ImageProcessing::MiniMagick
+      image_processor = ImageProcessing::Vips
                         .source(tempfile.path)
-                        .strip
+                        .saver(strip: true)
                         .resize_to_fit(width, height)
 
       unless %w[image/heic image/heif application/octet-stream].include?(mime_type)
-        image_processor = image_processor.convert(format).quality(95)
+        image_processor = image_processor.saver(format: 'webp', quality: 90)
       end
 
       resized_image = image_processor.call

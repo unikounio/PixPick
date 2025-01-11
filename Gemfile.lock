@@ -464,7 +464,6 @@ DEPENDENCIES
   image_processing
   importmap-rails
   meta-tags
-  mini_magick
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
   pg
