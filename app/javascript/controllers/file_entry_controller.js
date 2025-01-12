@@ -223,9 +223,7 @@ export default class extends Controller {
 
     if (this.files.length === 0) {
       alert("アップロードするファイルを選択してください。");
-      this.uploadButtonTarget.disabled = false;
-      this.uploadButtonTarget.innerHTML = originalButtonText;
-      document.body.classList.remove("loading");
+      this.resetUploadButton(originalButtonText);
       return;
     }
 
@@ -250,10 +248,18 @@ export default class extends Controller {
         window.location.href = responseData.redirect_url;
       } else {
         alert(responseData.error || "アップロードに失敗しました。");
+        this.resetUploadButton(originalButtonText);
       }
     } catch (error) {
       console.error("Upload error:", error);
       alert("通信エラーが発生しました。");
+      this.resetUploadButton(originalButtonText);
     }
+  }
+
+  resetUploadButton(originalText) {
+    this.uploadButtonTarget.disabled = false;
+    this.uploadButtonTarget.innerHTML = originalText;
+    document.body.classList.remove("loading");
   }
 }

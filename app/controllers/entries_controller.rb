@@ -14,6 +14,11 @@ class EntriesController < ApplicationController
   def create
     files = files_params[:files]
 
+    if files.size > 10
+      render json: { error: 'アップロードできる写真の最大数は10枚です' }, status: :unprocessable_entity
+      return
+    end
+
     error_message = validate_files(files)
     if error_message.present?
       render json: { error: error_message }, status: :unprocessable_entity
