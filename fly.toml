@@ -49,7 +49,7 @@ secrets = ["REDIS_URL"]
 [[vm]]
   processes = ["app"]
   size = "shared-cpu-1x"
-  memory = 512
+  memory = 1024
 
 [[vm]]
   processes = ["sidekiq"]
