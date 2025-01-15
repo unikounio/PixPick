@@ -17,33 +17,28 @@
   .mt-8.flex.justify-center.items-center.flex-col
     = render 'shared/login_button'
 
-  .mt-10.flex.justify-center.items-center.flex-col
-    ul.list-none.list-inside.mt-4
-      li.text-stone-700
-        span.font-semibold
-          = image_tag 'pin.png', alt: 'Pin image', class: 'h-6 w-8 inline'
-          | コンテストごとに写真を共有
-        p.text-stone-600.text-sm
-          | コンテストごとに、評価したい写真をお使いのデバイスから登録できます。
-          br
-          | 写真を登録したコンテストを家族や友人に共有しましょう。
-      li.text-stone-700.mt-4
-        span.font-semibold
-          = image_tag 'pin.png', alt: 'Pin image', class: 'h-6 w-8 inline'
-          | 写真を採点
-        p.text-stone-600.text-sm
-          | 参加者が各自で写真に点数をつけることで、みんなの意見を反映します。
-          br
-          | 参加者同士で話し合う必要はありません。
-      li.text-stone-700.mt-4
-        span.font-semibold
-          = image_tag 'pin.png', alt: 'Pin image', class: 'h-6 w-8 inline'
-          | ベストショットを選出
-        p.text-stone-600.text-sm
-          | 投票期間内におけるみんなの評価を集計して、ランキング形式で表示します。
-          br
-          | 自分のペースで写真を評価しましょう。
-    p.text-lg.text-center.mt-4 さあ、最高の瞬間を選び出しましょう！
+  .mt-14.flex.justify-center.items-center.flex-col
+    .flex.flex-col.items-center.text-center
+      p.text-xl.font-bold.text-stone-700.text-center.mb-4
+        = image_tag 'pin.png', alt: '丸ピンのアイコン', class: 'h-9 w-auto inline'
+        | 写真をアップロード
+      = image_tag 'upload.png', alt: '写真をアップロードするイメージ',
+        class: 'mx-auto size-3/5'
+
+    .flex.flex-col.items-center.text-center.mt-14
+      p.text-lg.font-bold.text-stone-700.mb-4
+        = image_tag 'pin.png', alt: '丸ピンのアイコン', class: 'h-9 w-auto inline'
+        | みんなで写真を評価
+      = image_tag 'vote.png', alt: '写真を評価するイメージ', class: 'mx-auto size-3/5'
+
+    .flex.flex-col.items-center.text-center.mt-14
+      p.text-lg.font-bold.text-stone-700.mb-4
+        = image_tag 'pin.png', alt: '丸ピンのアイコン', class: 'h-9 w-auto inline'
+        | ベストショットを決定！
+      = image_tag 'bestshot.png', alt: 'ベストショットを決めるイメージ',
+        class: 'mx-auto size-3/5'
+
+    p.text-lg.text-center.mt-14.mb-4 さあ、最高の瞬間を選び出しましょう！
 
   .mt-8.flex.justify-center.items-center.flex-col
     = render 'shared/login_button'
