@@ -24,10 +24,10 @@
       - if @contest.new_record?
         = f.submit t('helpers.submit.contest.create'),
           data: { turbo_frame: '_top' },
-          class: 'bg-cyan-500 hover:bg-cyan-600 text-white \
-                  font-bold py-2 px-4 rounded-full'
+          class: 'bg-cyan-500 hover:bg-cyan-600 text-white text-lg \
+                  font-bold py-4 w-full max-w-96 rounded-full'
       - else
         = f.submit '更新する',
           data: { turbo_frame: '_top' },
-          class: 'bg-cyan-500 hover:bg-cyan-600 text-white \
-                  font-bold py-2 px-4 rounded-full'
+          class: 'bg-cyan-500 hover:bg-cyan-600 text-white text-lg \
+                  font-bold py-2 w-full max-w-96 rounded-full'
