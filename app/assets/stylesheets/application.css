@@ -85,7 +85,7 @@ button:disabled:hover {
     position: absolute;
     top: 5px;
     right: 5px;
-    background-color: red;
+    background-color: #ff4726;
     color: white;
     border: none;
     border-radius: 50%;
@@ -98,11 +98,7 @@ button:disabled:hover {
 }
 
 .preview-item .remove-button:hover {
-    background-color: darkred;
-}
-
-.preview-item .remove-button:hover {
-    background-color: darkred;
+    background-color: #a82e19;
 }
 
 .loading-spinner {
