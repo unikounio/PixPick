@@ -1,18 +1,12 @@
 .mx-auto.mt-8.sm:w-3/5
   - if @ranked_entries.any?
     table.w-full.border-collapse
-      thead
-        tr.bg-stone-100
-          th.text-right.p-2 順位
-          th.p-2
-          th.text-left.p-2 合計点
-      tbody
-        - @ranked_entries.each do |ranked_entry|
-          tr
-            td.p-2.text-lg.font-bold.text-right = "#{ranked_entry[:rank]}位"
-            td.p-2.flex.justify-center.items-center
-              = image_tag url_for(ranked_entry[:entry].image.variant(:thumb)),
-                class: 'w-48 max-h-48 object-contain'
-            td.p-2.text-lg.text-left = "#{ranked_entry[:total_score]}点"
+      - @ranked_entries.each do |ranked_entry|
+        tr
+          td.p-2.text-lg.font-bold.text-right = "#{ranked_entry[:rank]}位"
+          td.p-2.flex.justify-center.items-center
+            = image_tag url_for(ranked_entry[:entry].image.variant(:thumb)),
+              class: 'w-48 max-h-48 object-contain'
+          td.p-2.text-lg.text-left = "#{ranked_entry[:total_score]}点"
   - else
     p.text-center.text-stone-600 エントリーがありません。
