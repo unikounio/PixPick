@@ -33,14 +33,15 @@
     )
     .preview-container.mt-4 data-file-entry-target='preview'
 
-  .text-sm.font-bold.text-stone-500.text-center.sm:text-right.mx-2.my-4
-    | ※一度にアップロードできる写真の枚数は10枚までです。
+  .text-sm.text-stone-500.text-center.sm:text-right.mx-2.my-4
+    i.fa-solid.fa-circle-info.mr-2
+    | 一度にアップロードできる写真の最大数は10枚です
 
   .sm:hidden.flex.justify-center.items-center.mx-4
     label(
-      class='bg-white hover:bg-cyan-500 text-stone-500 hover:text-white\
-             text-lg border border-stone-400 font-bold text-center py-4 \
-             w-full max-w-96 rounded-full transition'
+      class='bg-white hover:bg-cyan-500 text-stone-500 hover:text-white \
+             text-lg border border-stone-400 hover:border-cyan-500 \
+             font-bold text-center py-4 w-full max-w-96 rounded-full transition'
     )
       i.fa-regular.fa-image.text-stone-500.mr-2.text-2xl
       | 写真を選ぶ
