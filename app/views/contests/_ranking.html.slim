@@ -2,10 +2,21 @@
   - if @ranked_entries.any?
     table.w-full.sm:w-3/5.border-collapse.mx-auto.border-b.border-stone-200.pb-4
       - @ranked_entries.each do |ranked_entry|
+        - rank = ranked_entry[:rank]
         tr.flex.justify-center.items-center.mx-4.py-4.border-t.border-stone-200
           td.mr-10.whitespace-nowrap
-            .text-lg.font-bold.text-center = "#{ranked_entry[:rank]}位"
-            .text-lg.text-center = "#{ranked_entry[:total_score]}点"
+            - case rank
+            - when 1
+              .rank.bg-gold.text-white = rank
+            - when 2
+              .rank.bg-silver.text-white = rank
+            - when 3
+              .rank.bg-bronze.text-white = rank
+            - else
+              .rank.bg-white.text-stone-700.border.border-stone-500 = rank
+
+            .mt-2.text-lg.text-stone-700.text-center
+              = "#{ranked_entry[:total_score]}pt"
           td = image_tag url_for(ranked_entry[:entry].image.variant(:thumb)),
                class: 'w-48 max-h-48 object-contain'
   - else

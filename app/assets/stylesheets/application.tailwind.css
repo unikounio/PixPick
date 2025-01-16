@@ -19,3 +19,7 @@
 .tab-link {
     @apply w-1/2 h-full leading-10 px-2 py-1 text-base font-bold text-center;
 }
+
+.rank {
+    @apply flex items-center justify-center w-10 h-10 text-lg font-bold rounded-full;
+}
