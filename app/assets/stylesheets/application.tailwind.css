@@ -16,3 +16,6 @@
     @apply text-base my-4 p-1 border-b-2;
 }
 
+.tab-link {
+    @apply w-1/2 h-full leading-10 px-2 py-1 text-base font-bold text-center;
+}

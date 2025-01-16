@@ -11,20 +11,19 @@
             py-2 w-20 text-center rounded text-lg font-semibold flex-shrink-0'
 
 = turbo_frame_tag 'content' do
-  div class='flex justify-center items-center mt-6 \
-              border border-stone-300 rounded-lg overflow-hidden w-fit mx-auto'
-    = link_to '全てのエントリー', contest_path(@contest),
-      data: { turbo_frame: 'content' },
-      class: tab_link_classes(request.fullpath,
-                              contest_path(@contest),
-                              'w-32 h-10 leading-10 px-2 font-bold \
-                               text-center border-r border-stone-300')
-    = link_to 'ランキング', ranking_contest_path(@contest),
-      data: { turbo_frame: 'content' },
-      class: tab_link_classes(request.fullpath,
-                              ranking_contest_path(@contest),
-                              'w-32 h-10 leading-10 px-2 font-bold text-center \
-                               bg-stone-100 hover:bg-white')
+  .flex.justify-center.items-center.mt-6.mx-4
+    div class='flex justify-center items-center border border-stone-300 \
+               rounded-lg overflow-hidden w-full max-w-80 min-w-fit h-fit'
+      = link_to '全てのエントリー', contest_path(@contest),
+        data: { turbo_frame: 'content' },
+        class: tab_link_classes(request.fullpath,
+                                contest_path(@contest),
+                                'tab-link border-r border-stone-300')
+      = link_to 'ランキング', ranking_contest_path(@contest),
+        data: { turbo_frame: 'content' },
+        class: tab_link_classes(request.fullpath,
+                                ranking_contest_path(@contest),
+                                'tab-link')
 
   - if current_page?(contest_path(@contest))
     = render 'contests/all_entries'
