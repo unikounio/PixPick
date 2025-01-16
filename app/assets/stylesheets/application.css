@@ -18,6 +18,17 @@ button {
     cursor: pointer;
 }
 
+button:disabled {
+    background-color: #e5e7eb;
+    color: #9ca3af;
+    cursor: default;
+    opacity: 0.6;
+}
+
+button:disabled:hover {
+    background-color: #e5e7eb;
+}
+
 .drop-and-preview-zone {
     padding: 10px;
     text-align: center;
@@ -74,7 +85,7 @@ button {
     position: absolute;
     top: 5px;
     right: 5px;
-    background-color: red;
+    background-color: #ff4726;
     color: white;
     border: none;
     border-radius: 50%;
@@ -87,11 +98,7 @@ button {
 }
 
 .preview-item .remove-button:hover {
-    background-color: darkred;
-}
-
-.preview-item .remove-button:hover {
-    background-color: darkred;
+    background-color: #a82e19;
 }
 
 .loading-spinner {
@@ -114,4 +121,14 @@ button {
 
 body.loading {
     cursor: progress;
+}
+
+label i {
+    transition-property: color;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+label:hover i {
+    color: white !important;
 }

@@ -1,13 +1,17 @@
 - set_meta_tags title: 'コンテストに写真をエントリーする'
 - set_meta_tags description: '参加しているコンテストに写真をエントリーすることができます。'
 
-.bg-stone-100.px-4.py-3.flex.justify-between.items-center.border-none
-  h1.text-base.sm:text-2xl.font-bold.text-black
+.bg-stone-100.px-4.py-3.flex.flex-col.justify-between.items-center.border-none
+  h1.text-xl.sm:text-2xl.font-bold.text-black.mb-2
     = t('views.entries.new.entry_photos')
 
-  = link_to t('views.entries.new.to_contest_page'), contest_path(@contest),
-    class: 'bg-stone-300 text-stone-700 hover:bg-stone-400 hover:text-black \
-            px-2 py-2 rounded text-sm sm:text-lg font-semibold'
+  = link_to contest_path(@contest),
+    class: 'bg-white hover:bg-cyan-500 text-stone-500 hover:text-white \
+            text-center py-2 rounded text-sm sm:text-lg font-semibold \
+            w-full max-w-56 sm:max-w-64 border border-stone-400 \
+            hover:border-cyan-500 transition'
+    = t('views.entries.new.to_contest_page')
+    i.fa-solid.fa-angle-right.ml-2
 
 .mt-6(
   data-controller='file-entry'
@@ -29,14 +33,14 @@
     )
     .preview-container.mt-4 data-file-entry-target='preview'
 
-  .text-sm.font-bold.text-stone-500.text-center.sm:text-right.mt-2
+  .text-sm.font-bold.text-stone-500.text-center.sm:text-right.mx-2.my-4
     | ※一度にアップロードできる写真の枚数は10枚までです。
 
-  .sm:hidden.mt-6
+  .sm:hidden.flex.justify-center.items-center.mx-4
     label(
-      class="block w-full h-14 bg-white text-stone-500 font-bold \
-             text-lg text-center border border-stone-400 rounded-lg \
-             flex items-center justify-center cursor-pointer transition"
+      class='bg-white hover:bg-cyan-500 text-stone-500 hover:text-white\
+             text-lg border border-stone-400 font-bold text-center py-4 \
+             w-full max-w-96 rounded-full transition'
     )
       i.fa-regular.fa-image.text-stone-500.mr-2.text-2xl
       | 写真を選ぶ
@@ -48,11 +52,12 @@
         data-action='change->file-entry#addFiles'
       )
 
-  .flex.justify-center.items-center.mt-6
+  .flex.justify-center.items-center.m-4
     button(
-      class='w-full sm:w-auto bg-cyan-500 hover:bg-cyan-600 text-white \
-             font-bold py-3 px-6 rounded sm:rounded-full text-lg transition'
+      class='bg-cyan-500 hover:bg-cyan-600 text-white text-lg \
+             font-bold py-4 w-full max-w-96 rounded-full'
       data-action='click->file-entry#upload'
-      data-file-entry-target='uploadButton'
+      data-file-entry-target='entryButton'
+      disabled
     )
       = t('views.entries.new.enter')

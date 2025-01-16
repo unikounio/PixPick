@@ -2,11 +2,12 @@ import { Controller } from "@hotwired/stimulus";
 import heic2any from "heic2any";
 
 export default class extends Controller {
-  static targets = ["fileInput", "preview", "uploadButton"];
+  static targets = ["fileInput", "preview", "entryButton"];
   static values = { entriesCreatePath: String };
 
   connect() {
     this.files = [];
+    this.updateEntryButtonState();
   }
 
   dragOver(event) {
@@ -55,6 +56,8 @@ export default class extends Controller {
     } else {
       await this.updatePreviewAndAddFile(file, fileId, wrapper);
     }
+
+    this.updateEntryButtonState();
   }
 
   validateFile(file) {
@@ -127,6 +130,8 @@ export default class extends Controller {
         item.remove();
       }
     });
+
+    this.updateEntryButtonState();
   }
 
   createPreviewItem(fileId, fileName) {
@@ -217,13 +222,13 @@ export default class extends Controller {
     event.preventDefault();
 
     document.body.classList.add("loading");
-    this.uploadButtonTarget.disabled = true;
-    const originalButtonText = this.uploadButtonTarget.innerHTML;
-    this.uploadButtonTarget.innerHTML = "アップロード中...";
+    this.entryButtonTarget.disabled = true;
+    const originalButtonText = this.entryButtonTarget.innerHTML;
+    this.entryButtonTarget.innerHTML = "アップロード中...";
 
     if (this.files.length === 0) {
       alert("アップロードするファイルを選択してください。");
-      this.resetUploadButton(originalButtonText);
+      this.resetEntryButton(originalButtonText);
       return;
     }
 
@@ -248,18 +253,22 @@ export default class extends Controller {
         window.location.href = responseData.redirect_url;
       } else {
         alert(responseData.error || "アップロードに失敗しました。");
-        this.resetUploadButton(originalButtonText);
+        this.resetEntryButton(originalButtonText);
       }
     } catch (error) {
       console.error("Upload error:", error);
       alert("通信エラーが発生しました。");
-      this.resetUploadButton(originalButtonText);
+      this.resetEntryButton(originalButtonText);
     }
   }
 
-  resetUploadButton(originalText) {
-    this.uploadButtonTarget.disabled = false;
-    this.uploadButtonTarget.innerHTML = originalText;
+  resetEntryButton(originalText) {
+    this.entryButtonTarget.disabled = false;
+    this.entryButtonTarget.innerHTML = originalText;
     document.body.classList.remove("loading");
+  }
+
+  updateEntryButtonState() {
+    this.entryButtonTarget.disabled = this.files.length === 0;
   }
 }
