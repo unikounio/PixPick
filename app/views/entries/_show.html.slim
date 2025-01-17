@@ -1,6 +1,6 @@
 = turbo_frame_tag 'entry_content' do
   .px-2.py-4.relative
-    .max-w-screen-sm.sm:w-96.aspect-square
+    .max-w-screen-sm.sm:w-96
       .flex.justify-center.items-center.w-full.h-full
         = turbo_frame_tag 'entry_image', data: { controller: 'image-status' } do
           .loading-spinner
@@ -8,7 +8,7 @@
 
           = image_tag url_for(@entry.image),
             alt: t('views.entries.alt_text'),
-            class: 'entry-img h-72 sm:h-auto',
+            class: 'max-w-full max-h-full h-72 sm:h-auto object-contain',
             data: { action: 'load->image-status#finish' }
 
     p.text-center.my-6.text-base.text-stone-500.mx-4
