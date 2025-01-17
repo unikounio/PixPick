@@ -15,10 +15,10 @@
     - if user == current_user
       = render partial: 'contests/participant', locals: { user: }
 
-    .w-3/4.flex.justify-end.items-center
-      = link_to '新しい参加者を招待する',
-        invite_contest_path(@contest),
-        class: 'btn-primary-large'
+  .flex.justify-center.items-center.mt-8
+    = link_to '新しい参加者を招待する',
+      invite_contest_path(@contest),
+      class: 'btn-primary-large'
 
 .my-4.flex.justify-center
   = link_to 'コンテストを削除する',
