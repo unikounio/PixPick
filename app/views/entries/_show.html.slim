@@ -38,9 +38,8 @@
           class: 'flex items-center px-6 py-2 bg-white \
                   rounded-full shadow hover:bg-stone-200 ml-auto'
 
-    button.absolute.-top-7.-right-1.text-4xl.font-bold
-      .text-stone-600 data-action='click->modal#close'
-        |✕
+    button.absolute.-top-7.-right-1
+      i.fa-solid.fa-xmark.text-stone-600.text-4xl data-action='click->modal#close'
 
     - if @entry.user_id == current_user.id
       .mt-6.text-center
