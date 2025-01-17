@@ -1,6 +1,6 @@
 = turbo_frame_tag 'entry_content' do
   .px-2.py-4.relative
-    .max-w-screen-sm.sm:w-96.aspect-square
+    .max-w-screen-sm.sm:w-96
       .flex.justify-center.items-center.w-full.h-full
         = turbo_frame_tag 'entry_image', data: { controller: 'image-status' } do
           .loading-spinner
@@ -8,39 +8,41 @@
 
           = image_tag url_for(@entry.image),
             alt: t('views.entries.alt_text'),
-            class: 'entry-img h-72 sm:h-auto',
+            class: 'max-w-full max-h-full h-72 sm:h-auto object-contain',
             data: { action: 'load->image-status#finish' }
 
-    .flex.justify-center.mt-6.space-x-8
+    p.text-center.my-6.text-base.text-stone-500.mx-4
+      | 点数を選択してください
+
+    .flex.justify-center.mt-6.space-x-6.sm:space-x-8
       - [1, 2, 3].each do |score|
         = button_to score.to_s,
-          contest_entry_votes_path(@contest, @entry, score: score),
+          contest_entry_votes_path(@contest, @entry, score:),
           method: :post,
           remote: true,
           data: { action: 'click->modal#close' },
-          class: 'flex items-center justify-center w-12 h-12 text-sm \
-                  font-medium text-white bg-cyan-500 rounded-full shadow \
-                  hover:bg-cyan-600 focus:outline-none \
-                  focus:ring-2 focus:ring-cyan-300'
+          class: "score-button \
+                  #{score_button_classes(@entry, current_user, score)}"
 
     .flex.justify-between.items-center.mt-6
       - if @previous_entry
-        = link_to t('views.entries.show.prev'),
-          contest_entry_path(@contest, @previous_entry),
+        = link_to contest_entry_path(@contest, @previous_entry),
           data: { turbo_frame: 'entry_content' },
-          class: 'flex items-center px-6 py-2 bg-white \
-                  rounded-full shadow hover:bg-stone-200'
+          class: 'entry-nav-button' do
+          i.fa-solid.fa-chevron-left.mr-2
+          = t('views.entries.show.prev')
 
       - if @next_entry
-        = link_to t('views.entries.show.next'),
-          contest_entry_path(@contest, @next_entry),
+        = link_to contest_entry_path(@contest, @next_entry),
           data: { turbo_frame: 'entry_content' },
-          class: 'flex items-center px-6 py-2 bg-white \
-                  rounded-full shadow hover:bg-stone-200 ml-auto'
+          class: 'entry-nav-button ml-auto' do
+          = t('views.entries.show.next')
+          i.fa-solid.fa-chevron-right.ml-2
 
-    button.absolute.-top-7.-right-1.text-4xl.font-bold
-      .text-stone-600 data-action='click->modal#close'
-        |✕
+    button.absolute.-top-7.-right-1
+      i.fa-solid.fa-xmark.text-stone-600.text-4xl(
+        data-action='click->modal#close'
+      )
 
     - if @entry.user_id == current_user.id
       .mt-6.text-center

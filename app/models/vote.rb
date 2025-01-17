@@ -7,6 +7,10 @@ class Vote < ApplicationRecord
   validates :entry_id, uniqueness: { scope: :user_id }
   validate :contest_must_be_open_for_voting
 
+  def self.current_score(entry_id, user_id)
+    find_by(entry_id:, user_id:)&.score
+  end
+
   private
 
   def contest_must_be_open_for_voting
