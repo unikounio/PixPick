@@ -20,6 +20,14 @@
     @apply w-1/2 h-full leading-10 px-2 py-1 text-base font-bold text-center;
 }
 
+.score-button {
+    @apply flex items-center justify-center w-12 h-12 text-lg font-medium rounded-full;
+}
+
+.entry-nav-button {
+    @apply flex items-center px-6 py-2 text-stone-700 bg-white rounded border border-stone-200 hover:bg-stone-200;
+}
+
 .rank {
     @apply flex items-center justify-center w-10 h-10 text-lg font-bold rounded-full;
 }
