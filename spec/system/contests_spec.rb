@@ -34,7 +34,7 @@ RSpec.describe 'Contests' do
     end
 
     it 'displays the ranking correctly' do
-      [3, 2, 2].each do |score|
+      [3, 1, 1].each do |score|
         entry = create(:entry, contest:)
         create(:vote, entry:, score:)
       end
@@ -44,19 +44,14 @@ RSpec.describe 'Contests' do
       within('table') do
         rows = page.all('tr')
 
-        within(rows[1]) do
-          expect(page).to have_content('1位')
-          expect(page).to have_content('3')
-        end
+        expected_rows = [%w[1 3pt], %w[2 1pt], %w[2 1pt]]
 
-        within(rows[2]) do
-          expect(page).to have_content('2位')
-          expect(page).to have_content('2')
-        end
-
-        within(rows[3]) do
-          expect(page).to have_content('2位')
-          expect(page).to have_content('2')
+        expected_rows.each_with_index do |(rank, score), index|
+          within(rows[index]) do
+            first_cell = find('td:first-child')
+            expect(first_cell).to have_content(rank)
+            expect(first_cell).to have_content(score)
+          end
         end
       end
     end
