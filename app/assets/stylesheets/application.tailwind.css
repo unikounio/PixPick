@@ -17,6 +17,11 @@
     font-bold text-center w-full max-w-96 py-4 rounded-full transition;
 }
 
+.btn-submit {
+    @apply cursor-pointer bg-cyan-500 hover:bg-opacity-75 transition
+    text-white text-lg font-bold py-4 w-full max-w-96 rounded-full;
+}
+
 .section-header {
     @apply text-base my-4 p-1 border-b-2;
 }
