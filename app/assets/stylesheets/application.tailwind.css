@@ -22,6 +22,10 @@
     text-white text-lg font-bold py-4 w-full max-w-96 rounded-full;
 }
 
+.text-sunset-red {
+    color: #ff4726;
+}
+
 .section-header {
     @apply text-base my-4 p-1 border-b-2;
 }

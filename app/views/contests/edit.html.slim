@@ -6,15 +6,14 @@
 
 = render 'form'
 
-.my-4.flex.justify-center.mx-4
-  .w-full.max-w-lg.flex
-    .w-1/4.flex.flex-col.justify-start
-      | 【参加者】
-      = turbo_frame_tag 'participants_list'
-        = render 'participants_list'
-      - @users.each do |user|
-        - if user == current_user
-          = render partial: 'contests/participant', locals: { user: }
+.mt-8.w-full.mx-auto
+  .mx-8.border-b-2.border-stone-200.pb-2
+    h2.text-stone-800.font-bold 参加者
+  = turbo_frame_tag 'participants_list'
+    = render 'participants_list'
+  - @users.each do |user|
+    - if user == current_user
+      = render partial: 'contests/participant', locals: { user: }
 
     .w-3/4.flex.justify-end.items-center
       = link_to '新しい参加者を招待する',

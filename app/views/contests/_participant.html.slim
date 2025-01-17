@@ -1,10 +1,10 @@
-.flex.items-center.my-2
+.flex.items-center.mx-8.py-4.border-b-2.border-dashed.border-stone-200
   .flex-grow.truncate
     = user.name
   - participant = user.participant_for(@contest)
-  = link_to '✕', contest_participant_path(@contest, participant),
+  = link_to contest_participant_path(@contest, participant),
     method: :delete,
     data: { turbo_method: :delete,
       turbo_confirm: "#{user.name}さんの参加を取り消します。よろしいですか？" },
-    class: 'bg-red-500 text-white text-center \
-            hover:text-white rounded-full w-6 h-6 ml-2'
+    class: 'text-sunset-red hover:opacity-80 text-3xl' do
+    i.fa-solid.fa-circle-xmark
