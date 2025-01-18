@@ -23,8 +23,8 @@
 }
 
 .btn-secondary {
-    @apply text-stone-800 bg-white rounded text-center px-4 sm:px-6 py-2 rounded
-    text-base sm:text-lg font-semibold border border-stone-300 hover:bg-stone-300 transition flex-shrink-0;
+    @apply text-stone-800 bg-white rounded text-center py-2 rounded text-sm sm:text-lg font-semibold px-4 py-2
+    border border-stone-300 hover:bg-stone-300 transition;
 }
 
 .text-sunset-red {
