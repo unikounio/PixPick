@@ -42,5 +42,6 @@
       = render 'shared/login_button'
 
   .mt-6.text-center
-    = link_to 'トップページへ', root_path,
+    - navigation_text = user_signed_in? ? 'キャンセル' : 'トップページへ'
+    = link_to navigation_text, root_path,
       class: 'text-stone-700 hover:underline hover:underline-offset-4'
