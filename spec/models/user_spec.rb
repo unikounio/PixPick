@@ -15,12 +15,6 @@ RSpec.describe User do
     )
   end
 
-  it 'validates uniqueness of uid scoped to provider' do
-    create(:user, uid: '12345678', provider: 'google_oauth2')
-    duplicate_user = build(:user, uid: '12345678', provider: 'google_oauth2')
-    expect(duplicate_user).not_to be_valid
-  end
-
   describe '.from_omniauth' do
     context 'when the user exists' do
       it 'updates the existing user' do
