@@ -1,12 +1,16 @@
 - set_meta_tags title: 'コンテストを作成する'
 - set_meta_tags description: '新しいコンテストを作成するためのページです。'
 
-div class='bg-stone-100 px-4 sm:px-8 py-3 flex flex-col \
-           justify-center items-center border-none'
-  h1.text-xl.sm:text-2xl.font-bold.text-black.mb-2 = t('views.contests.new.title')
+div(
+  class='bg-stone-100 px-4 sm:px-8 py-3 flex flex-col \
+         justify-center items-center border-none'
+)
+  h1.text-xl.sm:text-2xl.font-bold.text-black.mb-2
+    = t('views.contests.new.title')
 
   - if @contests.any?
-    = link_to user_contests_path(current_user), class: 'btn-secondary w-full max-w-56 sm:max-w-64' do
+    = link_to user_contests_path(current_user),
+      class: 'btn-secondary w-full max-w-56 sm:max-w-64' do
       | コンテスト一覧へ
       i.fa-solid.fa-chevron-right.ml-2
 
