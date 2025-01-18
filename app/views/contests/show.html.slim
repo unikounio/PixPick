@@ -1,7 +1,7 @@
 - set_meta_tags title: @contest.name
 - set_meta_tags description: 'エントリーへ投票し、ランキングを確認するためのページです。'
 
-.flex.justify-between.items-center.bg-stone-100.px-4.py-3
+.flex.justify-between.items-center.bg-stone-100.px-4.sm:px-8.py-3
   .overflow-hidden
     h1.text-xl.sm:text-2xl.font-bold.my-2.truncate = @contest.name
     p.text-base.text-stone-600 投票期日：#{@contest.deadline.strftime('%Y年%-m月%-d日')}

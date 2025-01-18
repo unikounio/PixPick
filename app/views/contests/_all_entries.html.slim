@@ -1,16 +1,17 @@
 - if !@contest.deadline_passed? && @entries_with_score.any?
-  .text-center.my-6.text-base.text-stone-700.mx-4 画像を選択して投票してください
+  .mx-4.sm:mx-8.text-center.my-6.text-base.text-stone-700 画像を選択して投票してください
 
-- if @contest.deadline_passed?
-  .text-center.my-6.text-lg.font-semibold.text-stone-700
-    | このコンテストは投票を締め切りました。
-    br
-    | ランキングタブから投票結果をご確認ください。
+  - if @contest.deadline_passed?
+    .text-center.my-6.text-lg.font-semibold.text-stone-700
+      | このコンテストは投票を締め切りました。
+      br
+      | ランキングタブから投票結果をご確認ください。
 
-= render 'entries/thumbnail_list'
+.mx-4.sm:mx-8
+  = render 'entries/thumbnail_list'
 
 div class='fixed bottom-0 w-full max-w-screen-md h-fit py-2 bg-stone-100 \
-           flex justify-center items-center'
+           flex justify-center items-center mx-4'
   = link_to new_contest_entry_path(@contest),
     data: { turbo_frame: '_top' },
     class: 'btn-primary' do
