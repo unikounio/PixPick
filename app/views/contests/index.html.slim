@@ -25,5 +25,7 @@
     p.text-stone-500.text-center = t('views.contests.index.no_contests')
 
 .mt-10.flex.justify-center.items-center
-  = link_to '新しいコンテストを作成', new_contest_path,
-    class: 'btn-primary mx-4 sm:mx-8'
+  = link_to new_contest_path,
+    class: 'btn-primary mx-4 sm:mx-8' do
+    i.fas.fa-plus.mr-2
+    | 新しいコンテストを作成

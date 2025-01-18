@@ -16,9 +16,10 @@
       = render partial: 'contests/participant', locals: { user: }
 
   .flex.justify-center.items-center.mt-8.mx-8
-    = link_to '新しい参加者を招待する',
-      invite_contest_path(@contest),
-      class: 'btn-primary'
+    = link_to invite_contest_path(@contest),
+      class: 'btn-primary' do
+      i.fa-solid.fa-user-plus.mr-2
+      | 新しい参加者を招待する
 
 .mx-8.my-4.flex.justify-center
   = link_to 'キャンセル', user_contests_path(current_user),
