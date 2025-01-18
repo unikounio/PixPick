@@ -1,8 +1,9 @@
 - if !@contest.deadline_passed? && @entries_with_score.any?
   .mx-4.sm:mx-8.text-center.my-6.text-base.text-stone-700 画像を選択して投票してください
 
-  - if @contest.deadline_passed?
-    .text-center.my-6.text-lg.font-semibold.text-stone-700
+- if @contest.deadline_passed?
+  .bg-red-200.py-4.my-4
+    .text-center.text-base.sm:text-lg.font-semibold.text-black.opacity-75
       | このコンテストは投票を締め切りました。
       br
       | ランキングタブから投票結果をご確認ください。
