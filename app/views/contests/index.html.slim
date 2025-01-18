@@ -1,10 +1,10 @@
 - set_meta_tags title: 'コンテスト一覧'
 - set_meta_tags description: 'あなたの参加しているコンテストの一覧が確認できます。'
 
-.bg-stone-100.px-4.py-3.flex.justify-between.items-center.border-none
+.bg-stone-100.px-4.sm:px-8.py-3.flex.justify-between.items-center.border-none
   h1.text-xl.sm:text-2xl.font-bold.text-black = t('views.contests.index.title')
 
-.m-4.overflow-x-auto
+.mx-4.sm:mx-8.my-4.overflow-x-auto
   - if @contests.any?
     table.w-full.border-collapse.border.border-stone-300
       tbody
@@ -16,14 +16,16 @@
                         hover:underline hover:underline-offset-2 truncate' do
                 = contest.name
             td.border.border-stone-300.px-0.py-0.text-center
-              = link_to edit_contest_path(contest),
+              = link_to '編集',
+                edit_contest_path(contest),
                 class: 'block h-full w-full px-4 py-3 text-stone-800 \
-                        hover:underline hover:underline-offset-2' do
-                | 編集
+                        hover:underline hover:underline-offset-2'
+
   - else
     p.text-stone-500.text-center = t('views.contests.index.no_contests')
 
-.mt-10.flex.justify-center.items-center
-  = link_to '新しいコンテストを作成', new_contest_path,
-    class: 'bg-white text-stone-800 border border-stone-200 shadow-lg \
-            px-4 py-3 rounded-full hover:bg-stone-100'
+.mt-10.mx-4.flex.justify-center.items-center
+  = link_to new_contest_path,
+    class: 'btn-primary' do
+    i.fas.fa-plus.mr-2
+    | 新しいコンテストを作成

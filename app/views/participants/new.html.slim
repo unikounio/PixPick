@@ -1,14 +1,14 @@
 - set_meta_tags title: 'コンテストに参加する'
 - set_meta_tags description: 'PixPickで開催されている写真コンテストに参加するためのページです。'
 
-.bg-stone-100.px-4.py-3.flex.justify-between.items-center.border-none
+.bg-stone-100.px-4.sm:px-8.py-3.flex.justify-between.items-center.border-none
   h1.text-xl.sm:text-2xl.font-bold.text-black
     - if user_signed_in?
       | コンテストに参加する
     - else
       | ようこそPixPickへ！
 
-.mx-6.sm:mx-20
+.mx-4.sm:mx-8
   p.text-base.sm:text-xl.text-stone-800.my-6
     | あなたは以下のコンテストに招待されています。
     br
@@ -24,23 +24,23 @@
 
   .flex.flex-col.justify-center.items-start
     .flex.items-center.mb-2.overflow-hidden.text-xl.w-full
-      .font-medium.text-stone-500.text-right.pr-2.flex-shrink-0.w-32 = 'コンテスト名 '
-      .font-bold.text-stone-900.ml-2.truncate = @contest.name
+      .font-medium.text-stone-500.text-left.flex-shrink-0.w-24 = 'コンテスト名 '
+      .font-bold.text-stone-800.ml-2.truncate = @contest.name
 
-    .flex.justify-center.items-center.mb-4.text-xl
-      .font-medium.text-stone-500.text-right.pr-2.flex-shrink-0.w-32 = '投票期日 '
-      .font-bold.text-stone-900.ml-2
+    .flex.justify-center.items-center.text-xl
+      .font-medium.text-stone-500.text-left.flex-shrink-0.w-24 = '投票期日 '
+      .font-bold.text-stone-800.ml-2
         = "#{@contest.deadline.strftime('%Y/%m/%d')} まで"
 
-.mt-8.flex.justify-center.items-center.flex-col
-  - if user_signed_in?
-    = button_to 'コンテストに参加する',
-      contest_participants_path(@contest),
-      class: 'bg-cyan-500 text-white font-bold \
-              py-3 px-6 rounded-full hover:bg-cyan-600'
-  - else
-    = render 'shared/login_button'
+  .text-center.mt-8
+    - if user_signed_in?
+      = button_to 'コンテストに参加する',
+        contest_participants_path(@contest),
+        class: 'btn-submit'
+    - else
+      = render 'shared/login_button'
 
-.mt-6.text-center
-  = link_to 'トップページへ', root_path,
-    class: 'text-stone-700 hover:underline hover:underline-offset-4'
+  .mt-6.text-center
+    - navigation_text = user_signed_in? ? 'キャンセル' : 'トップページへ'
+    = link_to navigation_text, root_path,
+      class: 'text-stone-700 hover:underline hover:underline-offset-4'

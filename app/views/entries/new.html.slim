@@ -6,12 +6,9 @@
     = t('views.entries.new.entry_photos')
 
   = link_to contest_path(@contest),
-    class: 'bg-white hover:bg-cyan-500 text-stone-500 hover:text-white \
-            text-center py-2 rounded text-sm sm:text-lg font-semibold \
-            w-full max-w-56 sm:max-w-64 border border-stone-400 \
-            hover:border-cyan-500 transition'
+    class: 'btn-secondary w-full max-w-56 sm:max-w-64'
     = t('views.entries.new.to_contest_page')
-    i.fa-solid.fa-angle-right.ml-2
+    i.fa-solid.fa-chevron-right.ml-2
 
 .mt-6(
   data-controller='file-entry'
@@ -33,13 +30,13 @@
     )
     .preview-container.mt-4 data-file-entry-target='preview'
 
-  .text-sm.text-stone-500.text-center.sm:text-right.mx-2.my-4
+  .text-sm.text-stone-500.text-center.sm:text-right.mx-4.sm:mx-2.my-4
     i.fa-solid.fa-circle-info.mr-2
     | 一度にアップロードできる写真の最大数は10枚です
 
   .sm:hidden.flex.justify-center.items-center.mx-4
     label(
-      class='btn-primary-large'
+      class='btn-primary'
     )
       i.fa-regular.fa-image.text-stone-500.mr-2.text-2xl
       | 写真を選ぶ

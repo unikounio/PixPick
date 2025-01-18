@@ -2,8 +2,8 @@
   div(
     data-controller='alert'
     data-alert-dismiss-after-value=('5000' if notice_type?(flash_type))
-    class="alert flex items-start p-4 mb-4 rounded-lg shadow-lg \
-      max-w-fit mx-auto #{tailwind_classes_for(flash_type)}"
+    class="alert flex items-start p-4 mb-4 rounded-lg max-w-fit \
+           mx-auto border #{tailwind_classes_for(flash_type)}"
     role='alert'
   )
     .flex-shrink-0

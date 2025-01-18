@@ -1,8 +1,8 @@
-.flex.justify-between.items-center.p-4.bg-white.border-b.border-stone-200
+.flex.justify-between.items-center.mx-4.sm:mx-8.py-4.bg-white
   - if user_signed_in?
     = link_to image_tag('logo.png',
                         alt: 'PixPickのロゴ',
-                        class: 'mb-2 w-28 sm:w-48'),
+                        class: 'mb-2 min-w-20 w-28 sm:w-48'),
               current_contest_or_contests_index_path(@contest, current_user)
 
     .ml-auto.flex.justify-end.items-center

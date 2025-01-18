@@ -1,13 +1,13 @@
 - set_meta_tags title: 'コンテストを編集する'
 - set_meta_tags description: 'コンテストを編集するためのページです。コンテストの編集には参加者の招待を含みます。'
 
-.bg-stone-100.pl-8.py-3.flex.justify-between.items-center.border-none
+.bg-stone-100.px-4.sm:px-8.py-3.flex.justify-between.items-center.border-none
   h1.text-xl.sm:text-2xl.font-bold.text-black = 'コンテストを編集する'
 
 = render 'form'
 
 .mt-8.w-full.mx-auto
-  .mx-8.border-b-2.border-stone-200.pb-2
+  .mx-4.sm:mx-8.border-b-2.border-stone-200.pb-2
     h2.text-stone-800.font-bold 参加者
   = turbo_frame_tag 'participants_list'
     = render 'participants_list'
@@ -15,16 +15,17 @@
     - if user == current_user
       = render partial: 'contests/participant', locals: { user: }
 
-  .flex.justify-center.items-center.mt-8.mx-8
-    = link_to '新しい参加者を招待する',
-      invite_contest_path(@contest),
-      class: 'btn-primary-large'
+  .flex.justify-center.items-center.mt-8.mx-4.sm:mx-8
+    = link_to invite_contest_path(@contest),
+      class: 'btn-primary' do
+      i.fa-solid.fa-user-plus.mr-2
+      | 新しい参加者を招待する
 
-.mx-8.my-4.flex.justify-center
-  = link_to 'キャンセル', user_contests_path(current_user),
+.mx-4.sm:mx-8.my-4.flex.justify-center
+  = link_to 'キャンセル', root_path,
             class: 'hover:underline hover:underline-offset-4'
 
-.mx-8.my-8.flex.justify-end
+.mx-4.sm:mx-8.my-8.flex.justify-end
   = link_to 'コンテストを削除する',
     contest_path(@contest),
     data: { turbo_method: :delete,

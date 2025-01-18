@@ -1,5 +1,5 @@
 = turbo_frame_tag 'form'
-.mx-8.my-4.flex.justify-center
+.mx-4.sm:mx-8.my-4.flex.justify-center
   = form_with model: @contest, locale: true,
     html: { class: 'w-full flex flex-col \
                     justify-center items-start' } do |f|
@@ -7,11 +7,11 @@
     .w-full
       = f.label :name, t('activerecord.attributes.contest.name'),
         class: 'text-base font-medium text-stone-800 text-left'
-      = f.text_field :name, placeholder: '例：うちの子コンテスト',
+      = f.text_field :name, placeholder: '例：うちの子の写真コンテスト',
         class: 'text-stone-700 border-stone-300 rounded-md \
                 focus:ring-cyan-500 focus:border-cyan-500 w-full'
 
-    .flex.flex-col.my-4
+    .flex.flex-col.mt-4
       = f.label :deadline, t('activerecord.attributes.contest.deadline'),
         class: 'text-base font-medium text-stone-800 text-left'
       .flex.items-center
@@ -20,7 +20,7 @@
                   focus:ring-cyan-500 focus:border-cyan-500'
         .ml-2 まで
 
-    .flex.justify-center.items-center.w-full
+    .flex.justify-center.items-center.w-full.mt-8
       - if @contest.new_record?
         = f.submit t('helpers.submit.contest.create'),
           data: { turbo_frame: '_top' },

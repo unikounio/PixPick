@@ -1,12 +1,12 @@
 - set_meta_tags title: '家族や友人を招待する'
 - set_meta_tags description: 'コンテストに家族や友人を招待するためのページです。'
 
-.bg-stone-100.px-4.py-3.flex.justify-between.items-center.border-none
+.bg-stone-100.px-4.sm:px-8.py-3.flex.justify-between.items-center.border-none
   h1.text-xl.sm:text-2xl.font-bold.text-black 家族や友人を招待する
 
-.mx-6.sm:mx-20
-  p.text-base.sm:text-xl.text-stone-800.my-6
-    | 以下のURLからログインすることで、このコンテストに参加することができます。
+.mx-4.sm:mx-8
+  p.text-base.sm:text-lg.text-stone-800.my-6
+    = "以下のURLからログインすることで、「#{@contest.name}」に参加することができます。"
     br
     | URLをコピーして家族や友人をコンテストに招待しましょう！
 
@@ -15,16 +15,16 @@
       type="text"
       value=@invite_url
       readonly=true
-      class="w-full p-2 text-lg border border-stone-300 rounded-lg shadow-sm"
+      class='w-full p-2 text-lg border border-stone-300 rounded-lg'
     )
 
       .mt-6.text-center
-        = button_tag '招待用URLをコピー',
-          data: { controller: 'clipboard',
-                  action: 'clipboard#copy',
-                  clipboard_url_value: @invite_url },
-          class: 'bg-cyan-500 text-white font-bold py-3 px-4 \
-                  rounded-full hover:bg-cyan-600 shadow-md'
+        = button_tag data: { controller: 'clipboard',
+          action: 'clipboard#copy',
+          clipboard_url_value: @invite_url },
+          class: 'btn-primary' do
+          i.fa-regular.fa-copy.mr-2
+          | 招待用URLをコピー
 
   p.mt-6.text-center
     = link_to 'キャンセル', edit_contest_path(@contest),
