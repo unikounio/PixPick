@@ -16,14 +16,14 @@
                         hover:underline hover:underline-offset-2 truncate' do
                 = contest.name
             td.border.border-stone-300.px-0.py-0.text-center
-              = link_to edit_contest_path(contest),
+              = link_to '編集',
+                edit_contest_path(contest),
                 class: 'block h-full w-full px-4 py-3 text-stone-800 \
-                        hover:underline hover:underline-offset-2' do
-                | 編集
+                        hover:underline hover:underline-offset-2'
+
   - else
     p.text-stone-500.text-center = t('views.contests.index.no_contests')
 
 .mt-10.flex.justify-center.items-center
   = link_to '新しいコンテストを作成', new_contest_path,
-    class: 'bg-white text-stone-800 border border-stone-200 shadow-lg \
-            px-4 py-3 rounded-full hover:bg-stone-100'
+    class: 'btn-primary-small'

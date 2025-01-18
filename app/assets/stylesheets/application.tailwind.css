@@ -17,6 +17,11 @@
     font-bold text-center w-full max-w-96 py-4 rounded-full transition;
 }
 
+.btn-primary-small {
+    @apply text-stone-800 bg-white hover:bg-stone-200 text-base border-2 border-stone-200
+    font-bold text-center px-4 py-3 rounded-full transition;
+}
+
 .btn-submit {
     @apply cursor-pointer bg-cyan-500 hover:bg-opacity-75 transition
     text-white text-lg font-bold py-4 w-full max-w-96 rounded-full;
