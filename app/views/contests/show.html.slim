@@ -3,12 +3,11 @@
 
 .flex.justify-between.items-center.bg-stone-100.px-4.py-3
   .overflow-hidden
-    h1.text-2xl.font-bold.my-2.truncate = @contest.name
+    h1.text-xl.sm:text-2xl.font-bold.my-2.truncate = @contest.name
     p.text-base.text-stone-600 投票期日：#{@contest.deadline.strftime('%Y年%-m月%-d日')}
 
   = link_to '編集', edit_contest_path(@contest),
-    class: 'bg-stone-300 text-stone-700 hover:bg-stone-400 hover:text-black \
-            py-2 w-20 text-center rounded text-lg font-semibold flex-shrink-0'
+    class: 'btn-secondary'
 
 = turbo_frame_tag 'content' do
   .flex.justify-center.items-center.mt-6.mx-4
@@ -18,12 +17,12 @@
         data: { turbo_frame: 'content' },
         class: tab_link_classes(request.fullpath,
                                 contest_path(@contest),
-                                'tab-link border-r border-stone-300')
+                                'btn-tab border-r border-stone-300')
       = link_to 'ランキング', ranking_contest_path(@contest),
         data: { turbo_frame: 'content' },
         class: tab_link_classes(request.fullpath,
                                 ranking_contest_path(@contest),
-                                'tab-link')
+                                'btn-tab')
 
   - if current_page?(contest_path(@contest))
     = render 'contests/all_entries'

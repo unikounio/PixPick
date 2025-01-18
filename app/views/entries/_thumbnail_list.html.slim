@@ -14,11 +14,11 @@
             = button_tag type: 'button',
               data: { action: 'click->modal#open',
                 modal_entries_show_url_value: entries_show_url },
-              class: 'p-2 rounded hover:shadow-md'
+              class: 'p-2 rounded hover:ring-2 hover:ring-cyan-200'
               = image_tag url_for(entry.image.variant(:thumb)),
                 alt: t('views.entries.alt_text'),
                 class: 'w-full h-auto'
 
             = render 'entries/score', entry_id: entry.id, score: score
 - else
-  p.mt-8.text-center.text-stone-600 エントリーがありません。
+  p.mt-8.text-center.text-stone-700.text-base エントリーがありません。
