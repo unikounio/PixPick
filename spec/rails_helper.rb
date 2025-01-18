@@ -74,5 +74,9 @@ RSpec.configure do |config|
     driven_by :selenium_chrome_headless
   end
 
-  Sidekiq::Testing.inline!
+  config.after(:suite) do
+    Pathname(ActiveStorage::Blob.service.root).each_child do |path|
+      path.rmtree if path.directory?
+    end
+  end
 end

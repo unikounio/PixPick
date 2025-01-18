@@ -5,24 +5,63 @@ require 'rails_helper'
 RSpec.describe Entry do
   subject(:entry) { build(:entry) }
 
-  context 'when the image has an allowed MIME type' do
-    it 'is valid' do
-      expect(entry).to be_valid
+  describe 'Custom Validations' do
+    context 'when the image has an allowed MIME type' do
+      it 'is valid' do
+        expect(entry).to be_valid
+      end
+    end
+
+    context 'when the image has a disallowed MIME type' do
+      before do
+        entry.image.attach(
+          io: StringIO.new('This is an invalid file'),
+          filename: 'invalid.txt',
+          content_type: 'text/plain'
+        )
+      end
+
+      it 'is invalid' do
+        expect(entry).not_to be_valid
+        expect(entry.errors[:image]).to include('対応していない形式のファイルです')
+      end
     end
   end
 
-  context 'when the image has a disallowed MIME type' do
-    before do
-      entry.image.attach(
-        io: StringIO.new('This is an invalid file'),
-        filename: 'invalid.txt',
-        content_type: 'text/plain'
-      )
+  describe '.upload_and_create_entries!' do
+    let(:current_user) { create(:user) }
+    let(:contest) { create(:contest) }
+    let(:file) do
+      fixture_file_upload('spec/files/sample.jpg')
     end
 
-    it 'is invalid' do
-      expect(entry).not_to be_valid
-      expect(entry.errors[:image]).to include('対応していない形式のファイルです')
+    context 'when the file and parameters are valid' do
+      it 'creates a new entry with an attached image' do
+        expect do
+          described_class.upload_and_create_entries!(file, current_user, contest)
+        end.to change(described_class, :count).by(1)
+
+        entry = described_class.last
+        expect(entry.user).to eq(current_user)
+        expect(entry.contest).to eq(contest)
+        expect(entry.image.attached?).to be true
+        expect(entry.image.filename.to_s).to eq('sample.webp')
+        expect(entry.image.content_type).to eq('image/webp')
+      end
+    end
+
+    context 'when the image processing fails' do
+      before do
+        allow(EntryResizer).to receive(:resize_and_convert_image).and_raise(StandardError, 'Processing failed')
+      end
+
+      it 'does not create an entry and raises an error' do
+        expect do
+          expect do
+            described_class.upload_and_create_entries!(file, current_user, contest)
+          end.to raise_error(StandardError, 'Processing failed')
+        end.not_to change(described_class, :count)
+      end
     end
   end
 
