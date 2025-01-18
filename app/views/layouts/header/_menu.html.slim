@@ -13,9 +13,9 @@
   div(
     data-dropdown-target='menu'
     class='hidden absolute top-8 -right-3 mt-8 flex \
-          w-screen rounded-md shadow-lg max-w-max'
+          w-screen rounded-md max-w-max'
   )
-    .text-s.bg-white.rounded-lg.border-2.overflow-hidden.w-30.z-30
+    .text-s.bg-white.rounded-lg.border-2.border-stone-200.overflow-hidden.w-30.z-30
       = link_to t('views.layouts.header.contest_index'),
         user_contests_path(current_user),
         data: { dropdown_target: 'menuItem' },
