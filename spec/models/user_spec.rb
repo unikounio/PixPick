@@ -37,4 +37,24 @@ RSpec.describe User do
       end
     end
   end
+
+  describe '#participant_for' do
+    let(:contest) { create(:contest) }
+
+    context 'when the participant exists' do
+      it 'returns the participant associated with the contest and user' do
+        existing_participant = create(:participant, user:, contest:)
+        participant = user.participant_for(contest)
+
+        expect(participant).to eq(existing_participant)
+      end
+    end
+
+    context 'when the participant does not exist' do
+      it 'returns nil for a contest with no associated participant' do
+        participant = user.participant_for(contest)
+        expect(participant).to be_nil
+      end
+    end
+  end
 end
