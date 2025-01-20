@@ -14,7 +14,7 @@
             = button_tag type: 'button',
               data: { action: 'click->modal#open',
                 modal_entries_show_url_value: entries_show_url },
-              class: 'p-2 rounded hover:ring-2 hover:ring-cyan-200'
+              class: 'p-2 rounded hover:ring-2 hover:ring-stone-200'
               = image_tag url_for(entry.image.variant(:thumb)),
                 alt: t('views.entries.alt_text'),
                 class: 'w-full h-auto'
