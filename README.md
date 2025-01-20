@@ -27,22 +27,22 @@ https://pixpick.jp
 ### コンテストごとに写真を評価する
 コンテストごとに写真をアップロードして、評価することができます。
 
-<img width="60%" alt="エントリー評価画面" src="https://github.com/user-attachments/assets/dcf3703f-7ee2-4e50-9422-91314248b48a">
+<img width="60%" alt="エントリー評価画面" src="https://github.com/user-attachments/assets/cd11ccf4-3973-4897-a4a8-d86a48e6515c">
 
 ### ランキングを確認する
 コンテスト参加者間の評価を集計し、ランキング形式で表示することができます。
 
-<img width="60%" alt="ランキング画面" src="https://github.com/user-attachments/assets/2c27f05b-486b-4254-a42b-ecf68d43bd66">
+<img width="60%" alt="ランキング画面" src="https://github.com/user-attachments/assets/2169e2c4-0732-4cd6-90e3-9baca3712293">
 
 ### コンテストに他のユーザーを招待する
 コンテストに他のユーザーを招待することで、エントリーした写真を共有できます。
 
-<img width="60%" alt="参加者招待画面" src="https://github.com/user-attachments/assets/2dcf71b6-63f1-4927-93f2-c57df31b5414">
+<img width="60%" alt="参加者招待画面" src="https://github.com/user-attachments/assets/93407949-1bc7-4950-814d-b8894e020ec3">
 
 ### コンテスト一覧を表示する
 自分が参加しているコンテストを一覧表示します。コンテスト名等の編集や削除、参加者の管理も可能です。
 
-<img width="60%" alt="コンテスト一覧画面" src="https://github.com/user-attachments/assets/536c4c14-c664-4319-935b-dd388096729d">
+<img width="60%" alt="コンテスト一覧画面" src="https://github.com/user-attachments/assets/1fdf2af3-7141-427c-9241-cf160565b8a4">
 
 
 
