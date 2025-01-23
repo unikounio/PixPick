@@ -23,12 +23,4 @@ module ApplicationHelper
       }
     }
   end
-
-  def current_contest_or_contests_index_path(contest, current_user)
-    if contest&.persisted?
-      contest_path(contest)
-    else
-      user_contests_path(current_user)
-    end
-  end
 end
