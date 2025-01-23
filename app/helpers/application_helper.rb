@@ -41,22 +41,6 @@ module ApplicationHelper
     %w[alert participation_alert].include?(flash_type.to_s)
   end
 
-  def toast_border_css(type)
-    if type == :success
-      'border-stone-200 dark:bg-stone-800 dark:border-stone-700'
-    else
-      'border-red-300 dark:bg-red-800 dark:border-red-700'
-    end
-  end
-
-  def toast_text_css(type)
-    if type == :success
-      'text-stone-700 dark:text-stone-400'
-    else
-      'text-stone-700 dark:text-stone-100'
-    end
-  end
-
   def current_contest_or_contests_index_path(contest, current_user)
     if contest&.persisted?
       contest_path(contest)
