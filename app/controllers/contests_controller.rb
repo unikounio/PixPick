@@ -15,22 +15,7 @@ class ContestsController < ApplicationController
                                   .with_total_scores
                                   .order(total_score: :desc, id: :asc)
 
-    @ranked_entries = []
-    current_rank = 0
-    previous_score = nil
-
-    entries_with_scores.each_with_index do |entry, index|
-      if entry.total_score != previous_score
-        current_rank = index + 1
-        previous_score = entry.total_score
-      end
-
-      @ranked_entries << {
-        rank: current_rank,
-        entry:,
-        total_score: entry.total_score
-      }
-    end
+    @ranked_entries = Entry.create_ranked_entries_with_scores(entries_with_scores)
 
     render :show
   end
