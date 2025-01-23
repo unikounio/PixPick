@@ -24,10 +24,6 @@ module ApplicationHelper
     }
   end
 
-  def user_avatar_url
-    current_user&.avatar_url || asset_path('default_avatar.png')
-  end
-
   def tailwind_classes_for(flash_type)
     {
       notice: 'bg-white border-l-4 border-green-500 text-black',
