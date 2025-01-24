@@ -67,16 +67,6 @@ class Entry < ApplicationRecord
     end
   end
 
-  def self.create_ranked_entries_with_scores(entries_with_scores)
-    calculate_ranks(entries_with_scores).map do |rank, entry|
-      {
-        rank: rank,
-        entry: entry,
-        total_score: entry.total_score
-      }
-    end
-  end
-
   private
 
   def validate_image_format
@@ -86,23 +76,4 @@ class Entry < ApplicationRecord
 
     errors.add(:image, '対応していない形式のファイルです')
   end
-
-  def self.calculate_ranks(entries)
-    ranked_entries = []
-    current_rank = 0
-    previous_score = nil
-
-    entries.each_with_index do |entry, index|
-      if entry.total_score != previous_score
-        current_rank = index + 1
-        previous_score = entry.total_score
-      end
-
-      ranked_entries << [current_rank, entry]
-    end
-
-    ranked_entries
-  end
-
-  private_class_method :calculate_ranks
 end

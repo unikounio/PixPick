@@ -15,7 +15,8 @@ class ContestsController < ApplicationController
                                   .with_total_scores
                                   .order(total_score: :desc, id: :asc)
 
-    @ranked_entries = Entry.create_ranked_entries_with_scores(entries_with_scores)
+    ranking = Ranking.new(entries_with_scores).calculate
+    @ranked_entries = ranking.ranked_entries
 
     render :show
   end
