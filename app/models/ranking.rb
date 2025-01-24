@@ -18,11 +18,11 @@ class Ranking
         previous_score = entry.total_score
       end
 
-      @ranked_entries << {
+      @ranked_entries << RankedEntry.new(
         rank: current_rank,
         entry:,
         total_score: entry.total_score
-      }
+      )
     end
 
     self
