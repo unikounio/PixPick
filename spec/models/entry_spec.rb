@@ -52,7 +52,9 @@ RSpec.describe Entry do
 
     context 'when the image processing fails' do
       before do
-        allow(described_class).to receive(:resize_and_convert_image).and_raise(StandardError, 'Processing failed')
+        mock_instance = instance_double(ImageAdjuster)
+        allow(ImageAdjuster).to receive(:new).and_return(mock_instance)
+        allow(mock_instance).to receive(:resize_and_convert_image).and_raise(StandardError, 'Processing failed')
       end
 
       it 'does not create an entry and raises an error' do

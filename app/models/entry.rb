@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class Entry < ApplicationRecord
-  include ImageResizer
-  include ImageTempfileHandler
-
   belongs_to :contest
   belongs_to :user
   has_many :votes, dependent: :destroy
@@ -27,11 +24,8 @@ class Entry < ApplicationRecord
     transaction do
       entry = create!(user: current_user, contest: contest)
 
-      resized_image_data, format, content_type = prepare_image_for_attach(
-        file,
-        file.content_type,
-        400, 400
-      )
+      image_adjuster = ImageAdjuster.new(file, file.content_type)
+      resized_image_data, format, content_type = image_adjuster.resize_and_convert_image(width: 400, height: 400)
 
       entry.image.attach(
         io: StringIO.new(resized_image_data),
@@ -93,19 +87,6 @@ class Entry < ApplicationRecord
     errors.add(:image, '対応していない形式のファイルです')
   end
 
-  def self.prepare_image_for_attach(image_data, mime_type, width, height)
-    format = mime_type_to_format(mime_type) || 'webp'
-    tempfile = create_tempfile(image_data, format)
-
-    begin
-      resized_image_data, content_type = resize_and_convert_image(tempfile.path, mime_type, width, height)
-      [resized_image_data, format, content_type]
-    ensure
-      tempfile.close!
-      tempfile.unlink
-    end
-  end
-
   def self.calculate_ranks(entries)
     ranked_entries = []
     current_rank = 0
@@ -123,5 +104,5 @@ class Entry < ApplicationRecord
     ranked_entries
   end
 
-  private_class_method :prepare_image_for_attach, :calculate_ranks
+  private_class_method :calculate_ranks
 end
