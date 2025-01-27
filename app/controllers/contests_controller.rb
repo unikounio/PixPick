@@ -10,7 +10,7 @@ class ContestsController < ApplicationController
   end
 
   def ranking
-    @ranked_entries = Ranking.calculate(@contest.sort_entries_by_total_score)
+    @rankings = Ranking.calculate(@contest.sort_entries_by_total_score)
 
     render :show
   end
