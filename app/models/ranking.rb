@@ -10,23 +10,20 @@ class Ranking
   end
 
   def self.calculate(entries_with_scores)
-    ranked_entries = []
     current_rank = 0
     previous_score = nil
 
-    entries_with_scores.each_with_index do |entry, index|
+    entries_with_scores.map.with_index do |entry, index|
       if entry.total_score != previous_score
         current_rank = index + 1
         previous_score = entry.total_score
       end
 
-      ranked_entries << new(
+      new(
         rank: current_rank,
         entry:,
         total_score: entry.total_score
       )
     end
-
-    ranked_entries
   end
 end
