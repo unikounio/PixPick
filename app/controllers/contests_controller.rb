@@ -10,12 +10,7 @@ class ContestsController < ApplicationController
   end
 
   def ranking
-    entries_with_scores = @contest.entries
-                                  .includes(:image_attachment)
-                                  .with_total_scores
-                                  .order(total_score: :desc, id: :asc)
-
-    @ranked_entries = Ranking.calculate(entries_with_scores)
+    @ranked_entries = Ranking.calculate(@contest.sort_entries_by_total_score)
 
     render :show
   end

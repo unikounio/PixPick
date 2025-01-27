@@ -26,6 +26,10 @@ class Contest < ApplicationRecord
     end
   end
 
+  def sort_entries_by_total_score
+    entries.includes(:image_attachment).with_total_scores.order(total_score: :desc, id: :asc)
+  end
+
   def save_with_participant(user_id)
     transaction do
       save!
