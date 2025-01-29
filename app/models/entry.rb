@@ -24,11 +24,8 @@ class Entry < ApplicationRecord
     transaction do
       entry = create!(user: current_user, contest: contest)
 
-      resized_image_data, format, content_type = EntryResizer.resize_and_convert_image(
-        file,
-        file.content_type,
-        400, 400
-      )
+      image_adjuster = ImageAdjuster.new(file, file.content_type)
+      resized_image_data, format, content_type = image_adjuster.resize_and_convert_image(width: 400, height: 400)
 
       entry.image.attach(
         io: StringIO.new(resized_image_data),

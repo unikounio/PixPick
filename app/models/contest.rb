@@ -20,10 +20,14 @@ class Contest < ApplicationRecord
   end
 
   def entries_with_score_for(user)
-    entries.includes(:image_attachment).order(created_at: :desc).map do |entry|
+    entries.preload(:image_attachment).order(created_at: :desc).map do |entry|
       score = user.votes.find_by(entry_id: entry.id)&.score
       [entry, score]
     end
+  end
+
+  def sort_entries_by_total_score
+    entries.preload(:image_attachment).with_total_scores.order(total_score: :desc, id: :asc)
   end
 
   def save_with_participant(user_id)

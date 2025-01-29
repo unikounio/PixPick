@@ -10,27 +10,7 @@ class ContestsController < ApplicationController
   end
 
   def ranking
-    entries_with_scores = @contest.entries
-                                  .includes(:image_attachment)
-                                  .with_total_scores
-                                  .order(total_score: :desc, id: :asc)
-
-    @ranked_entries = []
-    current_rank = 0
-    previous_score = nil
-
-    entries_with_scores.each_with_index do |entry, index|
-      if entry.total_score != previous_score
-        current_rank = index + 1
-        previous_score = entry.total_score
-      end
-
-      @ranked_entries << {
-        rank: current_rank,
-        entry:,
-        total_score: entry.total_score
-      }
-    end
+    @rankings = Ranking.calculate(@contest.sort_entries_by_total_score)
 
     render :show
   end
