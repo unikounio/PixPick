@@ -56,8 +56,6 @@ export default class extends Controller {
     } else {
       await this.updatePreviewAndAddFile(file, fileId, wrapper);
     }
-
-    this.updateEntryButtonState();
   }
 
   validateFile(file) {
@@ -119,6 +117,7 @@ export default class extends Controller {
   addFileToList(file, fileID) {
     const fileWithId = { file: file, id: fileID };
     this.files.push(fileWithId);
+    this.updateEntryButtonState();
   }
 
   removeFile(id) {
