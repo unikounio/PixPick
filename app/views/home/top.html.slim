@@ -19,26 +19,26 @@
 
   .mt-14.flex.justify-center.items-center.flex-col
     .flex.flex-col.items-center.text-center
-      p.text-xl.font-bold.text-stone-700.text-center.mb-4
+      p.text-xl.font-bold.text-center.mb-4
         = image_tag 'pin.png', alt: '丸ピンのアイコン', class: 'h-9 w-auto inline'
         | 写真をアップロード
       = image_tag 'upload.png', alt: '写真をアップロードするイメージ',
         class: 'mx-auto size-3/5'
 
     .flex.flex-col.items-center.text-center.mt-14
-      p.text-lg.font-bold.text-stone-700.mb-4
+      p.text-lg.font-bold.mb-4
         = image_tag 'pin.png', alt: '丸ピンのアイコン', class: 'h-9 w-auto inline'
         | みんなで写真を評価
       = image_tag 'vote.png', alt: '写真を評価するイメージ', class: 'mx-auto size-3/5'
 
     .flex.flex-col.items-center.text-center.mt-14
-      p.text-lg.font-bold.text-stone-700.mb-4
+      p.text-lg.font-bold.mb-4
         = image_tag 'pin.png', alt: '丸ピンのアイコン', class: 'h-9 w-auto inline'
         | ベストショットを決定！
       = image_tag 'bestshot.png', alt: 'ベストショットを決めるイメージ',
         class: 'mx-auto size-3/5'
 
-    p.text-lg.text-center.mt-14.mb-4 さあ、最高の瞬間を選び出しましょう！
+    p.text-lg.text-center.text-stone-800.mt-14.mb-4 さあ、最高の瞬間を選び出しましょう！
 
   .mt-8.flex.justify-center.items-center.flex-col
     = render 'shared/login_button'
