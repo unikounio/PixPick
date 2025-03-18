@@ -9,7 +9,7 @@
 )
   button(
     data-action='dropdown#toggle:stop'
-    class='text-center text-base sm:text-lg text-stone-700 font-medium \
+    class='text-center text-base sm:text-lg font-medium \
            bg-white px-2 sm:px-4 py-2 rounded-md truncate \
            hover:ring-2 focus:outline-none focus:ring-2 focus:ring-cyan-500'
   )
@@ -27,12 +27,10 @@
       = link_to contest.name,
         contest_path(contest),
         data: { dropdown_target: 'menuItem' },
-        class: 'no-underline px-4 py-2 text-stone-700 truncate \
-        hover:bg-stone-200 \
+        class: 'no-underline px-4 py-2 truncate hover:bg-stone-200 \
         focus:ring-inset focus:ring-2 focus:ring-cyan-500 focus:rounded-lg'
     = link_to t('views.layouts.header.contest_index'),
       user_contests_path(current_user),
       data: { dropdown_target: 'menuItem' },
-      class: 'no-underline px-4 py-2 text-stone-700 \
-      hover:bg-stone-200 \
+      class: 'no-underline px-4 py-2 hover:bg-stone-200 \
       focus:ring-inset focus:ring-2 focus:ring-cyan-500 focus:rounded-lg'
