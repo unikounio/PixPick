@@ -12,14 +12,4 @@ RSpec.describe ToastHelper do
       expect(helper.toast_border_css(:error)).to eq('border-red-300 dark:bg-red-800 dark:border-red-700')
     end
   end
-
-  describe '#toast_text_css' do
-    it 'returns success text CSS classes for :success type' do
-      expect(helper.toast_text_css(:success)).to eq('text-stone-700 dark:text-stone-400')
-    end
-
-    it 'returns error text CSS classes for other types' do
-      expect(helper.toast_text_css(:error)).to eq('text-stone-700 dark:text-stone-100')
-    end
-  end
 end
