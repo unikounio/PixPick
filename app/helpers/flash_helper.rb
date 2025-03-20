@@ -3,10 +3,10 @@
 module FlashHelper
   def tailwind_classes_for(flash_type)
     {
-      notice: 'bg-white border-l-4 border-green-500 text-black',
-      participation_notice: 'bg-white border-l-4 border-green-500 text-black',
-      alert: 'bg-white border-l-4 border-red-500 text-black',
-      participation_alert: 'bg-white border-l-4 border-red-500 text-black'
+      notice: 'bg-white border-l-4 border-green-500',
+      participation_notice: 'bg-white border-l-4 border-green-500',
+      alert: 'bg-white border-l-4 border-red-500',
+      participation_alert: 'bg-white border-l-4 border-red-500'
     }.stringify_keys[flash_type.to_s] || flash_type.to_s
   end
 
