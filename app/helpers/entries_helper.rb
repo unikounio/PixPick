@@ -7,7 +7,7 @@ module EntriesHelper
     if score == current_score
       'text-white bg-cyan-500 border border-cyan-500'
     else
-      'text-stone-700 bg-white hover:bg-stone-300 transition border border-stone-300'
+      'bg-white hover:bg-stone-300 transition border border-stone-300'
     end
   end
 end
