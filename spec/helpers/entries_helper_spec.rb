@@ -19,14 +19,14 @@ RSpec.describe EntriesHelper do
       it 'returns the inactive button classes' do
         create(:vote, entry:, user:, score: 2)
         result = helper.score_button_classes(entry, user, 1)
-        expect(result).to eq('text-stone-700 bg-white hover:bg-stone-300 transition border border-stone-300')
+        expect(result).to eq('bg-white hover:bg-stone-300 transition border border-stone-300')
       end
     end
 
     context 'when there is no current score for the user' do
       it 'returns the inactive button classes' do
         result = helper.score_button_classes(entry, user, 1)
-        expect(result).to eq('text-stone-700 bg-white hover:bg-stone-300 transition border border-stone-300')
+        expect(result).to eq('bg-white hover:bg-stone-300 transition border border-stone-300')
       end
     end
   end
