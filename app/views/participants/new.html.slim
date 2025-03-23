@@ -14,7 +14,7 @@
     br
     | コンテスト名と投票期日をご確認の上、
 
-    span.font-bold.text-stone-800
+    span.font-bold
       - if user_signed_in?
         | 「コンテストに参加する」ボタンを押していただくことで、
       - else
@@ -25,11 +25,11 @@
   .flex.flex-col.justify-center.items-start
     .flex.items-center.mb-2.overflow-hidden.text-xl.w-full
       .font-medium.text-stone-500.text-left.flex-shrink-0.w-24 = 'コンテスト名 '
-      .font-bold.text-stone-800.ml-2.truncate = @contest.name
+      .font-bold.ml-2.truncate = @contest.name
 
     .flex.justify-center.items-center.text-xl
       .font-medium.text-stone-500.text-left.flex-shrink-0.w-24 = '投票期日 '
-      .font-bold.text-stone-800.ml-2
+      .font-bold.ml-2
         = "#{@contest.deadline.strftime('%Y/%m/%d')} まで"
 
   .text-center.mt-8
@@ -43,4 +43,4 @@
   .mt-6.text-center
     - navigation_text = user_signed_in? ? 'キャンセル' : 'トップページへ'
     = link_to navigation_text, root_path,
-      class: 'text-stone-700 hover:underline hover:underline-offset-4'
+      class: 'hover:underline hover:underline-offset-4'

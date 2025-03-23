@@ -16,22 +16,22 @@ div(
 
 .mx-4.sm:mx-8
   - if @contests.any?
-    p.text-base.sm:text-lg.text-stone-800.my-6
+    p.text-base.sm:text-lg.my-6
       = t('views.contests.new.description_with_contests')
   - else
-    p.text-base.sm:text-lg.text-stone-800.my-6
+    p.text-base.sm:text-lg.my-6
       = t('views.contests.new.welcome_message.title',
           name: current_user.name)
-    p.text-base.sm:text-lg.text-stone-800.mb-6
+    p.text-base.sm:text-lg.mb-6
       = t('views.contests.new.welcome_message.welcome')
-    p.text-base.sm:text-lg.text-stone-800.mb-6
+    p.text-base.sm:text-lg.mb-6
       = t('views.contests.new.welcome_message.description')
-    p.text-base.sm:text-lg.text-stone-800.mb-6
+    p.text-base.sm:text-lg.mb-6
       = t('views.contests.new.welcome_message.no_contests',
           name: current_user.name)
       br
       = t('views.contests.new.welcome_message.usage')
-    p.text-base.sm:text-lg.text-stone-800.mb-6
+    p.text-base.sm:text-lg.mb-6
       = t('views.contests.new.welcome_message.form_prompt')
       br
       = t('views.contests.new.welcome_message.encouragement',

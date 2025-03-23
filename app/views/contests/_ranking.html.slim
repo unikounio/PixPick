@@ -13,11 +13,11 @@
             - when 3
               .rank.bg-bronze.text-white = rank
             - else
-              .rank.bg-white.text-stone-700.border.border-stone-500 = rank
+              .rank.bg-white.border.border-stone-500 = rank
 
-            .mt-2.text-lg.text-stone-700.text-center
+            .mt-2.text-lg.text-center
               = "#{ranking.total_score}pt"
           td = image_tag url_for(ranking.entry.image.variant(:thumb)),
                class: 'w-48 max-h-48 object-contain'
   - else
-    p.text-center.text-stone-600 エントリーがありません。
+    p.text-center エントリーがありません。

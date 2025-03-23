@@ -5,11 +5,11 @@ require 'rails_helper'
 RSpec.describe FlashHelper do
   describe '#tailwind_classes_for' do
     it 'returns the correct Tailwind CSS classes for notice' do
-      expect(helper.tailwind_classes_for(:notice)).to eq('bg-white border-l-4 border-green-500 text-black')
+      expect(helper.tailwind_classes_for(:notice)).to eq('bg-white border-l-4 border-green-500')
     end
 
     it 'returns the correct Tailwind CSS classes for alert' do
-      expect(helper.tailwind_classes_for(:alert)).to eq('bg-white border-l-4 border-red-500 text-black')
+      expect(helper.tailwind_classes_for(:alert)).to eq('bg-white border-l-4 border-red-500')
     end
 
     it 'returns the input flash type string if it does not match predefined types' do

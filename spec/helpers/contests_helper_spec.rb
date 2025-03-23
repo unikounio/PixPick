@@ -25,7 +25,7 @@ RSpec.describe ContestsHelper do
     context 'when current_path matches target_path' do
       it 'returns the active tab classes with extra_classes' do
         result = helper.tab_link_classes('/current_path', '/current_path', 'custom-class')
-        expect(result).to eq('bg-white text-stone-700 custom-class')
+        expect(result).to eq('bg-white custom-class')
       end
     end
 

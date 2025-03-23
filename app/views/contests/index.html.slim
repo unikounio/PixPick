@@ -12,17 +12,17 @@
           tr.hover:bg-stone-100
             td.border.border-stone-300.px-0.py-0.max-w-64.sm:max-w-md
               = link_to contest_path(contest),
-                class: 'block h-full w-full px-4 py-3 text-stone-800 \
+                class: 'block h-full w-full px-4 py-3 \
                         hover:underline hover:underline-offset-2 truncate' do
                 = contest.name
             td.border.border-stone-300.px-0.py-0.text-center
               = link_to '編集',
                 edit_contest_path(contest),
-                class: 'block h-full w-full px-4 py-3 text-stone-800 \
+                class: 'block h-full w-full px-4 py-3 \
                         hover:underline hover:underline-offset-2'
 
   - else
-    p.text-stone-500.text-center = t('views.contests.index.no_contests')
+    p.text-center = t('views.contests.index.no_contests')
 
 .mt-10.mx-4.flex.justify-center.items-center
   = link_to new_contest_path,
