@@ -90,7 +90,7 @@ export default class extends Controller {
         this.updatePreview(wrapper, fileId, fileURL, file.name);
       } catch (error) {
         console.error("HEIC変換エラー:", error);
-        this.showErrorOnPreview(wrapper);
+        this.showErrorOnPreview(wrapper, fileId);
       }
     } else {
       await this.updatePreviewAndAddFile(file, fileId, wrapper);
@@ -212,9 +212,11 @@ export default class extends Controller {
     return img;
   }
 
-  showErrorOnPreview(wrapper) {
+  showErrorOnPreview(wrapper, fileId) {
     wrapper.innerHTML =
       "<p class='text-red-500 text-sm'>エラーが発生しました。</p>";
+    const removeButton = this.createRemoveButton(fileId);
+    wrapper.appendChild(removeButton);
   }
 
   async upload(event) {
