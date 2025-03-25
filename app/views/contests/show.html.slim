@@ -20,12 +20,11 @@
         data: { turbo_frame: 'content' },
         class: tab_link_classes(request.fullpath,
                                 contest_path(@contest),
-                                'btn-tab border-r border-stone-300')
+                                'border-r border-stone-300')
       = link_to 'ランキング', ranking_contest_path(@contest),
         data: { turbo_frame: 'content' },
         class: tab_link_classes(request.fullpath,
-                                ranking_contest_path(@contest),
-                                'btn-tab')
+                                ranking_contest_path(@contest))
 
   - if current_page?(contest_path(@contest))
     = render 'contests/all_entries'
