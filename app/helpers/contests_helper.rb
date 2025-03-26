@@ -9,11 +9,11 @@ module ContestsHelper
     end
   end
 
-  def tab_link_classes(current_path, target_path, extra_classes = '')
+  def tab_link_classes(current_path, target_path)
     if current_path == target_path
-      "bg-white btn-tab #{extra_classes}"
+      "bg-white btn-tab"
     else
-      "bg-stone-100 text-stone-500 hover:bg-white hover:text-stone-700 transition btn-tab #{extra_classes}"
+      "bg-stone-100 text-stone-500 hover:bg-white hover:text-stone-700 transition btn-tab"
     end
   end
 end

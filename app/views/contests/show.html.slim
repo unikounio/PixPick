@@ -18,9 +18,9 @@
                rounded-lg overflow-hidden w-full max-w-80 min-w-fit h-fit'
       = link_to '全てのエントリー', contest_path(@contest),
         data: { turbo_frame: 'content' },
-        class: tab_link_classes(request.fullpath,
-                                contest_path(@contest),
-                                'border-r border-stone-300')
+        class: "#{tab_link_classes(request.fullpath,
+                                contest_path(@contest))} \
+                                border-r border-stone-300"
       = link_to 'ランキング', ranking_contest_path(@contest),
         data: { turbo_frame: 'content' },
         class: tab_link_classes(request.fullpath,
