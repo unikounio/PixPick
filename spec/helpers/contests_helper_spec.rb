@@ -24,15 +24,15 @@ RSpec.describe ContestsHelper do
   describe '#tab_link_classes' do
     context 'when current_path matches target_path' do
       it 'returns the active tab classes with extra_classes' do
-        result = helper.tab_link_classes('/current_path', '/current_path', 'custom-class')
-        expect(result).to eq('bg-white custom-class')
+        result = helper.tab_link_classes('/current_path', '/current_path')
+        expect(result).to eq('bg-white btn-tab')
       end
     end
 
     context 'when current_path does not match target_path' do
       it 'returns the inactive tab classes with hover effects and extra_classes' do
-        result = helper.tab_link_classes('/current_path', '/different_path', 'custom-class')
-        expect(result).to eq('bg-stone-100 text-stone-500 hover:bg-white hover:text-stone-700 transition custom-class')
+        result = helper.tab_link_classes('/current_path', '/different_path')
+        expect(result).to eq('bg-stone-100 text-stone-500 hover:bg-white hover:text-stone-700 transition btn-tab')
       end
     end
   end
