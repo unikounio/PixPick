@@ -16,13 +16,13 @@
 
     .flex.justify-center.mt-6.space-x-6.sm:space-x-8
       - [1, 2, 3].each do |score|
+        - score_variant = score_button_classes(@entry, current_user, score)
         = button_to score.to_s,
           contest_entry_votes_path(@contest, @entry, score:),
           method: :post,
           remote: true,
           data: { action: 'click->modal#close' },
-          class: "score-button \
-                  #{score_button_classes(@entry, current_user, score)}"
+          class: "score-button #{score_variant}"
 
     .flex.justify-between.items-center.mt-6
       - if @previous_entry
