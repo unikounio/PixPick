@@ -2,6 +2,8 @@
 
 source 'https://rubygems.org'
 
+ruby '3.4.2'
+
 gem 'aws-sdk-s3', require: false
 gem 'bootsnap', require: false
 gem 'devise'
@@ -14,13 +16,14 @@ gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection'
 gem 'pg'
 gem 'puma'
-gem 'rails', '~> 7.2.1'
+gem 'rails', '8.0.2'
 gem 'rails-i18n'
 gem 'sidekiq'
 gem 'slim-rails'
 gem 'sprockets-rails'
 gem 'stimulus-rails'
-gem 'tailwindcss-rails'
+gem 'tailwindcss-rails', '3.0.0'
+gem 'tailwindcss-ruby', '~> 3.4'
 gem 'turbo-rails'
 gem 'tzinfo-data', platforms: %i[windows jruby]
 

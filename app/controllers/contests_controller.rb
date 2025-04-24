@@ -63,7 +63,7 @@ class ContestsController < ApplicationController
   private
 
   def contest_params
-    params.require(:contest).permit(:name, :deadline)
+    params.expect(contest: %i[name deadline])
   end
 
   def log_and_render_toast(action_name)

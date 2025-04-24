@@ -1,11 +1,13 @@
-require:
+plugins:
   - rubocop-rails
-  - rubocop-fjord
   - rubocop-performance
   - rubocop-rspec
   - rubocop-rspec_rails
   - rubocop-capybara
   - rubocop-factory_bot
+
+require:
+  - rubocop-fjord
 
 AllCops:
   SuggestExtensions: false
