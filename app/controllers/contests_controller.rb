@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ContestsController < ApplicationController
+  before_action :authorize_participant, only: %i[show ranking edit update invite destroy]
+
   def index
     @contests = current_user.contests
   end
@@ -61,6 +63,12 @@ class ContestsController < ApplicationController
   end
 
   private
+
+  def authorize_participant
+    unless Participant.exists?(contest_id: @contest.id, user_id: current_user.id)
+      redirect_to root_path, alert: '指定されたコンテストに参加していません。'
+    end
+  end
 
   def contest_params
     params.expect(contest: %i[name deadline])
