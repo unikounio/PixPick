@@ -16,6 +16,12 @@ class ApplicationController < ActionController::Base
     @contest = Contest.find(contest_id)
   end
 
+  def authorize_participant
+    unless Participant.exists?(contest_id: @contest.id, user_id: current_user.id)
+      redirect_to root_path, alert: '指定されたコンテストに参加していません。'
+    end
+  end
+
   def set_recent_contests
     return unless user_signed_in?
 

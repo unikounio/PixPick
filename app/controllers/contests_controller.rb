@@ -64,12 +64,6 @@ class ContestsController < ApplicationController
 
   private
 
-  def authorize_participant
-    unless Participant.exists?(contest_id: @contest.id, user_id: current_user.id)
-      redirect_to root_path, alert: '指定されたコンテストに参加していません。'
-    end
-  end
-
   def contest_params
     params.expect(contest: %i[name deadline])
   end
