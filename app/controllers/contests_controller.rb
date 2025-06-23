@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ContestsController < ApplicationController
+  before_action :authorize_participant, only: %i[show ranking edit update invite destroy]
+
   def index
     @contests = current_user.contests
   end

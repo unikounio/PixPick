@@ -2,6 +2,7 @@
 
 class EntriesController < ApplicationController
   before_action :set_entry, only: %i[show destroy]
+  before_action :authorize_participant, only: %i[show new create destroy]
 
   def show
     @previous_entry = @entry.contest.entries.where('id > ?', @entry.id).order(id: :asc).first

@@ -7,7 +7,10 @@ RSpec.describe 'Entries' do
   let(:contest) { create(:contest) }
   let(:entry) { create(:entry, contest: contest, user: user) }
 
-  before { sign_in user }
+  before do
+    sign_in user
+    create(:participant, contest:, user:)
+  end
 
   describe 'GET /contests/:contest_id/entries/:id' do
     it 'responds with 200 OK when rendering the show page' do
