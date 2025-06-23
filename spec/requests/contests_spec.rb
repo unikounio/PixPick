@@ -8,6 +8,7 @@ RSpec.describe 'Contests' do
 
   before do
     sign_in user
+    create(:participant, contest:, user:)
   end
 
   describe 'PATCH /contests/:id' do

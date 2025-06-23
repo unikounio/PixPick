@@ -8,6 +8,7 @@ RSpec.describe 'Contests' do
 
   before do
     sign_in user
+    create(:participant, contest:, user:)
   end
 
   describe 'Contest index' do
