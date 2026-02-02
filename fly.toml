@@ -12,7 +12,6 @@ secrets = ["REDIS_URL"]
 
 [processes]
   app = './bin/rails server'
-  sidekiq = 'bundle exec sidekiq'
 
 [http_service]
   internal_port = 3000
@@ -49,12 +48,7 @@ secrets = ["REDIS_URL"]
 [[vm]]
   processes = ["app"]
   size = "shared-cpu-1x"
-  memory = 1024
-
-[[vm]]
-  processes = ["sidekiq"]
-  size = "shared-cpu-1x"
-  memory = 256
+  memory = 512
 
 [[statics]]
   guest_path = '/rails/public'
